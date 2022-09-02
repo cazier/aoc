@@ -193,3 +193,5 @@ cython_debug/
 
 # Advent of Code Session File
 .aocdlconfig
+
+inputs/
