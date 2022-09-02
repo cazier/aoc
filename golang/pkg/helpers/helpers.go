@@ -19,5 +19,13 @@ func LoadInput(cwd string, year int, day int) string {
 }
 
 func SplitLine(input string) []string {
-	return strings.Split(input, "\n")
+	_splits := strings.Split(input, "\n")
+	var output []string
+
+	for i := 0; i < len(_splits); i++ {
+		if len(_splits[i]) > 0 {
+			output = append(output, _splits[i])
+		}
+	}
+	return output
 }

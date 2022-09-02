@@ -6,10 +6,6 @@ func StringToInt(input []string) []int64 {
 	var output []int64
 
 	for i := 0; i < len(input); i++ {
-		if len(input[i]) == 0 {
-			continue
-		}
-
 		val, err := strconv.ParseInt(input[i], 10, 16)
 
 		if err != nil {
