@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 func main() {
-	fmt.Println("Golang")
+	// fmt.Println(day_01.PartOne())
 }

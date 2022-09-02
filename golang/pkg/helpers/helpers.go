@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -21,24 +20,4 @@ func LoadInput(cwd string, year int, day int) string {
 
 func SplitLine(input string) []string {
 	return strings.Split(input, "\n")
-}
-
-func SliceStringToInt(input []string) []int64 {
-	var output []int64
-
-	for i := 0; i < len(input); i++ {
-		if len(input[i]) == 0 {
-			continue
-		}
-
-		val, err := strconv.ParseInt(input[i], 10, 16)
-
-		if err != nil {
-			panic(err)
-		}
-
-		output = append(output, val)
-	}
-
-	return output
 }
