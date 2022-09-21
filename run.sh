@@ -1,6 +1,7 @@
 #! /bin/bash
 # Using values from envars or defaults
 DAY=${DAY}
+YEAR=${YEAR}
 LANGUAGE=${LANGUAGE:-"go"}
 RUN=0
 TEST=0
@@ -30,6 +31,7 @@ usage() {
         echo "Real Arguments (can be passed into the CLI with short or long forms,"
         echo " or as environment variables):"
         echo "-d, --day, DAY              aoc puzzle day (required)"
+        echo "-y, --year, YEAR            aoc puzzle year (required)"
         echo "-l, --language, LANGUAGE    programming language (Default: go)"
         echo ""
         echo "Other Arguments"
@@ -82,6 +84,20 @@ days() {
 
         return 0
 }
+
+years() {
+        if [[ "$YEAR" =~ [^0-9] || $DAY -lt 2015 ]]; then
+                log_panic "The year must be an integer greater than 2015. (Got: ${YEAR:-"null"})"
+
+                return 1
+        fi
+
+        _MOD=$(expr $YEAR % 2000)
+        YEAR=$(printf '2%03d' ${_MOD})
+
+        return 0
+}
+
 languages() {
         LANGUAGE_DIRECTORY=${LANGUAGE_MAP[$LANGUAGE]}
         if [[ -z $LANGUAGE_DIRECTORY ]]; then
@@ -94,14 +110,14 @@ languages() {
 }
 
 check_args() {
-        if ! days || ! languages; then
+        if ! days || ! languages || ! years; then
                 usage
                 exit 1
         fi
 }
 
 change_directory() {
-        cmd "cd ${_CWD}/${LANGUAGE_DIRECTORY}/${DAY}"
+        cmd "cd ${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
 }
 
 cmd() {
@@ -125,7 +141,7 @@ do_thing() {
         esac
 }
 
-CLI=$(getopt -o rthl:d:vV --long run,test,help,language:,day:,verbose,version,dry-run -- "$@")
+CLI=$(getopt -o rthl:d:y:vV --long run,test,help,language:,day:,year:,verbose,version,dry-run -- "$@")
 eval set -- "$CLI"
 while true; do
         case "$1" in
@@ -147,6 +163,10 @@ while true; do
                 ;;
         -d | --day)
                 DAY=$2
+                shift 2
+                ;;
+        -y | --year)
+                YEAR=$2
                 shift 2
                 ;;
         -v | --verbose)
