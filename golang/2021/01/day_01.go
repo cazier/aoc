@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
-	helpers "main/pkg/helpers"
-	slices "main/pkg/slices"
 	"os"
+
+	utils "main/utils"
 )
 
 func PartOne() int {
 	cwd, _ := os.Getwd()
-	var data string = helpers.LoadInput(cwd, 2021, 01)
-	var depths []int64 = slices.StringToInt(helpers.SplitLine(data))
+	var data string = utils.LoadInput(cwd, 2021, 01)
+	var depths []int64 = utils.StringToInt(utils.SplitLine(data))
 
 	var increases int = 0
 
@@ -24,13 +24,13 @@ func PartOne() int {
 
 func PartTwo() int {
 	cwd, _ := os.Getwd()
-	var data string = helpers.LoadInput(cwd, 2021, 01)
-	var depths []int64 = slices.StringToInt(helpers.SplitLine(data))
+	var data string = utils.LoadInput(cwd, 2021, 01)
+	var depths []int64 = utils.StringToInt(utils.SplitLine(data))
 
 	var increases int = 0
 
 	for i := 0; i < len(depths)-3; i++ {
-		if slices.Sum(depths[i:i+3]) < slices.Sum(depths[i+1:i+4]) {
+		if utils.Sum(depths[i:i+3]) < utils.Sum(depths[i+1:i+4]) {
 			increases++
 		}
 	}

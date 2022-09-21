@@ -1,4 +1,4 @@
-package helpers
+package utils
 
 import (
 	"fmt"
@@ -22,9 +22,9 @@ func SplitLine(input string) []string {
 	_splits := strings.Split(input, "\n")
 	var output []string
 
-	for i := 0; i < len(_splits); i++ {
-		if len(_splits[i]) > 0 {
-			output = append(output, _splits[i])
+	for _, v := range _splits {
+		if len(v) > 0 {
+			output = append(output, v)
 		}
 	}
 	return output
