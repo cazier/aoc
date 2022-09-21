@@ -7,7 +7,7 @@ RUN=0
 TEST=0
 VERBOSE=${VERBOSE:-0}
 VERSION="1.0.0"
-DRY_RUN=1
+DRY_RUN=0
 
 _CWD=$(pwd)
 
@@ -86,7 +86,7 @@ days() {
 }
 
 years() {
-        if [[ "$YEAR" =~ [^0-9] || $DAY -lt 2015 ]]; then
+        if [[ "$YEAR" =~ [^0-9] || $YEAR -lt 2015 ]]; then
                 log_panic "The year must be an integer greater than 2015. (Got: ${YEAR:-"null"})"
 
                 return 1
@@ -130,10 +130,20 @@ cmd() {
 do_thing() {
         case "$LANGUAGE_DIRECTORY" in
         "golang")
-                cmd "go test ."
+                if [[ $RUN -eq 1 ]]; then
+                    cmd "go run ."
+                fi
+                if [[ $TEST -eq 1 ]]; then
+                    cmd "go test ."
+                fi
                 ;;
         "python")
-                cmd "python -m unittest ."
+                if [[ $RUN -eq 1 ]]; then
+                    cmd "python main.py"
+                fi
+                if [[ $TEST -eq 1 ]]; then
+                    cmd "python -m unittest ."
+                fi
                 ;;
         *)
                 log_panic "Internal error"
