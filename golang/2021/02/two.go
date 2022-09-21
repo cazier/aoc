@@ -2,16 +2,14 @@ package main
 
 import (
 	"fmt"
-	helpers "main/pkg/helpers"
-	"os"
 	"strconv"
 	"strings"
+
+	utils "main/utils"
 )
 
-func PartOne() int64 {
-	cwd, _ := os.Getwd()
-	var data string = helpers.LoadInput(cwd, 2021, 02)
-	var commands []string = helpers.SplitLine(data)
+func PartOne(input string) int64 {
+	var commands []string = utils.SplitLine(input)
 
 	var x int64 = 0
 	var y int64 = 0
@@ -36,10 +34,8 @@ func PartOne() int64 {
 	return x * y
 }
 
-func PartTwo() int64 {
-	cwd, _ := os.Getwd()
-	var data string = helpers.LoadInput(cwd, 2021, 02)
-	var commands []string = helpers.SplitLine(data)
+func PartTwo(input string) int64 {
+	var commands []string = utils.SplitLine(input)
 
 	var x int64 = 0
 	var y int64 = 0
@@ -68,6 +64,8 @@ func PartTwo() int64 {
 }
 
 func main() {
-	fmt.Println("Part One:", PartOne())
-	fmt.Println("Part Two:", PartTwo())
+	var input string = utils.LoadInput(2021, 02)
+
+	fmt.Println("Part One:", PartOne(input))
+	fmt.Println("Part Two:", PartTwo(input))
 }

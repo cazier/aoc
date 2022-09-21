@@ -2,15 +2,12 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	utils "main/utils"
 )
 
-func PartOne() int {
-	cwd, _ := os.Getwd()
-	var data string = utils.LoadInput(cwd, 2021, 01)
-	var depths []int64 = utils.StringToInt(utils.SplitLine(data))
+func PartOne(input string) int {
+	var depths []int64 = utils.StringToInt(utils.SplitLine(input))
 
 	var increases int = 0
 
@@ -22,10 +19,8 @@ func PartOne() int {
 	return increases
 }
 
-func PartTwo() int {
-	cwd, _ := os.Getwd()
-	var data string = utils.LoadInput(cwd, 2021, 01)
-	var depths []int64 = utils.StringToInt(utils.SplitLine(data))
+func PartTwo(input string) int {
+	var depths []int64 = utils.StringToInt(utils.SplitLine(input))
 
 	var increases int = 0
 
@@ -38,6 +33,8 @@ func PartTwo() int {
 }
 
 func main() {
-	fmt.Println("Part One:", PartOne())
-	fmt.Println("Part Two:", PartTwo())
+	var input string = utils.LoadInput(2021, 01)
+
+	fmt.Println("Part One:", PartOne(input))
+	fmt.Println("Part Two:", PartTwo(input))
 }

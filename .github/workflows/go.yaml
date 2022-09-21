@@ -1,0 +1,19 @@
+name: Test Golang Files
+defaults:
+  run:
+    working-directory: golang
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test_utilities:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: go test main/utils -v
