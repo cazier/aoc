@@ -8,15 +8,7 @@ import (
 )
 
 func LoadInput(year int, day int) string {
-	cwd, _ := os.Getwd()
-
-	var stop int = strings.Index(cwd, "aoc")
-
-	if stop == -1 {
-		panic("No \"aoc\" directory could be found in the working directory")
-	}
-
-	var root string = cwd[:stop+3]
+	var root string = os.Getenv("AOC_ROOT_DIRECTORY")
 
 	var year_string string = fmt.Sprintf("2%03d", year%2000)
 	var day_string string = fmt.Sprintf("%02d.txt", day)
