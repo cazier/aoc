@@ -1,28 +1,25 @@
 package utils
 
 import (
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestStringToInt(t *testing.T) {
 	var input []string = []string{"1", "2", "3", "4", "5"}
-	var expected []int64 = []int64{1, 2, 3, 4, 5}
+	var expected []int = []int{1, 2, 3, 4, 5}
 
-	var output []int64 = StringToInt(input)
+	var output []int = StringToInt(input)
 
-	if !reflect.DeepEqual(expected, output) {
-		panic("Not equal!")
-	}
-
+	assert.Equal(t, output, expected)
 }
+
 func TestSum(t *testing.T) {
-	var input []int64 = []int64{1, 2, 3, 4, 5}
-	var expected int64 = 15
+	var input []int = []int{1, 2, 3, 4, 5}
+	var expected int = 15
 
-	var actual int64 = Sum(input)
+	var output int = Sum(input)
 
-	if expected != actual {
-		t.Errorf("Expected value %d, but received %d", expected, actual)
-	}
+	assert.Equal(t, output, expected)
 }

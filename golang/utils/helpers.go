@@ -4,9 +4,12 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
+	"regexp"
+	"strconv"
 )
 
+// LoadInput reads the input file found at $AOC_ROOT_DIRECTORY/inputs and returns the value as a
+// string.
 func LoadInput(year int, day int) string {
 	var root string = os.Getenv("AOC_ROOT_DIRECTORY")
 
@@ -28,8 +31,11 @@ func LoadInput(year int, day int) string {
 	return string(contents)
 }
 
+// SplitLine takes a string input and breaks it into a slice of strings, split by any of the
+// following newline characters: `\r`, `\n` The resulting slice is returned.
 func SplitLine(input string) []string {
-	_splits := strings.Split(input, "\n")
+	pattern := regexp.MustCompile(`[\r\n]`)
+	_splits := pattern.Split(input, -1)
 	var output []string
 
 	for _, v := range _splits {
@@ -38,4 +44,11 @@ func SplitLine(input string) []string {
 		}
 	}
 	return output
+}
+
+// ParseToInt is a wrapper around strconv.ParseInt that casts the resulting integer to an `int` type
+func ParseToInt(s string, base int, bitSize int) (i int, err error) {
+	out, err := strconv.ParseInt(s, base, bitSize)
+
+	return int(out), err
 }

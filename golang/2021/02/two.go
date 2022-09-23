@@ -2,23 +2,22 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	utils "main/utils"
 )
 
-func PartOne(input string) int64 {
+func PartOne(input string) int {
 	var commands []string = utils.SplitLine(input)
 
-	var x int64 = 0
-	var y int64 = 0
+	var x int = 0
+	var y int = 0
 
-	for i := 0; i < len(commands); i++ {
-		splits := strings.SplitN(commands[i], " ", 2)
+	for _, v := range commands {
+		splits := strings.SplitN(v, " ", 2)
 
 		direction := splits[0]
-		amount, _ := strconv.ParseInt(splits[1], 10, 64)
+		amount, _ := utils.ParseToInt(splits[1], 10, 64)
 
 		switch direction {
 		case "forward":
@@ -34,18 +33,18 @@ func PartOne(input string) int64 {
 	return x * y
 }
 
-func PartTwo(input string) int64 {
+func PartTwo(input string) int {
 	var commands []string = utils.SplitLine(input)
 
-	var x int64 = 0
-	var y int64 = 0
-	var aim int64 = 0
+	var x int = 0
+	var y int = 0
+	var aim int = 0
 
-	for i := 0; i < len(commands); i++ {
-		splits := strings.SplitN(commands[i], " ", 2)
+	for _, v := range commands {
+		splits := strings.SplitN(v, " ", 2)
 
 		direction := splits[0]
-		amount, _ := strconv.ParseInt(splits[1], 10, 64)
+		amount, _ := utils.ParseToInt(splits[1], 10, 64)
 
 		switch direction {
 		case "forward":

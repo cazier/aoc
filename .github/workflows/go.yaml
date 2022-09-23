@@ -16,4 +16,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - run: go test main/utils -v
+      - run: go install github.com/kyoh86/richgo@v0.3.10
+      - run: richgo test main/utils -v
+
+  test_2021:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: go install github.com/kyoh86/richgo@v0.3.10
+      - run: richgo test ./2021/... -v

@@ -7,7 +7,7 @@ import (
 )
 
 func PartOne(input string) int {
-	var depths []int64 = utils.StringToInt(utils.SplitLine(input))
+	var depths []int = utils.StringToInt(utils.SplitLine(input))
 
 	var increases int = 0
 
@@ -20,7 +20,7 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var depths []int64 = utils.StringToInt(utils.SplitLine(input))
+	var depths []int = utils.StringToInt(utils.SplitLine(input))
 
 	var increases int = 0
 

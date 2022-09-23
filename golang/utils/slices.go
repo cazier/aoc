@@ -2,28 +2,32 @@ package utils
 
 import "strconv"
 
-func StringToInt(input []string) []int64 {
-	var output []int64
+// StringToInt takes a slice of strings and converts each of them to an int value,
+// and returns a new slice with those values.
+func StringToInt(slice []string) []int {
+	var output []int
 
-	for i := 0; i < len(input); i++ {
-		val, err := strconv.ParseInt(input[i], 10, 16)
+	for _, v := range slice {
+		val, err := strconv.ParseInt(v, 10, 16)
 
 		if err != nil {
 			panic(err)
 		}
 
-		output = append(output, val)
+		output = append(output, int(val))
 	}
 
 	return output
 }
 
-func Sum(values []int64) int64 {
-	var total int64 = 0
+// Sum returns the total value of all the elements in a slice added together. This will return the
+// same type as the input values.
+func Sum[T Numeric](slice []T) T {
+	var total T = 0
 
-	for i := 0; i < len(values); i++ {
-		total += values[i]
+	for _, v := range slice {
+		total += v
 	}
-	return total
 
+	return total
 }

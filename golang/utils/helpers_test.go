@@ -3,8 +3,9 @@ package utils
 import (
 	"os"
 	"path/filepath"
-	"reflect"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLoadInput(t *testing.T) {
@@ -23,10 +24,7 @@ func TestLoadInput(t *testing.T) {
 	// Test
 	var output string = LoadInput(2020, 15)
 
-	if output != expected {
-		panic("Not equal!")
-	}
-
+	assert.Equal(t, output, expected)
 }
 
 func TestSplitLine(t *testing.T) {
@@ -35,8 +33,5 @@ func TestSplitLine(t *testing.T) {
 
 	var output []string = SplitLine(input)
 
-	if !reflect.DeepEqual(expected, output) {
-		panic("Not equal!")
-	}
-
+	assert.Equal(t, output, expected)
 }
