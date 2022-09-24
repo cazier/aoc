@@ -1,13 +1,9 @@
 #! /bin/bash
 source utils/shared.sh
 
-RUN=0
-TEST=0
-
 usage() {
-        echo "Usage: run.sh [option]..."
-        echo "Run a particular day, from within a directory, written in the"
-        echo "specified programming language."
+        echo "Usage: new.sh [option]..."
+        echo "Create the files for a new day (and directory for a new year)."
         echo ""
         echo "Real Arguments (can be passed into the CLI with short or long forms,"
         echo " or as environment variables):"
@@ -19,51 +15,48 @@ usage() {
         echo "--dry-run                   only do a dry-run without actually executing"
         echo "                             anything (Default: ${BOOL_MAP[${DRY_RUN}]})"
         echo "-h, --help                  print this usage message and exit"
-        echo "-r, --run                   run the day for submittal/with input data"
-        echo "                             (Default: ${BOOL_MAP[${RUN}]})"
-        echo "-t, --test                  run the day with the sample values to test"
-        echo "                             (Default: ${BOOL_MAP[${TEST}]})"
         echo "-v, --version               print the package version and exit"
         echo "-V, --verbose               run in verbose mode, with more... logging?"
         echo "                             (Default: ${BOOL_MAP[${VERBOSE}]})"
 }
 
+debug_messages() {
+        _debug_messages
+}
+
 do_thing() {
         case "$LANGUAGE_DIRECTORY" in
         "golang")
-                if [[ $RUN -eq 1 ]]; then
-                    _cmd "go run ."
-                fi
-                if [[ $TEST -eq 1 ]]; then
-                    _cmd "go test ."
-                fi
-                ;;
+                source utils/golang.sh;;
         "python")
-                if [[ $RUN -eq 1 ]]; then
-                    _cmd "python main.py" #Need to manage naming better I think?
-                fi
-                if [[ $TEST -eq 1 ]]; then
-                    _cmd "python -m unittest ."
-                fi
-                ;;
+                source utils/python.sh;;
         *)
                 _log_panic "Internal error"
                 ;;
         esac
+
+        DIR="${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
+
+        _log_debug "Creating code directories and files"
+        _cmd "mkdir -p ${DIR}"
+        if ! [[ -e "${DIR}/${TEST_NAME}" ]]; then
+                _cmd "printf '${TEST_CODE}' > ${DIR}/${TEST_NAME}"
+                _cmd "printf '${RUN_CODE}' > ${DIR}/${RUN_NAME}"
+        else
+                _log_panic "The files for '${LANGUAGE_DIRECTORY} ${YEAR}-${DAY}' already exist and will not be overwritten"
+                exit 1
+        fi
+
+        _log_debug "Creating input file directory and file"
+        _cmd "mkdir -p ${_CWD}/inputs/${YEAR}"
+        _cmd "touch ${_CWD}/inputs/${YEAR}/${DAY}.txt"
+
 }
 
 CLI=$(getopt -o rthl:d:y:vV --long run,test,help,language:,day:,year:,verbose,version,dry-run -- "$@")
 eval set -- "$CLI"
 while true; do
         case "$1" in
-        -r | --run)
-                RUN=1
-                shift
-                ;;
-        -t | --test)
-                TEST=1
-                shift
-                ;;
         -h | --help)
                 usage
                 exit 0
@@ -104,13 +97,10 @@ while true; do
         esac
 done
 
-_debug_messages "  VERBOSE: ${BOOL_MAP[${VERBOSE}]}\n  DRY RUN: ${BOOL_MAP[${DRY_RUN}]}"
+_debug_messages
 
 # Checking for necessary variables
 _check_args
-
-# Switching into proper directory
-_change_directory
 
 # Do the thing!
 do_thing
