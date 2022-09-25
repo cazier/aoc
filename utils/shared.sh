@@ -8,6 +8,8 @@ DRY_RUN=0
 
 _CWD=$(cd $(dirname "$0") && pwd)
 
+export AOC_ROOT_DIRECTORY=${AOC_ROOT_DIRECTORY:-$_CWD}
+
 declare -A LANGUAGE_MAP=(
         ["go"]="golang"
         ["golang"]="golang"
@@ -131,5 +133,12 @@ _debug_messages() {
                 fi
 
                 printf "\033[0m\n"
+        fi
+}
+
+_cleanup() {
+        if [[ $_CWD == $AOC_ROOT_DIRECTORY ]]; then
+                _log_debug "Cleaning up "
+                unset AOC_ROOT_DIRECTORY
         fi
 }

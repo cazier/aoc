@@ -11,8 +11,26 @@ I'm going to be doing this in at least Python 3.10+ and Golang 1.19+. Ensure one
 
 #### Tools
 - pre-commit ([link](https://pre-commit.com/))
-- aocdl ([link](https://github.com/GreenLightning/advent-of-code-downloader))
+- bash (technically)
 
 ### Running
 
-TBD... This is already the first part where I'm gonna get lazy.
+To get started pulling the information, you can use the [`new.sh`](./new.sh) bash script. Run it with `--help` to get some usage information. It will download the input file and the available portions of the puzzle descriptions, putting each into the respective directory.
+
+Additionally, the script will create new folders, as needed, for the language, year, and day, and creates a pair of code files. One for the actual executed code, and a test file.
+
+For golang, they will be named `<day>.go` and `<day>_test.go`.
+
+```bash
+$ ./new.sh --day 3 --year 2021
+readme.py: Successfully retrieved data!
+Succesfully created all the files. Get to work!
+```
+
+Once you've filled in all the code in their individual files, you can run them with the [`run.sh`](./run.sh) script. It also has its own help flag (`--help/-h`). As an example:
+
+```bash
+$ ./run.sh --run --day 1 --year 2021
+Part One: A number
+Part Two: Another number!
+```
