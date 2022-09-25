@@ -35,6 +35,9 @@ do_thing() {
                 ;;
         esac
 
+        _log_debug "Creating input and readme directories and files"
+        _cmd "python ${_CWD}/utils/readme.py --year ${YEAR} --day ${DAY} --cookie ${_CWD}/.session_cookie --aoc-path ${_CWD} --log-level ERROR"
+
         DIR="${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
 
         _log_debug "Creating code directories and files"
@@ -47,10 +50,7 @@ do_thing() {
                 exit 1
         fi
 
-        _log_debug "Creating input file directory and file"
-        _cmd "mkdir -p ${_CWD}/inputs/${YEAR}"
-        _cmd "touch ${_CWD}/inputs/${YEAR}/${DAY}.txt"
-
+        _log_debug "Succesfully created all the files. Get to work!" "force"
 }
 
 CLI=$(getopt -o rthl:d:y:vV --long run,test,help,language:,day:,year:,verbose,version,dry-run -- "$@")

@@ -6,7 +6,7 @@ VERBOSE=${VERBOSE:-0}
 VERSION="1.0.0"
 DRY_RUN=0
 
-_CWD=$(pwd)
+_CWD=$(cd $(dirname "$0") && pwd)
 
 declare -A LANGUAGE_MAP=(
         ["go"]="golang"
@@ -53,8 +53,8 @@ _log_panic() {
 }
 
 _log_debug() {
-        if [[ $VERBOSE -eq 1 || $DRY_RUN -eq 1 ]]; then
-                printf "\033[32m${*}"
+        if [[ $VERBOSE -eq 1 || $DRY_RUN -eq 1 || $2 == "force" ]]; then
+                printf "\033[32m${1}"
                 printf "\033[0m\n"
         fi
 }

@@ -191,7 +191,7 @@ cython_debug/
 
 # End of https://www.toptal.com/developers/gitignore/api/python,go
 
-# Advent of Code Session File
-.aocdlconfig
+# Advent of Code Session Cookie
+.session_cookie
 
 inputs/
