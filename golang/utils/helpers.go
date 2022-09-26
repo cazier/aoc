@@ -6,12 +6,19 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+
+	"github.com/fatih/color"
 )
 
 // LoadInput reads the input file found at $AOC_ROOT_DIRECTORY/inputs and returns the value as a
 // string.
 func LoadInput(year int, day int) string {
 	var root string = os.Getenv("AOC_ROOT_DIRECTORY")
+
+	if root == "" {
+		color.Red("Could not determine the proper $AOC_ROOT_DIRECTORY environment variable.")
+		os.Exit(1)
+	}
 
 	var year_string string = fmt.Sprintf("2%03d", year%2000)
 	var day_string string = fmt.Sprintf("%02d.txt", day)
@@ -31,10 +38,23 @@ func LoadInput(year int, day int) string {
 	return string(contents)
 }
 
-// SplitLine takes a string input and breaks it into a slice of strings, split by any of the
+// SplitByLine takes a string input and breaks it into a slice of strings, split by any of the
 // following newline characters: `\r`, `\n` The resulting slice is returned.
-func SplitLine(input string) []string {
-	pattern := regexp.MustCompile(`[\r\n]`)
+func SplitByLine(input string) []string {
+	var pattern *regexp.Regexp = regexp.MustCompile(`[\r\n]`)
+	return SplitStringByPattern(input, pattern)
+}
+
+// SplitByCharacter takes a string input breaks into a slice with an element for each character,
+// which is then returned
+func SplitByCharacter(input string) []string {
+	var pattern *regexp.Regexp = regexp.MustCompile(``)
+	return SplitStringByPattern(input, pattern)
+}
+
+// SplitStringByPattern takes an arbitrary string and splits it by a regular expression pattern. The
+// resulting slice is returned.
+func SplitStringByPattern(input string, pattern *regexp.Regexp) []string {
 	_splits := pattern.Split(input, -1)
 	var output []string
 
@@ -51,4 +71,9 @@ func ParseToInt(s string, base int, bitSize int) (i int, err error) {
 	out, err := strconv.ParseInt(s, base, bitSize)
 
 	return int(out), err
+}
+
+// Answer wraps the answer from a regular section just so that it can get printed in pretty blue
+func Answer(s string, a ...any) {
+	fmt.Println(color.BlueString(s, a...))
 }

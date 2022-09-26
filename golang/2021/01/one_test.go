@@ -6,28 +6,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const input string = `
-199
-200
-208
-210
-200
-207
-240
-269
-260
-263
-`
-
 func TestPartOne(t *testing.T) {
 	var expected int = 7
-	var output int = PartOne(input)
+	var output int = PartOne(sample_input)
 
 	assert.Equal(t, output, expected)
 }
 func TestPartTwo(t *testing.T) {
 	var expected int = 5
-	var output int = PartTwo(input)
+	var output int = PartTwo(sample_input)
 
 	assert.Equal(t, output, expected)
 }

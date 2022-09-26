@@ -7,8 +7,17 @@ import (
 	utils "main/utils"
 )
 
+const sample_input string = `
+forward 5
+down 5
+forward 8
+up 3
+down 8
+forward 2
+`
+
 func PartOne(input string) int {
-	var commands []string = utils.SplitLine(input)
+	var commands []string = utils.SplitByLine(input)
 
 	var x int = 0
 	var y int = 0
@@ -34,7 +43,7 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var commands []string = utils.SplitLine(input)
+	var commands []string = utils.SplitByLine(input)
 
 	var x int = 0
 	var y int = 0
@@ -65,6 +74,6 @@ func PartTwo(input string) int {
 func main() {
 	var input string = utils.LoadInput(2021, 02)
 
-	fmt.Println("Part One:", PartOne(input))
-	fmt.Println("Part Two:", PartTwo(input))
+	utils.Answer("Part One: %d", PartOne(input))
+	utils.Answer("Part Two: %d", PartTwo(input))
 }

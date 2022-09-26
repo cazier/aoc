@@ -1,13 +1,24 @@
 package main
 
 import (
-	"fmt"
-
 	utils "main/utils"
 )
 
+const sample_input string = `
+199
+200
+208
+210
+200
+207
+240
+269
+260
+263
+`
+
 func PartOne(input string) int {
-	var depths []int = utils.StringToInt(utils.SplitLine(input))
+	var depths []int = utils.StringToInt(utils.SplitByLine(input))
 
 	var increases int = 0
 
@@ -20,7 +31,7 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var depths []int = utils.StringToInt(utils.SplitLine(input))
+	var depths []int = utils.StringToInt(utils.SplitByLine(input))
 
 	var increases int = 0
 
@@ -35,6 +46,6 @@ func PartTwo(input string) int {
 func main() {
 	var input string = utils.LoadInput(2021, 01)
 
-	fmt.Println("Part One:", PartOne(input))
-	fmt.Println("Part Two:", PartTwo(input))
+	utils.Answer("Part One: %d", PartOne(input))
+	utils.Answer("Part Two: %d", PartTwo(input))
 }

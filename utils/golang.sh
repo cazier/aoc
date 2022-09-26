@@ -10,19 +10,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-const input string = \`
-
-\`
-
 func TestPartOne(t *testing.T) {
 	var expected int =
-	var output int = PartOne(input)
+	var output int = PartOne(sample_input)
 
 	assert.Equal(t, output, expected)
 }
 func TestPartTwo(t *testing.T) {
 	var expected int =
-	var output int = PartTwo(input)
+	var output int = PartTwo(sample_input)
 
 	assert.Equal(t, output, expected)
 }
@@ -37,6 +33,10 @@ import (
 
 	utils "main/utils"
 )
+
+const sample_input string = \`
+
+\`
 
 func PartOne(input string) int {
 
