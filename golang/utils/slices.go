@@ -44,3 +44,23 @@ func Sum[T Numeric](slice []T) T {
 
 	return total
 }
+
+// IndexOf returns the index where a value can be found inside a slice. If the value is not found in
+// the slice, return -1.
+func IndexOf[T comparable](slice []T, value T) int {
+	for index, element := range slice {
+		if value == element {
+			return index
+		}
+	}
+	return -1
+}
+
+func NumRange(stop int) []int {
+	var output []int = make([]int, stop)
+	for i := 0; i < stop; i++ {
+		output[i] = i
+	}
+
+	return output
+}
