@@ -28,3 +28,15 @@ jobs:
       - uses: actions/checkout@v3
       - run: go install github.com/kyoh86/richgo@v0.3.10
       - run: richgo test ./2021/... -v
+
+  coverage:
+    runs-on: ubuntu-latest
+    container:
+      image: golang:latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: go test ./... -race -covermode=atomic -coverprofile=coverage.out
+      - run: curl -Os https://uploader.codecov.io/latest/linux/codecov
+      - run: chmod +x codecov
+      - run: ./codecov -t ${{ secrets.CODECOV_TOKEN }} -f coverage.out
