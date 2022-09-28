@@ -23,20 +23,20 @@ func Construct[T utils.Numeric](width, height int, defaults T) Array2D[T] {
 	return b
 }
 
-func (a Array2D[T]) Get(x, y int) T {
-	return a.Elements[y][x]
+func (this Array2D[T]) Get(x, y int) T {
+	return this.Elements[y][x]
 }
 
-func (a Array2D[T]) Set(x, y int, value T) T {
-	a.Elements[y][x] = value
+func (this Array2D[T]) Set(x, y int, value T) T {
+	this.Elements[y][x] = value
 
 	return value
 }
 
-func (a Array2D[T]) Print(format string) string {
+func (this Array2D[T]) Print(format string) string {
 	var output string = ""
 
-	for _, row := range a.Elements {
+	for _, row := range this.Elements {
 		for _, cell := range row {
 			output += fmt.Sprintf(format, cell)
 		}
@@ -45,24 +45,24 @@ func (a Array2D[T]) Print(format string) string {
 	return output
 }
 
-func (a Array2D[T]) Column(index int) []T {
-	var output []T = make([]T, a.height)
+func (this Array2D[T]) Column(index int) []T {
+	var output []T = make([]T, this.height)
 
-	for _index, row := range a.Elements {
+	for _index, row := range this.Elements {
 		output[_index] = row[index]
 	}
 
 	return output
 }
 
-func (a Array2D[T]) Row(index int) []T {
-	return a.Elements[index]
+func (this Array2D[T]) Row(index int) []T {
+	return this.Elements[index]
 }
 
-func (a Array2D[T]) Find(value T) (x, y int) {
-	for y, row := range a.Elements {
+func (this Array2D[T]) Find(value T) (x, y int) {
+	for y, row := range this.Elements {
 		for x := range row {
-			if a.Get(x, y) == value {
+			if this.Get(x, y) == value {
 				return x, y
 			}
 		}
@@ -70,9 +70,9 @@ func (a Array2D[T]) Find(value T) (x, y int) {
 	return -1, -1
 }
 
-func (a Array2D[T]) Total() T {
+func (this Array2D[T]) Sum() T {
 	var output T
-	for _, row := range a.Elements {
+	for _, row := range this.Elements {
 		for _, column := range row {
 			output += column
 		}
