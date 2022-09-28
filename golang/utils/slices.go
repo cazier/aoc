@@ -55,12 +55,3 @@ func IndexOf[T comparable](slice []T, value T) int {
 	}
 	return -1
 }
-
-func NumRange(stop int) []int {
-	var output []int = make([]int, stop)
-	for i := 0; i < stop; i++ {
-		output[i] = i
-	}
-
-	return output
-}

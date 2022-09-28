@@ -14,6 +14,10 @@ func TestStringToInt(t *testing.T) {
 	var output []int = StringToInt(input)
 
 	assert.Equal(t, output, expected)
+
+	input[0] = "not int"
+
+	assert.Panics(t, func() { StringToInt(input) })
 }
 
 func TestRemove(t *testing.T) {
@@ -43,4 +47,11 @@ func TestSum(t *testing.T) {
 	var output int = Sum(input)
 
 	assert.Equal(t, output, expected)
+}
+
+func TestIndexOf(t *testing.T) {
+	var input []int = []int{5, 4, 3, 2, 1}
+
+	assert.Equal(t, IndexOf(input, 4), 1)
+	assert.Equal(t, IndexOf(input, 10), -1)
 }

@@ -77,3 +77,25 @@ func ParseToInt(s string, base int, bitSize int) (i int, err error) {
 func Answer(s string, a ...any) {
 	fmt.Println(color.BlueString(s, a...))
 }
+
+// NumRange creates a slice with the integer values listed from start to stop, with a step size of
+// one. The range can be ascending or descending, and positive/negative, depending on the input
+// parameters.
+func NumRange(start, stop int) []int {
+	var step, num int
+
+	if stop > start {
+		step = 1
+		num = stop - start
+	} else {
+		step = -1
+		num = start - stop
+	}
+
+	var output []int = make([]int, num)
+	for i := 0; i < num; i++ {
+		output[i] = start + (step * i)
+	}
+
+	return output
+}

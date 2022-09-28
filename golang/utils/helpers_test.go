@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"bytes"
+	"io"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -77,4 +79,35 @@ func TestParseToInt(t *testing.T) {
 	assert.Equal(output, expected)
 }
 
-func TestAnswer(t *testing.T) {}
+func TestAnswer(t *testing.T) {
+	// This is mostly just going to check the output TEXT matches what it should be. I'm expecting
+	// the library maintainer to ensure the stdout text is properly colored. Plus that's easier for
+	// me.
+
+	r, w, _ := os.Pipe()
+
+	stdout := os.Stdout
+	os.Stdout = w
+
+	defer func() {
+		os.Stdout = stdout
+	}()
+
+	Answer("Colored text")
+	w.Close()
+
+	var output bytes.Buffer
+	io.Copy(&output, r)
+
+	os := output.String()
+
+	assert.Equal(t, os, "Colored text\n")
+}
+
+func TestNumRange(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.Equal([]int{0, 1, 2, 3, 4}, NumRange(0, 5))
+	assert.Equal([]int{-5, -4, -3, -2, -1}, NumRange(-5, 0))
+	assert.Equal([]int{5, 4, 3, 2, 1}, NumRange(5, 0))
+}

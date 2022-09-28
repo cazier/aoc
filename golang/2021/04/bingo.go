@@ -27,14 +27,6 @@ func FromBoard(input string) BingoBoard {
 	return b
 }
 
-func (b BingoBoard) AddToMarked(value int) {
-	x, y := b.input.Find(value)
-	if x == -1 || y == -1 {
-		panic("Could not find the value in the input board")
-	}
-	b.marked.Set(x, y, value)
-}
-
 func (b BingoBoard) CheckReturn() (row_num, column_num int) {
 	for index, row := range b.marked.Elements {
 		if index == 0 {
