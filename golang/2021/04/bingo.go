@@ -58,7 +58,20 @@ func (b BingoBoard) AddToMarkedWithRemoval(value int) int {
 		return -1
 	}
 	b.marked.Set(x, y, value)
-	b.input.Set(x, y, 0)
+	b.input.Set(x, y, -1)
 
 	return value
+}
+
+func (b BingoBoard) Total() int {
+	var output int
+	for _, row := range b.input.Elements {
+		for _, column := range row {
+			if column != -1 {
+				output += column
+			}
+		}
+	}
+
+	return output
 }

@@ -65,8 +65,7 @@ func PartTwo(input string) int {
 
 			if row != -1 || column != -1 {
 				if len(boards) == 1 {
-					tot := board.input.Total()
-					return tot * num
+					return board.Total() * num
 				}
 
 				delete(boards, index)
