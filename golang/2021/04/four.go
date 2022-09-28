@@ -40,7 +40,7 @@ func PartOne(input string) int {
 			row, column := board.CheckReturn()
 
 			if row != -1 || column != -1 {
-				return board.input.Total() * num
+				return board.Total() * num
 			}
 		}
 	}
