@@ -28,7 +28,7 @@ func ByLine(input string) []string {
 // ByComma takes a string input and breaks it into a slice of strings, split by any a comma.
 // The resulting slice is returned.
 func ByComma(input string) []string {
-	var pattern *regexp.Regexp = regexp.MustCompile(`[\r\n]`)
+	var pattern *regexp.Regexp = regexp.MustCompile(`,`)
 	return ByRegexp(input, pattern)
 }
 
