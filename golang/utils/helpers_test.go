@@ -100,8 +100,21 @@ func TestNumRange(t *testing.T) {
 	assert.Equal([]int{5, 4, 3, 2, 1}, NumRange(5, 0))
 }
 
+func TestMin(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.Equal(1, Min(1))
+
+	assert.Equal(1, Min(1, 2, 3, 4, 5))
+	assert.Equal(-5, Min(-5, -4, -3, -2, -1, 0))
+
+	assert.Equal(1.1, Min(1.1, 1.2, 1.3, 5.1))
+	assert.Equal(math.Inf(-1), Min(math.Inf(1), math.Inf(-1)))
+}
 func TestMax(t *testing.T) {
 	assert := assert.New(t)
+
+	assert.Equal(1, Max(1))
 
 	assert.Equal(5, Max(1, 2, 3, 4, 5))
 	assert.Equal(0, Max(-5, -4, -3, -2, -1, 0))

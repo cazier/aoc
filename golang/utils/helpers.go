@@ -64,15 +64,25 @@ func NumRange(start, stop int) []int {
 	return output
 }
 
+// Min returns the minimum Numeric value in a slice of values.
+func Min[T Numeric](values ...T) T {
+	var output T = values[0]
+	for _, v := range values[1:] {
+		if v < output {
+			output = v
+		}
+	}
+	return output
+}
+
 // Max returns the maximum Numeric value in a slice of values.
 func Max[T Numeric](values ...T) T {
-	var output T
-	for _, v := range values {
+	var output T = values[0]
+	for _, v := range values[1:] {
 		if v > output {
 			output = v
 		}
 	}
-
 	return output
 }
 
