@@ -13,7 +13,7 @@ func TestPartOne(t *testing.T) {
 	assert.Equal(t, output, expected)
 }
 func TestPartTwo(t *testing.T) {
-	var expected int = 168
+	var expected int = 167
 	var output int = PartTwo(sample_input)
 
 	assert.Equal(t, output, expected)
