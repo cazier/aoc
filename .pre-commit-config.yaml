@@ -28,10 +28,3 @@ repos:
         language: python
         types: [python]
         require_serial: true
-      - id: gotest
-        name: go test
-        language: golang
-        stages:
-        - push
-        entry: cd golang; go test ./...
-        pass_filenames: false
