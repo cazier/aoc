@@ -151,3 +151,13 @@ func TestAbs(t *testing.T) {
 	assert.Equal(5.1, Abs(-5.1))
 	assert.Equal(math.Inf(1), Abs(math.Inf(-1)))
 }
+
+func TestStrip(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.Equal("assert", Strip("assert "))
+	assert.Equal("assert", Strip(" assert"))
+	assert.Equal("assert", Strip(`
+
+	assert`))
+}

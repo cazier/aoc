@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/fatih/color"
 )
@@ -92,6 +93,7 @@ func NumRange(start, stop int) []int {
 	return output
 }
 
+// Max returns the maximum Numeric value in a slice of values.
 func Max[T Numeric](values ...T) T {
 	var output T
 	for _, v := range values {
@@ -103,11 +105,10 @@ func Max[T Numeric](values ...T) T {
 	return output
 }
 
+// Abs returns an absolute value for a generic Numeric type.
 func Abs[T Numeric](val T) T {
 	var output T
-	var _zero T
-
-	zero := _zero
+	var zero T
 
 	if val < zero {
 		output = zero - val
@@ -116,4 +117,9 @@ func Abs[T Numeric](val T) T {
 	}
 
 	return output
+}
+
+// Strip removes any whitespace (including newlines) at the beginning or end of a string
+func Strip(input string) string {
+	return strings.TrimSpace(input)
 }
