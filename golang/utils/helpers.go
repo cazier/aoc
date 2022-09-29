@@ -23,17 +23,9 @@ func LoadInput(year int, day int) string {
 	var year_string string = fmt.Sprintf("2%03d", year%2000)
 	var day_string string = fmt.Sprintf("%02d.txt", day)
 
-	path, err := filepath.Abs(filepath.Join(root, "inputs", year_string, day_string))
+	path, _ := filepath.Abs(filepath.Join(root, "inputs", year_string, day_string))
 
-	if err != nil {
-		panic(err)
-	}
-
-	contents, err := os.ReadFile(path)
-
-	if err != nil {
-		panic(err)
-	}
+	contents, _ := os.ReadFile(path)
 
 	return string(contents)
 }
@@ -95,6 +87,32 @@ func NumRange(start, stop int) []int {
 	var output []int = make([]int, num)
 	for i := 0; i < num; i++ {
 		output[i] = start + (step * i)
+	}
+
+	return output
+}
+
+func Max[T Numeric](values ...T) T {
+	var output T
+	for _, v := range values {
+		if v > output {
+			output = v
+		}
+	}
+
+	return output
+}
+
+func Abs[T Numeric](val T) T {
+	var output T
+	var _zero T
+
+	zero := _zero
+
+	if val < zero {
+		output = zero - val
+	} else {
+		output = val
 	}
 
 	return output

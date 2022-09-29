@@ -3,7 +3,9 @@ package utils
 import (
 	"bytes"
 	"io"
+	"math"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"regexp"
 	"testing"
@@ -28,6 +30,24 @@ func TestLoadInput(t *testing.T) {
 	var output string = LoadInput(2020, 15)
 
 	assert.Equal(t, output, expected)
+}
+
+func TestLoadInputFailure(t *testing.T) {
+	if os.Getenv("CAPTURE_CRASH_OUTPUT") == "1" {
+		os.Unsetenv("AOC_ROOT_DIRECTORY")
+
+		LoadInput(2020, 15)
+		return
+	}
+
+	command := exec.Command(os.Args[0], "-test.run=TestLoadInputFailure")
+	command.Env = append(os.Environ(), "CAPTURE_CRASH_OUTPUT=1")
+
+	err := command.Run()
+
+	if e, ok := err.(*exec.ExitError); ok && !e.Success() {
+		assert.True(t, ok && !e.Success())
+	}
 }
 
 func TestSplitByLine(t *testing.T) {
@@ -110,4 +130,24 @@ func TestNumRange(t *testing.T) {
 	assert.Equal([]int{0, 1, 2, 3, 4}, NumRange(0, 5))
 	assert.Equal([]int{-5, -4, -3, -2, -1}, NumRange(-5, 0))
 	assert.Equal([]int{5, 4, 3, 2, 1}, NumRange(5, 0))
+}
+
+func TestMax(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.Equal(5, Max(1, 2, 3, 4, 5))
+	assert.Equal(0, Max(-5, -4, -3, -2, -1, 0))
+
+	assert.Equal(5.1, Max(1.1, 1.2, 1.3, 5.1))
+	assert.Equal(math.Inf(1), Max(math.Inf(1), math.Inf(-1)))
+}
+
+func TestAbs(t *testing.T) {
+	assert := assert.New(t)
+
+	assert.Equal(1, Abs(-1))
+	assert.Equal(50, Abs(50))
+
+	assert.Equal(5.1, Abs(-5.1))
+	assert.Equal(math.Inf(1), Abs(math.Inf(-1)))
 }
