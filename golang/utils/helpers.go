@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"regexp"
 	"strconv"
 	"strings"
 
@@ -29,34 +28,6 @@ func LoadInput(year int, day int) string {
 	contents, _ := os.ReadFile(path)
 
 	return string(contents)
-}
-
-// SplitByLine takes a string input and breaks it into a slice of strings, split by any of the
-// following newline characters: `\r`, `\n` The resulting slice is returned.
-func SplitByLine(input string) []string {
-	var pattern *regexp.Regexp = regexp.MustCompile(`[\r\n]`)
-	return SplitStringByPattern(input, pattern)
-}
-
-// SplitByCharacter takes a string input breaks into a slice with an element for each character,
-// which is then returned
-func SplitByCharacter(input string) []string {
-	var pattern *regexp.Regexp = regexp.MustCompile(``)
-	return SplitStringByPattern(input, pattern)
-}
-
-// SplitStringByPattern takes an arbitrary string and splits it by a regular expression pattern. The
-// resulting slice is returned.
-func SplitStringByPattern(input string, pattern *regexp.Regexp) []string {
-	_splits := pattern.Split(input, -1)
-	var output []string
-
-	for _, v := range _splits {
-		if len(v) > 0 {
-			output = append(output, v)
-		}
-	}
-	return output
 }
 
 // ParseToInt is a wrapper around strconv.ParseInt that casts the resulting integer to an `int` type

@@ -2,6 +2,7 @@ package main
 
 import (
 	utils "main/utils"
+	splits "main/utils/splits"
 )
 
 const sample_input string = `
@@ -18,7 +19,7 @@ const sample_input string = `
 `
 
 func PartOne(input string) int {
-	var depths []int = utils.StringToInt(utils.SplitByLine(input))
+	var depths []int = utils.StringToInt(splits.ByLine(input))
 
 	var increases int = 0
 
@@ -31,7 +32,7 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var depths []int = utils.StringToInt(utils.SplitByLine(input))
+	var depths []int = utils.StringToInt(splits.ByLine(input))
 
 	var increases int = 0
 

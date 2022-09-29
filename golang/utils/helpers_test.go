@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -48,37 +47,6 @@ func TestLoadInputFailure(t *testing.T) {
 	if e, ok := err.(*exec.ExitError); ok && !e.Success() {
 		assert.True(t, ok && !e.Success())
 	}
-}
-
-func TestSplitByLine(t *testing.T) {
-	var input string = "hello\nline\ntwo\nfour"
-	var expected []string = []string{"hello", "line", "two", "four"}
-	var output []string = SplitByLine(input)
-
-	assert.Equal(t, output, expected)
-}
-
-func TestSplitByCharacter(t *testing.T) {
-	var input string = "hello"
-	var expected []string = []string{"h", "e", "l", "l", "o"}
-	var output []string = SplitByCharacter(input)
-
-	assert.Equal(t, output, expected)
-}
-
-func TestSplitStringByPattern(t *testing.T) {
-	assert := assert.New(t)
-	var input string = "h1e2l3l4o"
-	var expected []string = []string{"h", "e", "l", "l", "o"}
-
-	var output []string = SplitStringByPattern(input, regexp.MustCompile(`\d`))
-
-	assert.Equal(output, expected)
-
-	expected = []string{"h1e2l", "l4o"}
-	output = SplitStringByPattern(input, regexp.MustCompile(`3`))
-
-	assert.Equal(output, expected)
 }
 
 func TestParseToInt(t *testing.T) {

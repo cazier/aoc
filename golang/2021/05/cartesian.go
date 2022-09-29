@@ -2,6 +2,7 @@ package main
 
 import (
 	utils "main/utils"
+	"main/utils/splits"
 	"regexp"
 )
 
@@ -42,9 +43,9 @@ func (l Line) Crossings() []Point {
 }
 
 func fromString(input string) Line {
-	var line []string = utils.SplitStringByPattern(input, regexp.MustCompile(` -> `))
-	var start_split []int = utils.StringToInt(utils.SplitStringByPattern(line[0], regexp.MustCompile((`,`))))
-	var stop_split []int = utils.StringToInt(utils.SplitStringByPattern(line[1], regexp.MustCompile((`,`))))
+	var line []string = splits.ByRegexp(input, regexp.MustCompile(` -> `))
+	var start_split []int = utils.StringToInt(splits.ByRegexp(line[0], regexp.MustCompile((`,`))))
+	var stop_split []int = utils.StringToInt(splits.ByRegexp(line[1], regexp.MustCompile((`,`))))
 
 	return Line{
 		Point{start_split[0], start_split[1]},
@@ -54,7 +55,7 @@ func fromString(input string) Line {
 }
 
 func FromList(input string) []Line {
-	var lines []string = utils.SplitByLine(input)
+	var lines []string = splits.ByLine(input)
 	var out []Line = make([]Line, len(lines))
 
 	for index, line := range lines {

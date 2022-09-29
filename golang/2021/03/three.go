@@ -2,6 +2,7 @@ package main
 
 import (
 	utils "main/utils"
+	"main/utils/splits"
 )
 
 const sample_input string = `
@@ -20,7 +21,7 @@ const sample_input string = `
 `
 
 func PartOne(input string) int {
-	var report []string = utils.SplitByLine(input)
+	var report []string = splits.ByLine(input)
 	var commands int = len(report)
 
 	var width int = len(report[0])
@@ -28,7 +29,7 @@ func PartOne(input string) int {
 	var values []int = make([]int, width)
 
 	for _, command := range report {
-		for index, value := range utils.SplitByCharacter(command) {
+		for index, value := range splits.ByCharacter(command) {
 			if value == "1" {
 				values[index] += 1
 			}
@@ -53,7 +54,7 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var report []string = utils.SplitByLine(input)
+	var report []string = splits.ByLine(input)
 
 	o2_func := func(i, j int) bool { return i >= j }
 	o2_rating, _ := repeatPartTwo(report, o2_func)
@@ -101,7 +102,7 @@ func getValuesOfSliceAtIndex(slice []string, index int) int {
 	var count int = 0
 
 	for _, command := range slice {
-		if utils.SplitByCharacter(command)[index] == "1" {
+		if splits.ByCharacter(command)[index] == "1" {
 			count += 1
 		}
 	}

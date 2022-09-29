@@ -4,6 +4,7 @@ import (
 	"regexp"
 
 	utils "main/utils"
+	"main/utils/splits"
 )
 
 const sample_input string = `
@@ -50,7 +51,7 @@ func run(input map[int]int, days int) int {
 }
 
 func fromString(input string) map[int]int {
-	splits := utils.SplitStringByPattern(input, regexp.MustCompile(`,`))
+	splits := splits.ByRegexp(input, regexp.MustCompile(`,`))
 	var days []int = utils.StringToInt(splits)
 
 	var output map[int]int = make(map[int]int)

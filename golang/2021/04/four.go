@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	utils "main/utils"
+	"main/utils/splits"
 )
 
 const sample_input string = `
@@ -32,7 +33,7 @@ const sample_input string = `
 func PartOne(input string) int {
 	commands, boards := gameData(input)
 
-	for _, command := range utils.SplitStringByPattern(commands, regexp.MustCompile(`,`)) {
+	for _, command := range splits.ByRegexp(commands, regexp.MustCompile(`,`)) {
 		for _, board := range boards {
 			num, _ := utils.ParseToInt(command, 10, 16)
 			board.AddToMarkedWithRemoval(num)
@@ -51,7 +52,7 @@ func PartOne(input string) int {
 func PartTwo(input string) int {
 	commands, boards := gameData(input)
 
-	for _, command := range utils.SplitStringByPattern(commands, regexp.MustCompile(`,`)) {
+	for _, command := range splits.ByRegexp(commands, regexp.MustCompile(`,`)) {
 		num, _ := utils.ParseToInt(command, 10, 16)
 
 		for index, board := range boards {
@@ -77,7 +78,7 @@ func PartTwo(input string) int {
 }
 
 func gameData(input string) (string, map[int]BingoBoard) {
-	data := utils.SplitStringByPattern(input, regexp.MustCompile(`\n\n`))
+	data := splits.ByRegexp(input, regexp.MustCompile(`\n\n`))
 
 	boards := make(map[int]BingoBoard)
 

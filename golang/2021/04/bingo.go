@@ -3,6 +3,7 @@ package main
 import (
 	utils "main/utils"
 	arrays2d "main/utils/arrays"
+	"main/utils/splits"
 	"regexp"
 )
 
@@ -15,8 +16,8 @@ func FromBoard(input string) BingoBoard {
 	b := BingoBoard{}
 	var a arrays2d.Array2D[int] = arrays2d.Construct(5, 5, -1)
 
-	for y, row := range utils.SplitByLine(input) {
-		for x, value := range utils.StringToInt(utils.SplitStringByPattern(row, regexp.MustCompile(`[\s]`))) {
+	for y, row := range splits.ByLine(input) {
+		for x, value := range utils.StringToInt(splits.ByRegexp(row, regexp.MustCompile(`[\s]`))) {
 			a.Set(x, y, value)
 		}
 	}

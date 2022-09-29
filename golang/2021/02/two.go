@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	utils "main/utils"
+	"main/utils/splits"
 )
 
 const sample_input string = `
@@ -17,7 +18,7 @@ forward 2
 `
 
 func PartOne(input string) int {
-	var commands []string = utils.SplitByLine(input)
+	var commands []string = splits.ByLine(input)
 
 	var x int = 0
 	var y int = 0
@@ -43,7 +44,7 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var commands []string = utils.SplitByLine(input)
+	var commands []string = splits.ByLine(input)
 
 	var x int = 0
 	var y int = 0
