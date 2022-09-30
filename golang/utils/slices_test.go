@@ -55,3 +55,10 @@ func TestIndexOf(t *testing.T) {
 	assert.Equal(t, IndexOf(input, 4), 1)
 	assert.Equal(t, IndexOf(input, 10), -1)
 }
+
+func TestContains(t *testing.T) {
+	var input []int = []int{5, 4, 3, 2, 1}
+
+	assert.True(t, Contains(input, 4))
+	assert.False(t, Contains(input, 10))
+}

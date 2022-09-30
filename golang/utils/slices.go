@@ -55,3 +55,8 @@ func IndexOf[T comparable](slice []T, value T) int {
 	}
 	return -1
 }
+
+// Contains returns true if the slice has the value indicated, else returns false.
+func Contains[T comparable](slice []T, value T) bool {
+	return IndexOf(slice, value) != -1
+}

@@ -32,12 +32,12 @@ func (b BingoBoard) CheckReturn() (row_num, column_num int) {
 	for index, row := range b.marked.Elements {
 		if index == 0 {
 			for column_index := range row {
-				if utils.IndexOf(b.marked.Column(column_index), -1) == -1 {
+				if !utils.Contains(b.marked.Column(column_index), -1) {
 					return -1, column_index
 				}
 			}
 		}
-		if utils.IndexOf(b.marked.Row(index), -1) == -1 {
+		if !utils.Contains(b.marked.Row(index), -1) {
 			return index, -1
 		}
 	}
