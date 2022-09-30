@@ -62,13 +62,13 @@ _log_debug() {
 }
 
 _days() {
-        if [[ "$DAY" =~ [^0-9] || $DAY -gt 25 || $DAY -lt 1 ]]; then
-                _log_panic "The day must be an integer between 1 and 25. (Got: ${DAY:-"null"})"
+        if [[ "${DAY#0}" =~ [^0-9] || ${DAY#0} -gt 25 || ${DAY#0} -lt 1 ]]; then
+                _log_panic "The day must be an integer between 1 and 25. (Got: ${DAY#0:-"null"})"
 
                 return 1
         fi
 
-        DAY=$(printf '%02d' "${DAY}")
+        DAY=$(printf '%02d' "${DAY#0}")
         DAY_NAME=${DAY_NAME_MAP[$DAY]}
 
         return 0
