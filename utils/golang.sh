@@ -49,8 +49,8 @@ func PartTwo(input string) int {
 func main() {
 	var input string = utils.LoadInput(${YEAR}, ${DAY})
 
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	utils.Answer("Part One: %%d", PartOne(input))
+	utils.Answer("Part Two: %%d", PartTwo(input))
 }
 EOF
 )
