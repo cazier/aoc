@@ -60,3 +60,14 @@ func IndexOf[T comparable](slice []T, value T) int {
 func Contains[T comparable](slice []T, value T) bool {
 	return IndexOf(slice, value) != -1
 }
+
+// Each returns a boolean for the output of passing each element in the slice to the supplied
+// predicate argument function.
+func Each[T comparable](slice []T, predicate func(T) bool) bool {
+	for _, element := range slice {
+		if !predicate(element) {
+			return false
+		}
+	}
+	return true
+}

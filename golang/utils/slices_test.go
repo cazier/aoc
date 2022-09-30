@@ -62,3 +62,18 @@ func TestContains(t *testing.T) {
 	assert.True(t, Contains(input, 4))
 	assert.False(t, Contains(input, 10))
 }
+
+func TestEach(t *testing.T) {
+	assert := assert.New(t)
+
+	positive := func(value int) bool {
+		return value > 0
+	}
+
+	string_named_e := func(value string) bool {
+		return value == "e"
+	}
+
+	assert.True(Each([]int{1, 2, 3}, positive))
+	assert.False(Each([]string{"1", "e", "!"}, string_named_e))
+}
