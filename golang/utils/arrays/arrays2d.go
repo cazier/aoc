@@ -13,11 +13,13 @@ type Array2D[T utils.Numeric] struct {
 
 func Construct[T utils.Numeric](width, height int, defaults T) Array2D[T] {
 	b := Array2D[T]{width: width, height: height}
-	b.Elements = make([][]T, width)
+	b.Elements = make([][]T, height)
 
 	for index := range b.Elements {
 		b.Elements[index] = make([]T, width)
-		b.Elements[index] = []T{defaults, defaults, defaults, defaults, defaults}
+		for w := 0; w < width; w++ {
+			b.Elements[index][w] = defaults
+		}
 	}
 
 	return b
