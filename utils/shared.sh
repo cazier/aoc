@@ -54,9 +54,14 @@ _log_panic() {
         printf "\033[0m\n"
 }
 
+_log_info() {
+        printf "\033[32m${1}"
+        printf "\033[0m\n"
+}
+
 _log_debug() {
-        if [[ $VERBOSE -eq 1 || $DRY_RUN -eq 1 || $2 == "force" ]]; then
-                printf "\033[32m${1}"
+        if [[ $VERBOSE -eq 1 || $DRY_RUN -eq 1 ]]; then
+                printf "\033[34${1}"
                 printf "\033[0m\n"
         fi
 }

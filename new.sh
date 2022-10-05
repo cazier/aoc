@@ -25,6 +25,8 @@ debug_messages() {
 }
 
 do_thing() {
+        source utils/system.sh
+
         case "$LANGUAGE_DIRECTORY" in
         "golang")
                 source utils/golang.sh;;
@@ -39,6 +41,14 @@ do_thing() {
         _cmd "python ${_CWD}/utils/readme.py --year ${YEAR} --day ${DAY} --cookie ${_CWD}/.session_cookie --aoc-path ${_CWD} --log-level ERROR"
 
         DIR="${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
+        _cmd "mkdir -p ${DIR}"
+
+        README="${DIR}/README.md"
+
+        if ! [[ -e "${README}" ]]; then
+                _log_info "Adding a new readme file for ${YEAR}"
+                _cmd "printf '${ANNUAL_README}' > ${README}"
+        fi
 
         _log_debug "Creating code directories and files"
         _cmd "mkdir -p ${DIR}"
@@ -50,7 +60,7 @@ do_thing() {
                 exit 1
         fi
 
-        _log_debug "Succesfully created all the files. Get to work!" "force"
+        _log_info "Succesfully created all the files. Get to work!"
 }
 
 CLI=$(getopt -o rthl:d:y:vV --long run,test,help,language:,day:,year:,verbose,version,dry-run -- "$@")
