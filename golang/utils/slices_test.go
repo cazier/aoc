@@ -25,8 +25,8 @@ func TestRemove(t *testing.T) {
 	var expected []string = []string{"a", "b", "d", "e"}
 
 	var output []string = Remove(input, 2)
-	sort.SliceStable(output, func(i, j int) bool { return output[i] < output[j] })
-	sort.SliceStable(expected, func(i, j int) bool { return expected[i] < expected[j] })
+	sort.Strings(output)
+	sort.Strings(expected)
 
 	assert.Equal(t, output, expected)
 }
