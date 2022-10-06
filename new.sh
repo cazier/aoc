@@ -43,7 +43,7 @@ do_thing() {
         DIR="${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
         _cmd "mkdir -p ${DIR}"
 
-        README="${DIR}/README.md"
+        README="${DIR}/../README.md"
 
         if ! [[ -e "${README}" ]]; then
                 _log_info "Adding a new readme file for ${YEAR}"
