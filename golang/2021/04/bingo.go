@@ -1,10 +1,12 @@
+// TODO: This probably can be updated to use a grids.Grid rather than the Array2D
 package main
 
 import (
+	"regexp"
+
 	utils "main/utils"
 	arrays2d "main/utils/arrays"
-	"main/utils/splits"
-	"regexp"
+	splits "main/utils/splits"
 )
 
 type BingoBoard struct {
@@ -12,7 +14,7 @@ type BingoBoard struct {
 	marked arrays2d.Array2D[int]
 }
 
-func FromBoard(input string) BingoBoard {
+func fromBoard(input string) BingoBoard {
 	b := BingoBoard{}
 	var a arrays2d.Array2D[int] = arrays2d.Construct(5, 5, -1)
 
@@ -28,7 +30,7 @@ func FromBoard(input string) BingoBoard {
 	return b
 }
 
-func (b BingoBoard) CheckReturn() (row_num, column_num int) {
+func (b BingoBoard) checkReturn() (row_num, column_num int) {
 	for index, row := range b.marked.Elements {
 		if index == 0 {
 			for column_index := range row {
@@ -45,7 +47,7 @@ func (b BingoBoard) CheckReturn() (row_num, column_num int) {
 	return -1, -1
 }
 
-func (b BingoBoard) AddToMarkedWithRemoval(value int) int {
+func (b BingoBoard) addToMarkedWithRemoval(value int) int {
 	x, y := b.input.Find(value)
 	if x == -1 || y == -1 {
 		return -1
@@ -56,7 +58,7 @@ func (b BingoBoard) AddToMarkedWithRemoval(value int) int {
 	return value
 }
 
-func (b BingoBoard) Total() int {
+func (b BingoBoard) total() int {
 	var output int
 	for _, row := range b.input.Elements {
 		for _, column := range row {

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	utils "main/utils"
 )
 
@@ -19,7 +18,7 @@ const sample_input string = `
 `
 
 func PartOne(input string) int {
-	var lines []Line = FromList(input)
+	var lines []Line = fromList(input)
 	var output int = 0
 	crossover := make(map[Point]int)
 
@@ -34,7 +33,7 @@ func PartOne(input string) int {
 			continue
 		}
 
-		for _, point := range line.Crossings() {
+		for _, point := range line.crossings() {
 			crossover[point] += 1
 		}
 	}
@@ -49,7 +48,7 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var lines []Line = FromList(input)
+	var lines []Line = fromList(input)
 	var output int = 0
 	crossover := make(map[Point]int)
 
@@ -58,7 +57,7 @@ func PartTwo(input string) int {
 			continue
 		}
 
-		for _, point := range line.Crossings() {
+		for _, point := range line.crossings() {
 			crossover[point] += 1
 		}
 	}
@@ -81,36 +80,4 @@ func main() {
 
 	utils.Answer("Part One: %d", PartOne(input))
 	utils.Answer("Part Two: %d", PartTwo(input))
-}
-
-func PrintBoard(lines []Line) string {
-	output := make([][]int, 10)
-	for i := 0; i < 10; i++ {
-		for j := 0; j < 10; j++ {
-			output[i] = append(output[i], 0)
-		}
-	}
-
-	for _, line := range lines {
-		if line.valid {
-			var cross []Point = line.Crossings()
-			for _, point := range cross {
-				output[point.y][point.x] += 1
-			}
-		}
-	}
-
-	var stringy string = ""
-
-	for _, row := range output {
-		for _, column := range row {
-			if column == 0 {
-				stringy += "."
-			} else {
-				stringy += fmt.Sprintf("%d", column)
-			}
-		}
-		stringy += "\n"
-	}
-	return stringy
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	utils "main/utils"
-	"main/utils/splits"
+	splits "main/utils/splits"
 )
 
 const sample_input string = `
@@ -98,9 +98,7 @@ func repeatPartTwo(input []string, lookup func(int, int) bool) (int, error) {
 	}
 	return utils.ParseToInt(slice[0], 2, 16)
 }
-func getValuesOfSliceAtIndex(slice []string, index int) int {
-	var count int = 0
-
+func getValuesOfSliceAtIndex(slice []string, index int) (count int) {
 	for _, command := range slice {
 		if splits.ByCharacter(command)[index] == "1" {
 			count += 1

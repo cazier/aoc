@@ -1,9 +1,10 @@
-package grid
+package grids
 
 import (
 	"fmt"
-	"main/utils"
-	"main/utils/splits"
+
+	utils "main/utils"
+	splits "main/utils/splits"
 )
 
 func New[T utils.Numeric](rows int) Grid[T] {

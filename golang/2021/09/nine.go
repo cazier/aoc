@@ -1,9 +1,10 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/splits"
 	"sort"
+
+	utils "main/utils"
+	splits "main/utils/splits"
 )
 
 const sample_input string = `

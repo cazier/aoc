@@ -1,8 +1,9 @@
-package grid
+package grids
 
 import (
 	"fmt"
-	"main/utils"
+
+	utils "main/utils"
 )
 
 // Coord is used primarily as the keys to a map

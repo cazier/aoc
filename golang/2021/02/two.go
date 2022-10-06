@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"strings"
+	"regexp"
 
 	utils "main/utils"
-	"main/utils/splits"
+	splits "main/utils/splits"
 )
 
 const sample_input string = `
@@ -24,10 +24,10 @@ func PartOne(input string) int {
 	var y int = 0
 
 	for _, v := range commands {
-		splits := strings.SplitN(v, " ", 2)
+		splits := splits.ByRegexp(v, regexp.MustCompile(` `))
 
 		direction := splits[0]
-		amount, _ := utils.ParseToInt(splits[1], 10, 64)
+		amount := utils.B10toI(splits[1])
 
 		switch direction {
 		case "forward":
@@ -51,10 +51,10 @@ func PartTwo(input string) int {
 	var aim int = 0
 
 	for _, v := range commands {
-		splits := strings.SplitN(v, " ", 2)
+		splits := splits.ByRegexp(v, regexp.MustCompile(` `))
 
 		direction := splits[0]
-		amount, _ := utils.ParseToInt(splits[1], 10, 64)
+		amount := utils.B10toI(splits[1])
 
 		switch direction {
 		case "forward":

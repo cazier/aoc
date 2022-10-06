@@ -1,4 +1,4 @@
-package grid
+package grids
 
 func (c Coord) Neighbors() <-chan Coord {
 	channel := make(chan Coord)

@@ -18,30 +18,26 @@ const sample_input string = `
 263
 `
 
-func PartOne(input string) int {
+func PartOne(input string) (score int) {
 	var depths []int = utils.StringToInt(splits.ByLine(input))
-
-	var increases int = 0
 
 	for i := 1; i < len(depths); i++ {
 		if depths[i-1] < depths[i] {
-			increases++
+			score++
 		}
 	}
-	return increases
+	return score
 }
 
-func PartTwo(input string) int {
+func PartTwo(input string) (score int) {
 	var depths []int = utils.StringToInt(splits.ByLine(input))
-
-	var increases int = 0
 
 	for i := 0; i < len(depths)-3; i++ {
 		if utils.Sum(depths[i:i+3]) < utils.Sum(depths[i+1:i+4]) {
-			increases++
+			score++
 		}
 	}
-	return increases
+	return score
 }
 
 func main() {

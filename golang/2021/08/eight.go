@@ -1,10 +1,11 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/sets"
-	"main/utils/splits"
 	"regexp"
+
+	utils "main/utils"
+	sets "main/utils/sets"
+	splits "main/utils/splits"
 )
 
 const sample_input string = `

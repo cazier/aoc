@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	utils "main/utils"
-	"main/utils/splits"
+	splits "main/utils/splits"
 )
 
 const sample_input string = `
@@ -36,12 +36,12 @@ func PartOne(input string) int {
 	for _, command := range splits.ByRegexp(commands, regexp.MustCompile(`,`)) {
 		for _, board := range boards {
 			num, _ := utils.ParseToInt(command, 10, 16)
-			board.AddToMarkedWithRemoval(num)
+			board.addToMarkedWithRemoval(num)
 
-			row, column := board.CheckReturn()
+			row, column := board.checkReturn()
 
 			if row != -1 || column != -1 {
-				return board.Total() * num
+				return board.total() * num
 			}
 		}
 	}
@@ -56,17 +56,17 @@ func PartTwo(input string) int {
 		num, _ := utils.ParseToInt(command, 10, 16)
 
 		for index, board := range boards {
-			var out int = board.AddToMarkedWithRemoval(num)
+			var out int = board.addToMarkedWithRemoval(num)
 
 			if out == -1 {
 				continue
 			}
 
-			row, column := board.CheckReturn()
+			row, column := board.checkReturn()
 
 			if row != -1 || column != -1 {
 				if len(boards) == 1 {
-					return board.Total() * num
+					return board.total() * num
 				}
 
 				delete(boards, index)
@@ -83,7 +83,7 @@ func gameData(input string) (string, map[int]BingoBoard) {
 	boards := make(map[int]BingoBoard)
 
 	for index, board_string := range data[1:] {
-		boards[index] = FromBoard(board_string)
+		boards[index] = fromBoard(board_string)
 	}
 
 	return strings.Replace(data[0], "\n", "", -1), boards

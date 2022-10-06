@@ -4,7 +4,7 @@ import (
 	"regexp"
 
 	utils "main/utils"
-	"main/utils/splits"
+	splits "main/utils/splits"
 )
 
 const sample_input string = `

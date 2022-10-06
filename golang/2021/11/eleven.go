@@ -3,7 +3,7 @@ package main
 import (
 	utils "main/utils"
 	grid "main/utils/grids"
-	"main/utils/sets"
+	sets "main/utils/sets"
 )
 
 const sample_input string = `

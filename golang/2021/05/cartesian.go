@@ -1,9 +1,11 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/splits"
+	"fmt"
 	"regexp"
+
+	utils "main/utils"
+	splits "main/utils/splits"
 )
 
 type Point struct {
@@ -17,7 +19,7 @@ type Line struct {
 	valid bool
 }
 
-func (l Line) Crossings() []Point {
+func (l Line) crossings() []Point {
 	var length int = utils.Max(utils.Abs(l.start.x-l.stop.x), utils.Abs(l.start.y-l.stop.y))
 	var output []Point = make([]Point, length+1)
 
@@ -54,7 +56,7 @@ func fromString(input string) Line {
 	}
 }
 
-func FromList(input string) []Line {
+func fromList(input string) []Line {
 	var lines []string = splits.ByLine(input)
 	var out []Line = make([]Line, len(lines))
 
@@ -63,4 +65,36 @@ func FromList(input string) []Line {
 
 	}
 	return out
+}
+
+func printBoard(lines []Line) string {
+	output := make([][]int, 10)
+	for i := 0; i < 10; i++ {
+		for j := 0; j < 10; j++ {
+			output[i] = append(output[i], 0)
+		}
+	}
+
+	for _, line := range lines {
+		if line.valid {
+			var cross []Point = line.crossings()
+			for _, point := range cross {
+				output[point.y][point.x] += 1
+			}
+		}
+	}
+
+	var stringy string = ""
+
+	for _, row := range output {
+		for _, column := range row {
+			if column == 0 {
+				stringy += "."
+			} else {
+				stringy += fmt.Sprintf("%d", column)
+			}
+		}
+		stringy += "\n"
+	}
+	return stringy
 }

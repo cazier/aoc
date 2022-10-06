@@ -1,7 +1,7 @@
 package sets
 
 import (
-	"main/utils"
+	utils "main/utils"
 )
 
 type Set[T comparable] struct {
