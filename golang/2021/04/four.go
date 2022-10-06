@@ -90,7 +90,11 @@ func gameData(input string) (string, map[int]BingoBoard) {
 }
 
 func main() {
-	var input string = utils.LoadInput(2021, 04)
+	input, err := utils.LoadInput(2021, 04)
+
+	if err != nil {
+		panic(err)
+	}
 
 	utils.Answer("Part One: %d", PartOne(input))
 	utils.Answer("Part Two: %d", PartTwo(input))

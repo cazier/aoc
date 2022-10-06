@@ -111,7 +111,11 @@ func getValuesOfSliceAtIndex(slice []string, index int) int {
 }
 
 func main() {
-	var input string = utils.LoadInput(2021, 03)
+	input, err := utils.LoadInput(2021, 03)
+
+	if err != nil {
+		panic(err)
+	}
 
 	utils.Answer("Part One: %d", PartOne(input))
 	utils.Answer("Part Two: %d", PartTwo(input))

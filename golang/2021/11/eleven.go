@@ -42,7 +42,11 @@ func PartTwo(input string) (score int) {
 }
 
 func main() {
-	var input string = utils.LoadInput(2021, 11)
+	input, err := utils.LoadInput(2021, 11)
+
+	if err != nil {
+		panic(err)
+	}
 
 	utils.Answer("Part One: %d", PartOne(input))
 	utils.Answer("Part Two: %d", PartTwo(input))

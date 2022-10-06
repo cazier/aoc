@@ -45,7 +45,11 @@ func PartTwo(input string) int {
 }
 
 func main() {
-	var input string = utils.LoadInput(2021, 01)
+	input, err := utils.LoadInput(2021, 01)
+
+	if err != nil {
+		panic(err)
+	}
 
 	utils.Answer("Part One: %d", PartOne(input))
 	utils.Answer("Part Two: %d", PartTwo(input))
