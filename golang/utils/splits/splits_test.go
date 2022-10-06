@@ -12,7 +12,7 @@ func TestByLine(t *testing.T) {
 	var expected []string = []string{"hello", "line", "two", "four"}
 	var output []string = ByLine(input)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 }
 
 func TestByComma(t *testing.T) {
@@ -20,7 +20,7 @@ func TestByComma(t *testing.T) {
 	var expected []string = []string{"1", "2", "3", "4"}
 	var output []string = ByComma(input)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 }
 
 func TestByCharacter(t *testing.T) {
@@ -28,7 +28,7 @@ func TestByCharacter(t *testing.T) {
 	var expected []string = []string{"h", "e", "l", "l", "o"}
 	var output []string = ByCharacter(input)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 }
 
 func TestStringByRegexp(t *testing.T) {
@@ -38,10 +38,10 @@ func TestStringByRegexp(t *testing.T) {
 
 	var output []string = ByRegexp(input, regexp.MustCompile(`\d`))
 
-	assert.Equal(output, expected)
+	assert.Equal(expected, output)
 
 	expected = []string{"h1e2l", "l4o"}
 	output = ByRegexp(input, regexp.MustCompile(`3`))
 
-	assert.Equal(output, expected)
+	assert.Equal(expected, output)
 }

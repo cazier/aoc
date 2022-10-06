@@ -28,7 +28,7 @@ func TestLoadInput(t *testing.T) {
 	// Test
 	var output string = LoadInput(2020, 15)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 }
 
 func TestLoadInputFailure(t *testing.T) {
@@ -57,14 +57,14 @@ func TestParseToInt(t *testing.T) {
 
 	output, _ := ParseToInt(input, 10, 16)
 
-	assert.Equal(output, expected)
+	assert.Equal(expected, output)
 
 	input = "10101"
 	expected = 21
 
 	output, _ = ParseToInt(input, 2, 16)
 
-	assert.Equal(output, expected)
+	assert.Equal(expected, output)
 }
 func TestB10toI(t *testing.T) {
 	assert := assert.New(t)
@@ -72,7 +72,7 @@ func TestB10toI(t *testing.T) {
 	var input string = "123"
 	var expected int = 123
 
-	assert.Equal(B10toI(input), expected)
+	assert.Equal(expected, B10toI(input))
 	assert.Panics(func() { B10toI("abcd") })
 }
 
@@ -98,7 +98,7 @@ func TestAnswer(t *testing.T) {
 
 	os := output.String()
 
-	assert.Equal(t, os, "Colored text\n")
+	assert.Equal(t, "Colored text\n", os)
 }
 
 func TestNumRange(t *testing.T) {

@@ -52,7 +52,7 @@ func step(board grid.Grid[int]) int {
 	flash := sets.New(grid.Coord{})
 	flash.Remove(grid.Coord{})
 
-	for key := range board.Iter() {
+	for key := range board.OrderedIter(0, 10, 0, 10) {
 		board.IAdd(key, 1)
 	}
 	var changed bool = true

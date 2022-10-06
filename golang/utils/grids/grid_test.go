@@ -25,7 +25,7 @@ func TestCoordNeighbors(t *testing.T) {
 func TestCoordAdd(t *testing.T) {
 	input := Coord{3, 3}
 
-	assert.Equal(t, input.Add(input), Coord{6, 6})
+	assert.Equal(t, Coord{6, 6}, input.Add(input))
 }
 
 func TestCoordOk(t *testing.T) {

@@ -10,7 +10,7 @@ func TestNew(t *testing.T) {
 	var input []string = []string{"1", "2", "2", "3", "3", "3"}
 	expected := Set[string]{values: []string{"1", "2", "3"}}
 
-	assert.Equal(t, New(input...), expected)
+	assert.Equal(t, expected, New(input...))
 }
 
 func TestAdd(t *testing.T) {
@@ -21,22 +21,22 @@ func TestAdd(t *testing.T) {
 			s.Add(index)
 		}
 	}
-	assert.Equal(t, s, Set[int]{values: []int{0, 1, 2, 3, 4}})
+	assert.Equal(t, Set[int]{values: []int{0, 1, 2, 3, 4}}, s)
 }
 
 func TestRemove(t *testing.T) {
 	s := New(1, 2, 3, 4)
 
-	assert.Equal(t, s, Set[int]{values: []int{1, 2, 3, 4}})
+	assert.Equal(t, Set[int]{values: []int{1, 2, 3, 4}}, s)
 
 	s.Remove(3)
-	assert.Equal(t, s, Set[int]{values: []int{1, 2, 4}})
+	assert.Equal(t, Set[int]{values: []int{1, 2, 4}}, s)
 }
 func TestExtend(t *testing.T) {
 	s := New(0)
 	s.Extend(1, 2, 3, 4)
 
-	assert.Equal(t, s, Set[int]{values: []int{0, 1, 2, 3, 4}})
+	assert.Equal(t, Set[int]{values: []int{0, 1, 2, 3, 4}}, s)
 }
 
 func TestContains(t *testing.T) {
@@ -49,9 +49,9 @@ func TestContains(t *testing.T) {
 func TestLength(t *testing.T) {
 	s := New[int]()
 
-	assert.Equal(t, s.Length(), 0)
+	assert.Equal(t, 0, s.Length())
 	s.Add(1)
-	assert.Equal(t, s.Length(), 1)
+	assert.Equal(t, 1, s.Length())
 }
 
 func TestIter(t *testing.T) {
@@ -70,7 +70,7 @@ func TestIntersection(t *testing.T) {
 	s1 := New(1, 2, 3, 4)
 	s2 := New(3, 4, 5)
 
-	assert.Equal(t, s1.Intersection(s2), New(3, 4))
+	assert.ElementsMatch(t, []int{3, 4}, s1.Intersection(s2).values)
 }
 
 func TestIsDisjoint(t *testing.T) {

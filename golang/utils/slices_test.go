@@ -13,7 +13,7 @@ func TestStringToInt(t *testing.T) {
 
 	var output []int = StringToInt(input)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 
 	input[0] = "not int"
 
@@ -28,7 +28,7 @@ func TestRemove(t *testing.T) {
 	sort.Strings(output)
 	sort.Strings(expected)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 }
 
 func TestRemoveSlow(t *testing.T) {
@@ -37,7 +37,7 @@ func TestRemoveSlow(t *testing.T) {
 
 	var output []int = RemoveSlow(input, 2)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 }
 
 func TestSum(t *testing.T) {
@@ -46,7 +46,7 @@ func TestSum(t *testing.T) {
 
 	var output int = Sum(input)
 
-	assert.Equal(t, output, expected)
+	assert.Equal(t, expected, output)
 }
 
 func TestIndexOf(t *testing.T) {
