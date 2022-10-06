@@ -5,7 +5,6 @@ import (
 	"io"
 	"math"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"testing"
 
@@ -25,28 +24,13 @@ func TestLoadInput(t *testing.T) {
 
 	os.WriteFile(filepath.Join(testFile, "15.txt"), input, os.ModePerm)
 
-	// Test
-	var output string = LoadInput(2020, 15)
-
+	output, err := LoadInput(2020, 15)
 	assert.Equal(t, expected, output)
-}
+	assert.Nil(t, err)
 
-func TestLoadInputFailure(t *testing.T) {
-	if os.Getenv("CAPTURE_CRASH_OUTPUT") == "1" {
-		os.Unsetenv("AOC_ROOT_DIRECTORY")
-
-		LoadInput(2020, 15)
-		return
-	}
-
-	command := exec.Command(os.Args[0], "-test.run=TestLoadInputFailure")
-	command.Env = append(os.Environ(), "CAPTURE_CRASH_OUTPUT=1")
-
-	err := command.Run()
-
-	if e, ok := err.(*exec.ExitError); ok && !e.Success() {
-		assert.True(t, ok && !e.Success())
-	}
+	os.Unsetenv("AOC_ROOT_DIRECTORY")
+	_, err = LoadInput(2020, 15)
+	assert.Error(t, err)
 }
 
 func TestParseToInt(t *testing.T) {
@@ -99,15 +83,6 @@ func TestAnswer(t *testing.T) {
 	os := output.String()
 
 	assert.Equal(t, "Colored text\n", os)
-}
-
-func TestNumRange(t *testing.T) {
-	t.Skip("This needs to be rewritten to manage the channel output")
-	assert := assert.New(t)
-
-	assert.Equal([]int{0, 1, 2, 3, 4}, NumRange(0, 5))
-	assert.Equal([]int{-5, -4, -3, -2, -1}, NumRange(-5, 0))
-	assert.Equal([]int{5, 4, 3, 2, 1}, NumRange(5, 0))
 }
 
 func TestMin(t *testing.T) {

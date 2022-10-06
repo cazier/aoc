@@ -73,6 +73,17 @@ func TestIntersection(t *testing.T) {
 	assert.ElementsMatch(t, []int{3, 4}, s1.Intersection(s2).values)
 }
 
+func TestEquals(t *testing.T) {
+	s1 := New(1, 2, 3)
+	s2 := New(1, 2, 3)
+	s3 := New(3, 4, 5)
+	s4 := New(3, 4, 5, 6)
+
+	assert.True(t, s1.Equals(s2))
+	assert.False(t, s2.Equals(s3))
+	assert.False(t, s3.Equals(s4))
+}
+
 func TestIsDisjoint(t *testing.T) {
 	s1 := New(1, 2, 3, 4)
 	s2 := New(5, 6, 7)

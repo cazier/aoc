@@ -6,44 +6,8 @@ import (
 	"main/utils/splits"
 )
 
-// Coord is used primarily as the keys to a map
-type Coord struct {
-	x int
-	y int
-}
-
-func (c Coord) Neighbors() <-chan Coord {
-	channel := make(chan Coord)
-
-	go func() {
-		for x := -1; x <= 1; x++ {
-			for y := -1; y <= 1; y++ {
-				if !(x == 0 && y == 0) {
-					channel <- Coord{c.x + x, c.y + y}
-				}
-			}
-		}
-		close(channel)
-	}()
-
-	return channel
-}
-
-func (c Coord) Add(other Coord) Coord {
-	return Coord{c.x + other.x, c.y + other.y}
-}
-
-func (c Coord) Ok() bool {
-	return c.x >= 0 && c.y >= 0
-}
-
-type Grid[T utils.Numeric] struct {
-	contents map[Coord]T
-	viewer   [][]T
-}
-
-func New[T utils.Numeric](defaults T, size int) Grid[T] {
-	return Grid[T]{make(map[Coord]T), make([][]T, size)}
+func New[T utils.Numeric](rows int) Grid[T] {
+	return Grid[T]{make(map[Coord]T), make([][]T, rows)}
 }
 
 func FromString[T utils.Numeric](input string, cast func(value string) T) Grid[T] {
@@ -63,11 +27,17 @@ func FromString[T utils.Numeric](input string, cast func(value string) T) Grid[T
 }
 
 func (g *Grid[T]) Get(spot Coord) T {
+	out, _ := g.GetSafe(spot)
+	return out
+}
+
+func (g *Grid[T]) GetSafe(spot Coord) (T, error) {
 	var def T
 	if out, ok := g.contents[spot]; ok {
-		return out
+		return out, nil
 	}
-	return def
+
+	return def, coordError(spot)
 }
 
 func (g *Grid[T]) Set(spot Coord, value T) {
@@ -77,8 +47,7 @@ func (g *Grid[T]) Set(spot Coord, value T) {
 
 func (g *Grid[T]) IAdd(spot Coord, addition T) {
 	if _, ok := g.contents[spot]; ok {
-		g.contents[spot] += addition
-		g.viewer[spot.y][spot.x] += addition
+		g.Set(spot, g.Get(spot)+addition)
 	}
 }
 

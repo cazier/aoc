@@ -12,12 +12,12 @@ import (
 
 // LoadInput reads the input file found at $AOC_ROOT_DIRECTORY/inputs and returns the value as a
 // string.
-func LoadInput(year int, day int) string {
+func LoadInput(year int, day int) (string, error) {
 	var root string = os.Getenv("AOC_ROOT_DIRECTORY")
 
 	if root == "" {
-		color.Red("Could not determine the proper $AOC_ROOT_DIRECTORY environment variable.")
-		os.Exit(1)
+		msg := color.RedString("Could not determine the proper $AOC_ROOT_DIRECTORY environment variable.")
+		return "", &AocError{Msg: msg}
 	}
 
 	var year_string string = fmt.Sprintf("2%03d", year%2000)
@@ -27,7 +27,7 @@ func LoadInput(year int, day int) string {
 
 	contents, _ := os.ReadFile(path)
 
-	return string(contents)
+	return string(contents), nil
 }
 
 // ParseToInt is a wrapper around strconv.ParseInt that casts the resulting integer to an `int` type
@@ -52,29 +52,6 @@ func B10toI(s string) (i int) {
 // Answer wraps the answer from a regular section just so that it can get printed in pretty blue
 func Answer(s string, a ...any) {
 	fmt.Println(color.BlueString(s, a...))
-}
-
-// NumRange creates an iterator with the integer values listed from start to stop, with a step size of
-// one. The range can be ascending or descending, and positive/negative, depending on the input
-// parameters.
-func NumRange(start, stop int) <-chan int {
-	var step int
-
-	if stop > start {
-		step = 1
-	} else {
-		step = -1
-	}
-
-	channel := make(chan int)
-
-	go func() {
-		for i := start; i < stop; i += step {
-			channel <- i
-		}
-	}()
-
-	return channel
 }
 
 // Min returns the minimum Numeric value in a slice of values.
