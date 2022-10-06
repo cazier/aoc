@@ -23,6 +23,15 @@ func (s *Set[T]) Add(value T) {
 	s.values = append(s.values, value)
 }
 
+func (s *Set[T]) Remove(value T) {
+	for index, current := range s.values {
+		if current == value {
+			s.values = append(s.values[:index], s.values[index+1:]...)
+			return
+		}
+	}
+}
+
 func (s *Set[T]) Extend(values ...T) {
 	for _, value := range values {
 		s.Add(value)

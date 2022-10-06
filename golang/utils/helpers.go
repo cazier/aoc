@@ -37,31 +37,44 @@ func ParseToInt(s string, base int, bitSize int) (i int, err error) {
 	return int(out), err
 }
 
+// B10toI is a further wrapper around strconv.ParseInt that casts the resulting integer to an `int`
+// type, assumes the string is base-10, and panics on errors.
+func B10toI(s string) (i int) {
+	out, err := strconv.ParseInt(s, 10, 32)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return int(out)
+}
+
 // Answer wraps the answer from a regular section just so that it can get printed in pretty blue
 func Answer(s string, a ...any) {
 	fmt.Println(color.BlueString(s, a...))
 }
 
-// NumRange creates a slice with the integer values listed from start to stop, with a step size of
+// NumRange creates an iterator with the integer values listed from start to stop, with a step size of
 // one. The range can be ascending or descending, and positive/negative, depending on the input
 // parameters.
-func NumRange(start, stop int) []int {
-	var step, num int
+func NumRange(start, stop int) <-chan int {
+	var step int
 
 	if stop > start {
 		step = 1
-		num = stop - start
 	} else {
 		step = -1
-		num = start - stop
 	}
 
-	var output []int = make([]int, num)
-	for i := 0; i < num; i++ {
-		output[i] = start + (step * i)
-	}
+	channel := make(chan int)
 
-	return output
+	go func() {
+		for i := start; i < stop; i += step {
+			channel <- i
+		}
+	}()
+
+	return channel
 }
 
 // Min returns the minimum Numeric value in a slice of values.

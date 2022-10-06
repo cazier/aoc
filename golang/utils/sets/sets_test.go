@@ -24,6 +24,14 @@ func TestAdd(t *testing.T) {
 	assert.Equal(t, s, Set[int]{values: []int{0, 1, 2, 3, 4}})
 }
 
+func TestRemove(t *testing.T) {
+	s := New(1, 2, 3, 4)
+
+	assert.Equal(t, s, Set[int]{values: []int{1, 2, 3, 4}})
+
+	s.Remove(3)
+	assert.Equal(t, s, Set[int]{values: []int{1, 2, 4}})
+}
 func TestExtend(t *testing.T) {
 	s := New(0)
 	s.Extend(1, 2, 3, 4)
