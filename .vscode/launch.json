@@ -5,6 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python - Current",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/python",
+                "AOC_ROOT_DIRECTORY": "${workspaceFolder}",
+            },
+        },
+        {
             "name": "Go - Main",
             "type": "go",
             "request": "launch",

@@ -45,7 +45,7 @@ do_thing() {
                     _cmd "python main.py"
                 fi
                 if [[ $TEST -eq 1 ]]; then
-                    _cmd "ward test"
+                    _cmd "ward test -p test_main.py"
                 fi
                 ;;
         *)
