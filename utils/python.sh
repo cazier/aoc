@@ -6,14 +6,14 @@ from ward import test
 from main import part_one, part_two, SAMPLE_INPUT
 
 @test("2022-01: Part One")
-def _():
+def _() -> None:
     expected =
     output = part_one(SAMPLE_INPUT)
 
     assert expected == output
 
 @test("2022-01: Part Two")
-def _():
+def _() -> None:
     expected =
     output = part_two(SAMPLE_INPUT)
 
