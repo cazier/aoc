@@ -39,11 +39,13 @@ do_thing() {
                 fi
                 ;;
         "python")
+                export PYTHONPATH="${AOC_ROOT_DIRECTORY}/python"
+
                 if [[ $RUN -eq 1 ]]; then
-                    _cmd "python main.py" #Need to manage naming better I think?
+                    _cmd "python main.py"
                 fi
                 if [[ $TEST -eq 1 ]]; then
-                    _cmd "python -m unittest ."
+                    _cmd "ward test"
                 fi
                 ;;
         *)
