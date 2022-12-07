@@ -37,6 +37,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: go test ./... -race -covermode=atomic -coverprofile=coverage.out
-      - run: curl -Os https://uploader.codecov.io/latest/linux/codecov
-      - run: chmod +x codecov
-      - run: ./codecov -t ${{ secrets.CODECOV_TOKEN }} -f coverage.out
+      - uses: ./.github/actions/coverage/
+        id: coverage
+        with:
+          coverage_file: coverage.out
+          secret: ${{ secrets.CODECOV_TOKEN }}
