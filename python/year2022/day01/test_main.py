@@ -2,7 +2,7 @@ from ward import test
 from year2022.day01.main import SAMPLE_INPUT, part_one, part_two
 
 
-@test("2022-01: Part One")
+@test("2022-01: Part One")  # type: ignore
 def _() -> None:
     expected = 24000
     output = part_one(SAMPLE_INPUT)
@@ -10,7 +10,7 @@ def _() -> None:
     assert expected == output
 
 
-@test("2022-01: Part Two")
+@test("2022-01: Part Two")  # type: ignore
 def _() -> None:
     expected = 45000
     output = part_two(SAMPLE_INPUT)

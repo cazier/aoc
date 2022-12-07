@@ -6,11 +6,13 @@ authors = ["Brendan Cazier <cazier@github>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pre-commit = "^2.20.0"
-ipython = "^8.5.0"
+
+[tool.poetry.group.testing.dependencies]
+ward = "^0.67.0b0"
 
 [tool.poetry.group.dev.dependencies]
-ward = "^0.67.0b0"
+pre-commit = "^2.20.0"
+ipython = "^8.5.0"
 black = "^22.8.0"
 pudb = "^2022.1.2"
 isort = "^5.10.1"
@@ -42,6 +44,6 @@ mypy_path = "python"
 show_error_codes = true
 namespace_packages = true
 explicit_package_bases = true
-exclude =[
-    'test_main\.py$'
-]
+
+[tool.ward]
+hook_module = ['utils.conftest']

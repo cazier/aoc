@@ -6,14 +6,14 @@ TEST_CODE=$(cat <<EOF
 from ward import test
 from year${YEAR}.day${DAY}.main import SAMPLE_INPUT, part_one, part_two
 
-@test("${YEAR}-${DAY}: Part One")
+@test("${YEAR}-${DAY}: Part One")  # type: ignore
 def _() -> None:
     expected =
     output = part_one(SAMPLE_INPUT)
 
     assert expected == output
 
-@test("${YEAR}-${DAY}: Part Two")
+@test("${YEAR}-${DAY}: Part Two")  # type: ignore
 def _() -> None:
     expected =
     output = part_two(SAMPLE_INPUT)
