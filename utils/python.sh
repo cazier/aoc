@@ -1,9 +1,10 @@
 TEST_NAME="test_main.py"
 RUN_NAME="main.py"
+DIR="${_CWD}/${LANGUAGE_DIRECTORY}/year${YEAR}/day${DAY}"
 
 TEST_CODE=$(cat <<EOF
 from ward import test
-from main import part_one, part_two, SAMPLE_INPUT
+from year${YEAR}.day${DAY}.main import SAMPLE_INPUT, part_one, part_two
 
 @test("${YEAR}-${DAY}: Part One")
 def _() -> None:
@@ -43,3 +44,8 @@ if __name__ == "__main__":
     print(part_two(input_string))
 EOF
 )
+
+ERRATA="
+touch ${DIR}/../__init__.py
+touch ${DIR}/__init__.py
+"

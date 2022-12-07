@@ -39,8 +39,6 @@ do_thing() {
 
         _log_debug "Creating input and readme directories and files"
         _cmd "python ${_CWD}/utils/readme.py --year ${YEAR} --day ${DAY} --cookie ${_CWD}/.session_cookie --aoc-path ${_CWD} --log-level ERROR"
-
-        DIR="${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
         _cmd "mkdir -p ${DIR}"
 
         README="${DIR}/../README.md"
@@ -58,6 +56,10 @@ do_thing() {
         else
                 _log_panic "The files for '${LANGUAGE_DIRECTORY} ${YEAR}-${DAY}' already exist and will not be overwritten"
                 exit 1
+        fi
+
+        if [[ -n ${ERRATA} ]]; then
+                _cmd "${ERRATA}"
         fi
 
         _log_info "Succesfully created all the files. Get to work!"

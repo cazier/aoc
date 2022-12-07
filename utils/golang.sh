@@ -1,5 +1,6 @@
 TEST_NAME="${DAY_NAME}_test.go"
 RUN_NAME="${DAY_NAME}.go"
+DIR="${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
 
 TEST_CODE=$(cat <<EOF
 package main
@@ -59,3 +60,5 @@ func main() {
 }
 EOF
 )
+
+ERRATA=""
