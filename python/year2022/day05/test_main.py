@@ -1,18 +1,18 @@
-from main import SAMPLE_INPUT, part_one, part_two
+from y2022.d05.main import SAMPLE_INPUT, part_one, part_two
 from ward import test
 
 
-@test("2022-01: Part One")
+@test("2022-05: Part One")
 def _() -> None:
-    expected = 24000
+    expected = "CMZ"
     output = part_one(SAMPLE_INPUT)
 
     assert expected == output
 
 
-@test("2022-01: Part Two")
+@test("2022-05: Part Two")
 def _() -> None:
-    expected = 45000
+    expected = "MCD"
     output = part_two(SAMPLE_INPUT)
 
     assert expected == output

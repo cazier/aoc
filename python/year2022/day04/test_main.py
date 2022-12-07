@@ -1,4 +1,4 @@
-from main import SAMPLE_INPUT, part_one, part_two
+from y2022.d04.main import SAMPLE_INPUT, part_one, part_two
 from ward import test
 
 
