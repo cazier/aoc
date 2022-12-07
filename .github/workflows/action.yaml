@@ -1,0 +1,24 @@
+name: Test actions Files
+defaults:
+  run:
+    working-directory: python
+
+on:
+  push:
+    branches:
+      - custom-action
+      - main
+
+env:
+  PYTHONPATH: .
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    container:
+      image: python:latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/coverage/
+        id: coverage
