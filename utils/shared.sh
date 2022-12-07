@@ -111,7 +111,7 @@ _check_args() {
 }
 
 _change_directory() {
-        _cmd "cd ${_CWD}/${LANGUAGE_DIRECTORY}/${YEAR}/${DAY}"
+        _cmd "cd ${DIR}"
 }
 
 _cmd() {

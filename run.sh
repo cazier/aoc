@@ -31,6 +31,9 @@ usage() {
 do_thing() {
         case "$LANGUAGE_DIRECTORY" in
         "golang")
+                source utils/golang.sh
+                _change_directory
+
                 if [[ $RUN -eq 1 ]]; then
                     _cmd "go run ."
                 fi
@@ -40,6 +43,8 @@ do_thing() {
                 ;;
         "python")
                 export PYTHONPATH="${AOC_ROOT_DIRECTORY}/python"
+                source utils/python.sh
+                _change_directory
 
                 if [[ $RUN -eq 1 ]]; then
                     _cmd "python main.py"
@@ -110,9 +115,6 @@ _debug_messages "  VERBOSE: ${BOOL_MAP[${VERBOSE}]}\n  DRY RUN: ${BOOL_MAP[${DRY
 
 # Checking for necessary variables
 _check_args
-
-# Switching into proper directory
-_change_directory
 
 # Do the thing!
 do_thing

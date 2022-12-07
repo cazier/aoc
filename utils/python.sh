@@ -45,7 +45,4 @@ if __name__ == "__main__":
 EOF
 )
 
-ERRATA="
-touch ${DIR}/../__init__.py
-touch ${DIR}/__init__.py
-"
+ERRATA=""
