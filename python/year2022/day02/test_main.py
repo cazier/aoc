@@ -1,5 +1,5 @@
-from y2022.d02.main import SAMPLE_INPUT, part_one, part_two
 from ward import test
+from year2022.day02.main import SAMPLE_INPUT, part_one, part_two
 
 
 @test("2022-02: Part One")
