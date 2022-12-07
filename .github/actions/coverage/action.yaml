@@ -1,0 +1,20 @@
+# action.yml
+name: 'Coverage'
+description: 'Upload coverage using static binary to codecov.io'
+inputs:
+  coverage_file:
+    description: 'Path to the coverage file to upload'
+    required: true
+  secret:
+    description: 'Codecov.io upload token'
+    required: true
+  dry_run:
+    description: 'If true, do not upload the coverage file to Codecov.io'
+    required: false
+    default: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.secret }}
+    - ${{ inputs.coverage_file }}
