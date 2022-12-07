@@ -35,3 +35,13 @@ max-line-length = 119
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = "missing-module-docstring,missing-function-docstring"
+
+[tool.mypy]
+strict = true
+mypy_path = "python"
+show_error_codes = true
+namespace_packages = true
+explicit_package_bases = true
+exclude =[
+    'test_main\.py$'
+]
