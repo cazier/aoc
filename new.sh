@@ -20,10 +20,6 @@ usage() {
         echo "                             (Default: ${BOOL_MAP[${VERBOSE}]})"
 }
 
-debug_messages() {
-        _debug_messages
-}
-
 do_thing() {
         source utils/system.sh
 
@@ -37,7 +33,7 @@ do_thing() {
                 ;;
         esac
 
-        _log_debug "Creating input and readme directories and files"
+        _log_debug "\\Creating input and readme directories and files"
         _cmd "python ${_CWD}/utils/readme.py --year ${YEAR} --day ${DAY} --cookie ${_CWD}/.session_cookie --aoc-path ${_CWD} --log-level ERROR"
         _cmd "mkdir -p ${DIR}"
 
@@ -48,7 +44,7 @@ do_thing() {
                 _cmd "printf '${ANNUAL_README}' > ${README}"
         fi
 
-        _log_debug "Creating code directories and files"
+        _log_debug "\\Creating code directories and files"
         _cmd "mkdir -p ${DIR}"
         if ! [[ -e "${DIR}/${TEST_NAME}" ]]; then
                 _cmd "printf '${TEST_CODE}' > ${DIR}/${TEST_NAME}"
@@ -65,7 +61,7 @@ do_thing() {
         _log_info "Succesfully created all the files. Get to work!"
 }
 
-CLI=$(getopt -o rthl:d:y:vV --long run,test,help,language:,day:,year:,verbose,version,dry-run -- "$@")
+CLI=$(getopt -o hl:ad:y:vV --long help,language:,auto,day:,year:,verbose,version,dry-run -- "$@")
 eval set -- "$CLI"
 while true; do
         case "$1" in
@@ -76,6 +72,10 @@ while true; do
         -l | --language)
                 LANGUAGE=$2
                 shift 2
+                ;;
+        -a | --auto)
+                AUTO=1
+                shift
                 ;;
         -d | --day)
                 DAY=$2

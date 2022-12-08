@@ -1,4 +1,5 @@
 # Using values from envars or defaults
+AUTO=${AUTO:-0}
 DAY=${DAY}
 YEAR=${YEAR}
 LANGUAGE=${LANGUAGE:-"go"}
@@ -61,7 +62,8 @@ _log_info() {
 
 _log_debug() {
         if [[ $VERBOSE -eq 1 || $DRY_RUN -eq 1 ]]; then
-                printf "\033[34${1}"
+                printf "\033[34"
+                printf "%s" "$1"
                 printf "\033[0m\n"
         fi
 }
@@ -104,6 +106,11 @@ _languages() {
 }
 
 _check_args() {
+        if [[ $AUTO -eq 1 ]]; then
+                YEAR=$(date +"%Y")
+                DAY=$(date +"%d")
+        fi
+
         if ! _days || ! _languages || ! _years; then
                 usage
                 exit 1
@@ -115,7 +122,7 @@ _change_directory() {
 }
 
 _cmd() {
-        _log_debug "$ ${1}"
+        _log_debug "\\$ ${1}"
         if [[ $DRY_RUN -eq 0 ]]; then
                 eval "${1}"
         fi
@@ -125,6 +132,7 @@ _debug_messages() {
         if [[ $VERBOSE -eq 1 || $DRY_RUN -eq 1 ]]; then
                 printf "\033[33m"
                 echo "Debug Messages:"
+                echo -e "  YEAR: $YEAR"
                 echo -e "  DAY: $DAY"
                 echo -e "  DAY_NAME: $DAY_NAME"
                 echo -e "  LANGUAGE: $LANGUAGE"

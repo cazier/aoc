@@ -59,7 +59,7 @@ do_thing() {
         esac
 }
 
-CLI=$(getopt -o rthl:d:y:vV --long run,test,help,language:,day:,year:,verbose,version,dry-run -- "$@")
+CLI=$(getopt -o rthl:ad:y:vV --long run,test,help,language:,auto,day:,year:,verbose,version,dry-run -- "$@")
 eval set -- "$CLI"
 while true; do
         case "$1" in
@@ -78,6 +78,10 @@ while true; do
         -l | --language)
                 LANGUAGE=$2
                 shift 2
+                ;;
+        -a | --auto)
+                AUTO=1
+                shift
                 ;;
         -d | --day)
                 DAY=$2
