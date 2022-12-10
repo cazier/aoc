@@ -23,6 +23,8 @@ EOF
 )
 
 RUN_CODE=$(cat <<EOF
+from rich import print  # pylint: disable=redefined-builtin
+
 import utils
 
 SAMPLE_INPUT: str = """

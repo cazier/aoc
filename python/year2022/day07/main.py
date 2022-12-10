@@ -2,6 +2,8 @@ import pathlib
 import tempfile
 from functools import lru_cache
 
+from rich import print  # pylint: disable=redefined-builtin
+
 import utils
 
 SAMPLE_INPUT: str = """$ cd /

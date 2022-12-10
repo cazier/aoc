@@ -6,6 +6,7 @@ authors = ["Brendan Cazier <cazier@github>"]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+rich = "^12.6.0"
 
 [tool.poetry.group.testing.dependencies]
 ward = "^0.67.0b0"

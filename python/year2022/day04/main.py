@@ -1,3 +1,5 @@
+from rich import print  # pylint: disable=redefined-builtin
+
 import utils
 
 SAMPLE_INPUT: str = """2-4,6-8

@@ -1,6 +1,8 @@
 import re
 from collections import defaultdict
 
+from rich import print  # pylint: disable=redefined-builtin
+
 import utils
 
 SAMPLE_INPUT: str = """    [D]
