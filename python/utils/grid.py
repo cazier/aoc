@@ -190,17 +190,25 @@ class Grid(t.Generic[T]):
         if not isinstance(center, Coord):
             center = Coord(*center)
 
+        if center not in self._grid:
+            raise KeyError(f"The coordinate {center} does not exist")
+
         return self._grid[center]
 
-    def set(self, center: Coord | tuple[int, int], value: T) -> None:
-        """Set a new value at the specific coordinate location on the grid
+    def set(self, center: Coord | tuple[int, int], value: T, anywhere: bool = False) -> None:
+        """Set a new value at the specific coordinate location on the grid. If the ``anywhere`` flag is not used, the
+        coordinate location cannot be a new location. (i.e., replacing an existing value.)
 
         Args:
             center (Coord | tuple[int, int]): the coordinate location
             value (T): the value to set in the grid
+            anywhere (bool, optional): If True, the value set can be applied anywhere on the grid. Defaults to False.
         """
         if not isinstance(center, Coord):
             center = Coord(*center)
+
+        if not anywhere and center not in self._grid:
+            raise KeyError(f"The coordinate {center} does not exist. Maybe use the `anywhere=True` argument")
 
         self._grid[center] = value
 

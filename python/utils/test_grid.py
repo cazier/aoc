@@ -5,6 +5,67 @@ from ward import test, raises
 from .grid import Grid, Coord, Direction
 
 
+@test("coord: arithmetic")  # type: ignore
+def _() -> None:
+    assert repr(Coord(1, 1)) == "<Coord(1, 1)>"
+
+    assert Coord(1, 1) == Coord(1, 1)
+    assert Coord(1, 1) != Coord(1, 2)
+    assert Coord(12, 12) == (12, 12)
+
+    with raises(NotImplementedError):
+        assert Coord(12, 12) == "(12, 12)"
+
+    assert Coord(1, 1) + Coord(2, 2) == Coord(3, 3)
+    assert Coord(1, 1) + Coord(2, -2) == Coord(3, -1)
+    assert Coord(5, 5) - Coord(2, 2) == Coord(3, 3)
+    assert Coord(5, 5) - Coord(-2, -2) == Coord(7, 7)
+
+    coord = Coord(10, 10)
+    coord += Coord(15, 15)
+    assert coord == Coord(25, 25)
+
+    assert Coord(10, 10) * 5 == Coord(50, 50)
+
+    assert Coord(1, 1) + (1, 2) == Coord(2, 3)
+    assert Coord(1, 1) - (1, 2) == Coord(0, -1)
+    coord += (9, 10)
+    assert coord == Coord(34, 35)
+
+    with raises(NotImplementedError):
+        coord = Coord(12, 12) / 2
+
+    with raises(NotImplementedError):
+        coord = Coord(12, 12) // 2
+
+    assert abs(Coord(-1, 1)) == Coord(1, 1)
+    assert abs(Coord(-1, -1)) == Coord(1, 1)
+
+
+@test("coord: normalize")  # type: ignore
+def _() -> None:
+    assert Coord(0, 0).normalize() == Coord(0, 0)
+    assert Coord(-1, 10).normalize() == Coord(-1, 1)
+    assert Coord(50, -100).normalize() == Coord(1, -1)
+    assert Coord(10, 100).normalize() == Coord(1, 1)
+
+
+@test("coord: touching")  # type: ignore
+def _() -> None:
+    assert Coord(0, 0).touching((0, 0))
+    assert Coord(1, 1).touching((0, 0))
+    assert Coord(1, 1).touching((0, 2))
+    assert Coord(1, 1).touching((2, 0))
+    assert Coord(0, 0).touching((1, 1))
+    assert not Coord(1, 1).touching((10, 1))
+    assert not Coord(1, 1).touching((1, 5))
+
+
+@test("direction: types")  # type:ignore
+def _() -> None:
+    assert list(Direction.types()) == [Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN]
+
+
 @test("grid: create from string")  # type: ignore
 def _() -> None:
     input_string = "12\n34"
@@ -21,6 +82,27 @@ def _() -> None:
 
     assert dict(Grid.create(input_string_with_delim, int, ",").items()) == expected_with_pred  # type: ignore
     assert dict(Grid.create(input_string_with_delim, split=",").items()) == expected  # type: ignore
+
+
+@test("grid: access")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+
+    assert grid.get((1, 1)) == 5
+    assert grid.get(Coord(1, 2)) == 8
+
+    with raises(KeyError):
+        assert grid.get((10, 10)) == -1
+
+    grid.set((Coord(2, 2)), -1)
+    assert grid.get(Coord(2, 2)) == -1
+
+    with raises(KeyError) as exception:
+        grid.set((3, 3), 10)
+    assert "does not exist. Maybe use the `anywhere=True` argument" in str(exception.raised)
+
+    grid.set((3, 3), 10, anywhere=True)
+    assert grid.get(Coord(3, 3)) == 10
 
 
 @test("grid: left")  # type: ignore
@@ -86,63 +168,24 @@ def _() -> None:
     assert list(grid.values((0, 0), Direction.ALL, False)) == [2, 3, 4, 7]
 
 
+@test("grid: iterators")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+
+    assert list(grid.iter_coord()) == list(
+        itertools.starmap(Coord, [(0, 0), (1, 0), (2, 0), (0, 1), (1, 1), (2, 1), (0, 2), (1, 2), (2, 2)])
+    )
+
+    assert list(grid.iter_values()) == [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+
 @test("grid: internal")  # type: ignore
 def _() -> None:
     grid = Grid.create("123\n456\n789", int)
 
-    for coord in itertools.permutations(range(3), 2):
-        if coord == (1, 1):
-            assert grid.is_on_edge(coord) is False  # type: ignore[arg-type]
+    for (x, y) in itertools.product(range(3), repeat=2):
+        if (x, y) == (1, 1):
+            assert grid.is_on_edge(Coord(x, y)) is False
 
         else:
-            assert grid.is_on_edge(coord) is True  # type: ignore[arg-type]
-
-
-@test("coord: arithmetic")  # type: ignore
-def _() -> None:
-    assert Coord(1, 1) == Coord(1, 1)
-    assert Coord(1, 1) != Coord(1, 2)
-
-    assert Coord(1, 1) + Coord(2, 2) == Coord(3, 3)
-    assert Coord(1, 1) + Coord(2, -2) == Coord(3, -1)
-    assert Coord(5, 5) - Coord(2, 2) == Coord(3, 3)
-    assert Coord(5, 5) - Coord(-2, -2) == Coord(7, 7)
-
-    coord = Coord(10, 10)
-    coord += Coord(15, 15)
-    assert coord == Coord(25, 25)
-
-    assert Coord(10, 10) * 5 == Coord(50, 50)
-
-    assert Coord(1, 1) + (1, 2) == Coord(2, 3)
-    assert Coord(1, 1) - (1, 2) == Coord(0, -1)
-    coord += (9, 10)
-    assert coord == Coord(34, 35)
-
-    with raises(NotImplementedError):
-        coord = Coord(12, 12) / 2
-
-    with raises(NotImplementedError):
-        coord = Coord(12, 12) // 2
-
-    assert abs(Coord(-1, 1)) == Coord(1, 1)
-    assert abs(Coord(-1, -1)) == Coord(1, 1)
-
-
-@test("coord: normalize")  # type: ignore
-def _() -> None:
-    assert Coord(0, 0).normalize() == Coord(0, 0)
-    assert Coord(-1, 10).normalize() == Coord(-1, 1)
-    assert Coord(50, -100).normalize() == Coord(1, -1)
-    assert Coord(10, 100).normalize() == Coord(1, 1)
-
-
-@test("coord: touching")  # type: ignore
-def _() -> None:
-    assert Coord(0, 0).touching((0, 0))
-    assert Coord(1, 1).touching((0, 0))
-    assert Coord(1, 1).touching((0, 2))
-    assert Coord(1, 1).touching((2, 0))
-    assert Coord(0, 0).touching((1, 1))
-    assert not Coord(1, 1).touching((10, 1))
-    assert not Coord(1, 1).touching((1, 5))
+            assert grid.is_on_edge(Coord(x, y)) is True
