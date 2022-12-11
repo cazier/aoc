@@ -15,6 +15,9 @@ class Coord:
         self.x = x
         self.y = y
 
+    def __repr__(self) -> str:
+        return f"<Coord({self.x}, {self.y})>"
+
     @property
     def G(self) -> tuple[int, int]:
         """Returns a tuple with the (x, y) coordinates.
@@ -34,10 +37,16 @@ class Coord:
         if not isinstance(other, Coord):
             other = Coord(*other)
 
-        return Coord(self.x + other.x, self.y + other.y)
+        return Coord(self.x - other.x, self.y - other.y)
 
     def __mul__(self, other: t.Any) -> "Coord":
         return Coord(self.x * other, self.y * other)
+
+    def __truediv__(self, other: t.Any) -> "Coord":
+        raise NotImplementedError()
+
+    def __floordiv__(self, other: t.Any) -> "Coord":
+        raise NotImplementedError()
 
     def __iadd__(self, other: t.Any) -> "Coord":
         if not isinstance(other, Coord):
@@ -47,6 +56,9 @@ class Coord:
         self.y += other.y
 
         return self
+
+    def __abs__(self) -> "Coord":
+        return Coord(abs(self.x), abs(self.y))
 
     def __hash__(self) -> int:
         return hash(self.G)
@@ -59,6 +71,21 @@ class Coord:
             return self.G == other.G
 
         raise NotImplementedError()
+
+    def normalize(self) -> "Coord":
+        return Coord(*map(lambda k: k // abs(k) if k else 0, self.G))
+
+    def touching(self, other: t.Any) -> bool:
+        if not isinstance(other, Coord):
+            other = Coord(*other)
+
+        if (diff := abs(self - other).G) == (0, 0):
+            return True
+
+        if max(diff) == 1:
+            return True
+
+        return False
 
 
 class Direction(enum.Enum):
