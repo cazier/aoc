@@ -25,7 +25,7 @@ def part_one(inputs: str) -> int:
 
 
 def part_two(inputs: str) -> int:
-    contents = [set.intersection(*map(set, lines)) for lines in zip(*[iter(inputs.splitlines())] * 3)]
+    contents = [set.intersection(*[set(line) for line in lines]) for lines in zip(*[iter(inputs.splitlines())] * 3)]
     return sum(SCORE[list(i)[0]] for i in contents)
 
 
