@@ -51,7 +51,7 @@ def part_two(inputs: str) -> str:
     return "".join(l[-1] for l in maps.values())
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "05")
 
     print(part_one(input_string))

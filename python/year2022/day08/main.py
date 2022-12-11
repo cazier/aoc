@@ -47,7 +47,7 @@ def part_two(inputs: str) -> int:
     return max(visible(coord) for coord in heights.iter_coord())
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "08")
 
     print(part_one(input_string))

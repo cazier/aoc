@@ -32,7 +32,7 @@ def part_two(inputs: str) -> int:
     raise SystemExit(1)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "06")
 
     print(part_one(input_string))

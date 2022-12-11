@@ -31,7 +31,7 @@ def part_two(inputs: str) -> int:
     return sum(sorted(list(map(lambda k: sum(map(int, k)), elves)), reverse=True)[:3])
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "01")
 
     print(part_one(input_string))

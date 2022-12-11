@@ -39,7 +39,7 @@ def part_two(inputs: str) -> int:
 
     return
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("${YEAR}", "${DAY}")
 
     print(part_one(input_string))
