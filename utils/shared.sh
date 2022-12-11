@@ -107,8 +107,8 @@ _languages() {
 
 _check_args() {
         if [[ $AUTO -eq 1 ]]; then
-                YEAR=$(date +"%Y")
-                DAY=$(date +"%d")
+                YEAR=$(TZ=America/New_York date +"%Y")
+                DAY=$(TZ=America/New_York date +"%d")
         fi
 
         if ! _days || ! _languages || ! _years; then
