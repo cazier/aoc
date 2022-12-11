@@ -5,7 +5,7 @@ description = "Attempting Advent of Code in Golang and Python."
 authors = ["Brendan Cazier <cazier@github>"]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.11"
 rich = "^12.6.0"
 
 [tool.poetry.group.testing.dependencies]
@@ -33,6 +33,9 @@ line_length = 119
 length_sort = true
 multi_line_output = 3
 include_trailing_comma = true
+
+[tool.pylint.'BASIC']
+good-names="x,y,G"
 
 [tool.pylint.'FORMAT']
 max-line-length = 119
