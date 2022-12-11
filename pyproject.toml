@@ -26,10 +26,10 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
-line-length = 119
+line-length = 120
 
 [tool.isort]
-line_length = 119
+line_length = 120
 length_sort = true
 multi_line_output = 3
 include_trailing_comma = true
@@ -38,7 +38,7 @@ include_trailing_comma = true
 good-names="x,y,G"
 
 [tool.pylint.'FORMAT']
-max-line-length = 119
+max-line-length = 120
 
 [tool.pylint.'MESSAGES CONTROL']
 disable = "missing-module-docstring,missing-function-docstring"

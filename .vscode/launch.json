@@ -5,6 +5,36 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Ward",
+            "type": "python",
+            "request": "launch",
+            "module": "ward",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/python",
+                "AOC_ROOT_DIRECTORY": "${workspaceFolder}",
+            },
+            "args": [
+                "test",
+            ]
+        },
+        {
+            "name": "Ward - Current",
+            "type": "python",
+            "request": "launch",
+            "module": "ward",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/python",
+                "AOC_ROOT_DIRECTORY": "${workspaceFolder}",
+            },
+            "args": [
+                "test",
+                "-p",
+                "${file}"
+            ]
+        },
+        {
             "name": "Python - Current",
             "type": "python",
             "request": "launch",
