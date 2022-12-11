@@ -44,6 +44,19 @@ def _() -> None:
     assert Display(5, 5).show() == ".....\n.....\n.....\n.....\n....."
 
 
+@test("display: ocr")  # type: ignore
+def _() -> None:
+    display = Display(6, 4)
+
+    for row in range(6):
+        display.draw(0, row)
+
+    for column in range(4):
+        display.draw(column, 5)
+
+    assert display.characters() == "L"
+
+
 @test("ocr: single conversion")  # type: ignore
 def _() -> None:
     assert OCR.single_to_display("A", "#", ".") == ".##.\n#..#\n#..#\n####\n#..#\n#..#"
