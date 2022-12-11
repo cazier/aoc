@@ -2,13 +2,13 @@ import os
 import pathlib
 from unittest.mock import patch
 
-from ward import test
+from ward import test, raises
 
 from .helpers import load_input
 from .conftest import tmpdir
 
 
-@test("Helpers: load_input")  # type: ignore
+@test("load_input")  # type: ignore
 def _(directory: pathlib.Path = tmpdir) -> None:
     input_string = b"hello\nline\ntwo\nfour"
     expected = "hello\nline\ntwo\nfour"
@@ -20,3 +20,11 @@ def _(directory: pathlib.Path = tmpdir) -> None:
 
     with patch.dict(os.environ, {"AOC_ROOT_DIRECTORY": str(directory)}):
         assert load_input("2020", "15") == expected
+
+        with raises(FileNotFoundError) as no_file:
+            expected = load_input("2020", "16")
+        assert "No such file or directory" in str(no_file.raised)
+
+    with raises(SystemExit) as no_env:  # type: ignore[type-var]
+        expected = load_input("2020", "15")
+    assert "Could not determine the proper $AOC_ROOT_DIRECTORY" in str(no_env.raised)
