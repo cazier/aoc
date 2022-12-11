@@ -29,7 +29,7 @@ def part_two(inputs: str) -> int:
     return sum(SCORE[list(i)[0]] for i in contents)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "03")
 
     print(part_one(input_string))

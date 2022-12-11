@@ -42,7 +42,7 @@ def part_two(inputs: str) -> int:
     return sum(score(*value(a, b)) for a, b in guide)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "02")
 
     print(part_one(input_string))

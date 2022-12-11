@@ -77,7 +77,7 @@ def part_two(inputs: str) -> int:
     return min(i for i in track.values() if i > missing)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "07")
 
     print(part_one(input_string))

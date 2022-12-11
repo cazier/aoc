@@ -29,7 +29,7 @@ def part_two(inputs: str) -> int:
     return sum(fits(*map(srange, line.split(","))) for line in inputs.splitlines())
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "04")
 
     print(part_one(input_string))
