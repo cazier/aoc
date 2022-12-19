@@ -63,11 +63,11 @@ def _() -> None:
     assert OCR.single_from_display(".##.\n#..#\n#..#\n#..#\n#..#\n.##.", "#", ".") == "O"
 
     with raises(NotImplementedError) as exception:
-        _ = OCR.single_to_display("M", "#", ".")
+        _ = OCR.single_to_display("%", "#", ".")
     assert "does not exist yet" in str(exception.raised)
 
     with raises(NotImplementedError) as exception:
-        _ = OCR.single_from_display("M", "#", ".")
+        _ = OCR.single_from_display("/", "#", ".")
     assert "does not exist yet" in str(exception.raised)
 
 

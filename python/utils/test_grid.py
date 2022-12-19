@@ -61,9 +61,28 @@ def _() -> None:
     assert not Coord(1, 1).touching((1, 5))
 
 
-@test("direction: types")  # type:ignore
+@test("direction: orthogonals")  # type:ignore
 def _() -> None:
-    assert list(Direction.types()) == [Direction.LEFT, Direction.RIGHT, Direction.UP, Direction.DOWN]
+    assert list(Direction.orthogonals()) == [
+        Direction.N,
+        Direction.E,
+        Direction.S,
+        Direction.W,
+    ]
+
+
+@test("direction: all")  # type:ignore
+def _() -> None:
+    assert list(Direction.all()) == [
+        Direction.N,
+        Direction.NE,
+        Direction.E,
+        Direction.SE,
+        Direction.S,
+        Direction.SW,
+        Direction.W,
+        Direction.NW,
+    ]
 
 
 @test("grid: create from string")  # type: ignore
@@ -109,36 +128,36 @@ def _() -> None:
 def _() -> None:
     grid = Grid.create("123\n456\n789", int)
 
-    assert list(grid.values((2, 1), Direction.LEFT)) == [5, 4]
-    assert list(grid.values((2, 1), Direction.LEFT, True)) == [6, 5, 4]
-    assert not list(grid.values((0, 1), Direction.LEFT, False))
+    assert list(grid.values((2, 1), Direction.W)) == [5, 4]
+    assert list(grid.values((2, 1), Direction.W, True)) == [6, 5, 4]
+    assert not list(grid.values((0, 1), Direction.W, False))
 
 
 @test("grid: right")  # type: ignore
 def _() -> None:
     grid = Grid.create("123\n456\n789", int)
 
-    assert list(grid.values((0, 1), Direction.RIGHT)) == [5, 6]
-    assert list(grid.values((0, 1), Direction.RIGHT, True)) == [4, 5, 6]
-    assert not list(grid.values((2, 1), Direction.RIGHT, False))
+    assert list(grid.values((0, 1), Direction.E)) == [5, 6]
+    assert list(grid.values((0, 1), Direction.E, True)) == [4, 5, 6]
+    assert not list(grid.values((2, 1), Direction.E, False))
 
 
 @test("grid: up")  # type: ignore
 def _() -> None:
     grid = Grid.create("123\n456\n789", int)
 
-    assert list(grid.values((1, 2), Direction.UP)) == [5, 2]
-    assert list(grid.values((1, 2), Direction.UP, True)) == [8, 5, 2]
-    assert not list(grid.values((1, 0), Direction.UP, False))
+    assert list(grid.values((1, 2), Direction.N)) == [5, 2]
+    assert list(grid.values((1, 2), Direction.N, True)) == [8, 5, 2]
+    assert not list(grid.values((1, 0), Direction.N, False))
 
 
 @test("grid: down")  # type: ignore
 def _() -> None:
     grid = Grid.create("123\n456\n789", int)
 
-    assert list(grid.values((1, 0), Direction.DOWN)) == [5, 8]
-    assert list(grid.values((1, 0), Direction.DOWN, True)) == [2, 5, 8]
-    assert not list(grid.values((1, 2), Direction.DOWN, False))
+    assert list(grid.values((1, 0), Direction.S)) == [5, 8]
+    assert list(grid.values((1, 0), Direction.S, True)) == [2, 5, 8]
+    assert not list(grid.values((1, 2), Direction.S, False))
 
 
 @test("grid: row")  # type: ignore
@@ -163,9 +182,9 @@ def _() -> None:
 def _() -> None:
     grid = Grid.create("123\n456\n789", int)
 
-    assert list(grid.values((1, 1), Direction.ALL)) == [2, 4, 6, 8]
-    assert list(grid.values((1, 1), Direction.ALL, True)) == [5, 2, 4, 6, 8]
-    assert list(grid.values((0, 0), Direction.ALL, False)) == [2, 3, 4, 7]
+    assert list(grid.values((1, 1), Direction.ORTHOGONAL)) == [2, 6, 8, 4]
+    assert list(grid.values((1, 1), Direction.ORTHOGONAL, True)) == [5, 2, 6, 8, 4]
+    assert list(grid.values((0, 0), Direction.ORTHOGONAL, False)) == [2, 3, 4, 7]
 
 
 @test("grid: iterators")  # type: ignore
@@ -189,3 +208,56 @@ def _() -> None:
 
         else:
             assert grid.is_on_edge(Coord(x, y)) is True
+
+
+@test("grid: orthogonal")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+    assert list(grid.orthogonal((1, 1))) == [Coord(1, 0), Coord(2, 1), Coord(1, 2), Coord(0, 1)]
+    assert list(grid.orthogonal((0, 1))) == [Coord(0, 0), Coord(1, 1), Coord(0, 2)]
+    assert list(grid.orthogonal((0, 0))) == [Coord(1, 0), Coord(0, 1)]
+
+    with raises(KeyError) as exception:
+        list(grid.orthogonal((12, 12)))
+    assert "does not exist" in str(exception.raised)
+
+
+@test("grid: neighbors")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+    assert list(grid.neighbors((1, 1))) == [
+        Coord(1, 0),
+        Coord(2, 0),
+        Coord(2, 1),
+        Coord(2, 2),
+        Coord(1, 2),
+        Coord(0, 2),
+        Coord(0, 1),
+        Coord(0, 0),
+    ]
+    assert list(grid.neighbors((0, 1))) == [Coord(0, 0), Coord(1, 0), Coord(1, 1), Coord(1, 2), Coord(0, 2)]
+    assert list(grid.neighbors((0, 0))) == [Coord(1, 0), Coord(1, 1), Coord(0, 1)]
+
+    with raises(KeyError) as exception:
+        list(grid.neighbors((12, 12)))
+    assert "does not exist" in str(exception.raised)
+
+
+@test("grid: find")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+    assert grid.find(5) == [Coord(1, 1)]
+    assert grid.find(10) == []  # pylint: disable=use-implicit-booleaness-not-comparison
+
+    grid = Grid.create("111\n111\n111", int)
+    assert grid.find(1, allow_multiple=True) == [
+        Coord(0, 0),
+        Coord(1, 0),
+        Coord(2, 0),
+        Coord(0, 1),
+        Coord(1, 1),
+        Coord(2, 1),
+        Coord(0, 2),
+        Coord(1, 2),
+        Coord(2, 2),
+    ]

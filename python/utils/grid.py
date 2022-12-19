@@ -91,22 +91,42 @@ class Coord:
 class Direction(enum.Enum):
     """An enumerator for each direction that can be moved along a grid.
 
-    # TODO: Add support for diagonals
+    .. note:: When the enumerator returns multiple values (i.e., :py:attr:`Direction.COLUMN`), the iterated values will
+       always return in a clockwise order, starting from the North direction.
     """
 
-    LEFT = (Coord(-1, 0),)
-    RIGHT = (Coord(1, 0),)
-    UP = (Coord(0, -1),)
-    DOWN = (Coord(0, 1),)
+    N = (Coord(0, -1),)
+    E = (Coord(1, 0),)
+    S = (Coord(0, 1),)
+    W = (Coord(-1, 0),)
 
-    ROW = (LEFT[0], RIGHT[0])
-    COLUMN = (UP[0], DOWN[0])
+    NE = (Coord(1, -1),)
+    SE = (Coord(1, 1),)
+    SW = (Coord(-1, 1),)
+    NW = (Coord(-1, -1),)
 
-    ALL = (UP[0], LEFT[0], RIGHT[0], DOWN[0])
+    ROW = (W[0], E[0])
+    COLUMN = (N[0], S[0])
+
+    ORTHOGONAL = (N[0], E[0], S[0], W[0])
+    ALL = (
+        N[0],
+        NE[0],
+        E[0],
+        SE[0],
+        S[0],
+        SW[0],
+        W[0],
+        NW[0],
+    )
 
     @classmethod
-    def types(cls) -> t.Iterator["Direction"]:
-        yield from (name for name in cls if name not in (cls.ALL, cls.COLUMN, cls.ROW))
+    def orthogonals(cls) -> t.Iterator["Direction"]:
+        yield from (cls.N, cls.E, cls.S, cls.W)
+
+    @classmethod
+    def all(cls) -> t.Iterator["Direction"]:
+        yield from (cls.N, cls.NE, cls.E, cls.SE, cls.S, cls.SW, cls.W, cls.NW)
 
 
 class Grid(t.Generic[T]):
@@ -176,7 +196,7 @@ class Grid(t.Generic[T]):
         Returns:
             bool: True, if the coordinate is on the edge
         """
-        return any(not list(self._iter(center, False, direction)) for direction in Direction.ALL.value)
+        return any(not list(self._iter(center, False, direction)) for direction in Direction.ORTHOGONAL.value)
 
     def get(self, center: Coord | tuple[int, int]) -> T:
         """Get the value stored at a specific coordinate location on the grid
@@ -262,3 +282,65 @@ class Grid(t.Generic[T]):
             t.Iterator[T]: the value along each direction
         """
         yield from map(self.get, self.coordinates(center=center, direction=direction, include_self=include_self))
+
+    def orthogonal(self, center: Coord | tuple[int, int]) -> t.Iterator[Coord]:
+        """An iterator with each of the orthogonal neighbors to the supplied center coordinate. (Orthognal meaning
+        only the coordinates directly North, East, South or East)
+
+        .. note:: The iterator will always return values starting from the North direction, and proceeding clockwise.
+
+        Args:
+            center (Coord | tuple[int, int]): the center point
+
+        Yields:
+            t.Iterator[Coord]: each adjacent orthogonal neighbor coordinate
+        """
+        self.get(center)
+        for shift in Direction.ORTHOGONAL.value:
+            try:
+                yield next(self._iter(center, False, shift))
+
+            except StopIteration:
+                continue
+
+    def neighbors(self, center: Coord | tuple[int, int]) -> t.Iterator[Coord]:
+        """An iterator with each of the neighbors to the supplied center coordinate, including diagonally adjacent
+        coordinates.
+
+        .. note:: The iterator will always return values starting from the North direction, and proceeding clockwise.
+
+        Args:
+            center (Coord | tuple[int, int]): the center point
+
+        Yields:
+            t.Iterator[Coord]: each adjacent neighbor coordinate
+        """
+        self.get(center)
+        for shift in Direction.ALL.value:
+            try:
+                yield next(self._iter(center, False, shift))
+
+            except StopIteration:
+                continue
+
+    def find(self, search: T, allow_multiple: bool = False) -> list[Coord]:
+        """Return a list of :py:class:`Coord` that have a particular value. If the value does not exist in the grid,
+        return an empty list.
+
+        Args:
+            search (T): the searched value
+            allow_multiple (bool, optional): If true, allow multiple results in returned list. Defaults to False.
+
+        Returns:
+            list[Coord]: Coordinates locations with the desired value
+        """
+        results: list[Coord] = []
+
+        for coord, value in self._grid.items():
+            if value == search:
+                if not allow_multiple:
+                    return [coord]
+
+                results.append(coord)
+
+        return results
