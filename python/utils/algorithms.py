@@ -42,3 +42,52 @@ def bfs(
                 visited.add(new)
 
     return []
+
+
+class _Comparable(t.Protocol):
+    def __le__(self: "B", other: "B") -> bool:
+        ...
+
+    def __lt__(self: "B", other: "B") -> bool:
+        ...
+
+
+B = t.TypeVar("B", bound=_Comparable)
+
+
+def _cmp(lhs: B, rhs: B) -> int:
+    if lhs < rhs:
+        return -1
+
+    if lhs == rhs:
+        return 0
+
+    return 1
+
+
+def bubble(items: t.Iterable[B], cmp: t.Callable[[B, B], int] = _cmp) -> list[B]:
+    """An implementation of a (rather slow probably) bubble sort with support for arbitray generic iterable types.
+
+    .. note:: A better option than this is probably to use `functools.cmp_to_key` as the key value for the builtin
+       `sort` function, but this is kept for... Posterity? It's very slow. Use `functools.cmp_to_key`
+
+    Args:
+        items (t.Iterable[B]): an iterable of items to be sorted
+        cmp (t.Callable[[B, B], int], optional): A callable used to compare two items in the list. The callable that
+            takes two arguments, and returns -1 if the first argument is smaller, 0 if the they are equal, and 1 if the
+            second argument is smaller. Defaults to a simple comparison.
+
+    Returns:
+        list[B]: the sorted values in a list
+    """
+    result = list(items)[:]
+
+    for stop in range(len(items)):  # type: ignore[arg-type]
+        for index in range(0, len(items) - (1 + stop)):  # type: ignore[arg-type]
+            lhs, rhs = result[index], result[index + 1]
+
+            if cmp(lhs, rhs) > 0:
+                result[index] = rhs
+                result[index + 1] = lhs
+
+    return result
