@@ -46,10 +46,10 @@ def bfs(
 
 class _Comparable(t.Protocol):
     def __le__(self: "B", other: "B") -> bool:
-        ...
+        ...  # pragma: nocover
 
     def __lt__(self: "B", other: "B") -> bool:
-        ...
+        ...  # pragma: nocover
 
 
 B = t.TypeVar("B", bound=_Comparable)
