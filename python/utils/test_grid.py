@@ -123,6 +123,35 @@ def _() -> None:
     grid.set((3, 3), 10, anywhere=True)
     assert grid.get(Coord(3, 3)) == 10
 
+    assert grid.pop((3, 3)) == 10
+    assert Coord(3, 3) not in grid
+
+    with raises(KeyError) as exception:
+        grid.pop((3, 3))
+
+
+@test("grid: print")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+    assert str(grid) == "123\n456\n789"
+
+    grid = Grid({Coord(1, 2): 0, Coord(2, 1): 8})
+    assert str(grid) == ".8\n0."
+
+    grid.background = " "
+    assert str(grid) == " 8\n0 "
+
+
+@test("grid: bounds")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+    assert grid.min_bound == Coord(0, 0)
+    assert grid.max_bound == Coord(2, 2)
+
+    grid.set(Coord(-50, 50), 10, True)
+    assert grid.min_bound == Coord(-50, 0)
+    assert grid.max_bound == Coord(2, 50)
+
 
 @test("grid: left")  # type: ignore
 def _() -> None:
@@ -197,6 +226,18 @@ def _() -> None:
 
     assert list(grid.iter_values()) == [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+    assert list(grid.items()) == [
+        (Coord(0, 0), 1),
+        (Coord(1, 0), 2),
+        (Coord(2, 0), 3),
+        (Coord(0, 1), 4),
+        (Coord(1, 1), 5),
+        (Coord(2, 1), 6),
+        (Coord(0, 2), 7),
+        (Coord(1, 2), 8),
+        (Coord(2, 2), 9),
+    ]
+
 
 @test("grid: internal")  # type: ignore
 def _() -> None:
@@ -261,3 +302,10 @@ def _() -> None:
         Coord(1, 2),
         Coord(2, 2),
     ]
+
+
+@test("grid: within")  # type: ignore
+def _() -> None:
+    grid = Grid.create("123\n456\n789", int)
+    assert grid.within((1, 1))
+    assert not grid.within((10, 10))

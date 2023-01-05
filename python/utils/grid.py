@@ -2,6 +2,7 @@
 A simple module to implement a fairly basic Grid type.
 """
 
+import sys
 import enum
 import typing as t
 
@@ -132,6 +133,8 @@ class Direction(enum.Enum):
 class Grid(t.Generic[T]):
     """A generic Grid type to store arbitrary values at specific coordinate locations."""
 
+    background = "."
+
     @staticmethod
     def create(string: str, predicate: t.Optional[t.Callable[[str], T]] = None, split: str = "") -> "Grid[T]":
         """Create a grid from a string input
@@ -153,11 +156,62 @@ class Grid(t.Generic[T]):
             }
         )
 
-    def __init__(self, grid: dict[Coord, T]) -> None:
-        self._grid = grid
+    def __init__(self, grid: dict[tuple[int, int] | Coord, T]) -> None:
+        self._grid = {k if isinstance(k, Coord) else Coord(*k): v for k, v in grid.items()}
+        self._calculate_boundaries()
+
+    def __str__(self) -> str:
+        def get(center: tuple[int, int]) -> str:
+            try:
+                return str(self.get(center))
+
+            except KeyError:
+                return self.background
+
+        return "\n".join(
+            "".join(get((x, y)) for x in range(self.min_bound.x, self.max_bound.x + 1))
+            for y in range(self.min_bound.y, self.max_bound.y + 1)
+        )
 
     def __contains__(self, key: t.Any) -> bool:
         return key in self._grid
+
+    @property
+    def min_bound(self) -> Coord:
+        """A coordinate point representing the minimum "X" and "Y" value in the grid.
+
+        .. note:: This point may not actually have any values in the grid, and just represents the "bottom-left" point,
+           were the whole grid to be printed out.
+
+        Returns:
+            Coord: (Minimum X, Minimum Y) coordinate location
+        """
+        return self._min_bound
+
+    @property
+    def max_bound(self) -> Coord:
+        """A coordinate point representing the maximum "X" and "Y" value in the grid.
+
+        .. note:: This point may not actually have any values in the grid, and just represents the "top-right" point,
+           were the whole grid to be printed out.
+
+        Returns:
+            Coord: (Maximum X, Maximum Y) coordinate location
+        """
+        return self._max_bound
+
+    def _update_minimums(self, other: Coord) -> None:
+        self._min_bound.x = min(self._min_bound.x, other.x)
+        self._min_bound.y = min(self._min_bound.y, other.y)
+        self._max_bound.x = max(self._max_bound.x, other.x)
+        self._max_bound.y = max(self._max_bound.y, other.y)
+
+    def _calculate_boundaries(self) -> None:
+        self._min_bound = Coord(sys.maxsize, sys.maxsize)
+        self._max_bound = Coord(-sys.maxsize, -sys.maxsize)
+
+        for center in self.iter_coord():
+            self._update_minimums(center)
 
     def iter_coord(self) -> t.Iterator[Coord]:
         """An iterator for all of the coordinates in the grid. This will return each of the coordinates
@@ -231,6 +285,30 @@ class Grid(t.Generic[T]):
             raise KeyError(f"The coordinate {center} does not exist. Maybe use the `anywhere=True` argument")
 
         self._grid[center] = value
+
+        self._update_minimums(center)
+
+    def pop(self, center: Coord | tuple[int, int], default: t.Optional[T] = None) -> T:
+        """If ``center`` is in the grid, remove it and return its value. Otherwise, return ``default``. If ``default``
+        is not set, raise a KeyError.
+
+        Args:
+            center (Coord | tuple[int, int]): A coordinate location to pop from the grid
+            default (t.Optional[T], optional): A default value to return if center is not in the dict. Defaults to None.
+
+        Raises:
+            KeyError: When the key doesn't exist and no default is provided.
+
+        Returns:
+            T: The value at the grid location that was removed.
+        """
+        if not isinstance(center, Coord):
+            center = Coord(*center)
+
+        if default is None:
+            return self._grid.pop(center)
+
+        return self._grid.pop(center, default)
 
     def _iter(self, center: Coord | tuple[int, int], include_self: bool, shift: Coord) -> t.Iterator[Coord]:
         if not isinstance(center, Coord):
@@ -344,3 +422,17 @@ class Grid(t.Generic[T]):
                 results.append(coord)
 
         return results
+
+    def within(self, center: Coord | tuple[int, int]) -> bool:
+        """Returns true if the supplied coordinate fits within the boundaries of the grid
+
+        Args:
+            center (Coord | tuple[int, int]): Checked coordinate
+
+        Returns:
+            bool: If coordinate is inside the minimum/maximum boundaries of the grid, return True. Else, return False.
+        """
+        if not isinstance(center, Coord):
+            center = Coord(*center)
+
+        return (self.min_bound.x <= center.x <= self.max_bound.x) and (self.min_bound.y <= center.y <= self.max_bound.y)

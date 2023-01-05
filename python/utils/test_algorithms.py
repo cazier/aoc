@@ -30,5 +30,7 @@ def _() -> None:
     random.shuffle(numbers)
 
     assert bubble(numbers) == sorted(numbers)
+    assert bubble([1, 1, 2, 2, 3, 4, 5]) == [1, 1, 2, 2, 3, 4, 5]
 
     assert bubble(numbers, cmp) == sorted(numbers, reverse=True)
+    assert bubble([1, 1, 2, 2, 3, 4, 5], cmp) == sorted([1, 1, 2, 2, 3, 4, 5], reverse=True)
