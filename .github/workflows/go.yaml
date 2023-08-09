@@ -8,6 +8,11 @@ on:
     branches:
       - main
       - go
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
 
 jobs:
   test_utilities:
