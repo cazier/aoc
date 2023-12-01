@@ -25,11 +25,11 @@ def part_one(inputs: str) -> int:
 
 
 def part_two(inputs: str) -> int:
-    contents = [set.intersection(*map(set, lines)) for lines in zip(*[iter(inputs.splitlines())] * 3)]
+    contents = [set.intersection(*[set(line) for line in lines]) for lines in zip(*[iter(inputs.splitlines())] * 3)]
     return sum(SCORE[list(i)[0]] for i in contents)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "03")
 
     print(part_one(input_string))

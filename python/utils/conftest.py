@@ -16,7 +16,7 @@ def preprocess_tests(config: Config, collected_tests: list[Test]) -> None:  # py
             break
 
     else:
-        return
+        return  # pragma: no cover
 
     collected_tests.sort(key=lambda k: k.description)
 

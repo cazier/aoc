@@ -1,6 +1,5 @@
 import pathlib
 import tempfile
-from functools import lru_cache
 
 from rich import print  # pylint: disable=redefined-builtin
 
@@ -32,7 +31,6 @@ $ ls
 """
 
 
-@lru_cache
 def assemble(inputs: str) -> tuple[str, dict[pathlib.Path, int]]:
     lines = (line.splitlines() for line in inputs.split("$ ") if line not in ("", "cd /\n"))
     track: dict[pathlib.Path, int] = {}
@@ -77,7 +75,7 @@ def part_two(inputs: str) -> int:
     return min(i for i in track.values() if i > missing)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "07")
 
     print(part_one(input_string))

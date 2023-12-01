@@ -13,7 +13,7 @@ SAMPLE_INPUT: str = """30373
 
 def part_one(inputs: str) -> int:
     def visible(coordinate: Coord) -> bool:
-        for direction in Direction.types():
+        for direction in Direction.orthogonals():
             if heights.get(coordinate) > max(heights.values(coordinate, direction)):
                 return True
 
@@ -29,7 +29,7 @@ def part_two(inputs: str) -> int:
         height = heights.get(coordinate)
         score = 1
 
-        for direction in Direction.types():
+        for direction in Direction.orthogonals():
             multiply = 0
 
             for index, coord in enumerate(heights.coordinates(coordinate, direction), 1):
@@ -47,7 +47,7 @@ def part_two(inputs: str) -> int:
     return max(visible(coord) for coord in heights.iter_coord())
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2022", "08")
 
     print(part_one(input_string))
