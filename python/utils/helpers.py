@@ -58,3 +58,7 @@ def zip_longest_repeating(*iterables: t.Iterable[Z]) -> t.Iterator[list[Z]]:
             return
 
         yield out
+
+
+def splitlines(text: str) -> list[str]:
+    return [line for line in text.splitlines() if line]
