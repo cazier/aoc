@@ -1,3 +1,3 @@
-from .helpers import load_input
+from .helpers import load_input, splitlines
 
-__all__ = ["load_input"]
+__all__ = ["load_input", "splitlines"]

@@ -37,7 +37,7 @@ def get(year: int, day: int, cookie: str, _input: bool = False) -> str:
         logger.info("Getting puzzle readme data.")
 
     req = Request(url=url)
-    req.add_header("Cookie", f"session={cookie}")
+    req.add_header("Cookie", f"session={cookie.strip()}")
 
     return str(urlopen(req).read().decode("utf8"))
 

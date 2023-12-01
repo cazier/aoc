@@ -14,3 +14,7 @@ def load_input(year: str, day: str) -> str:
     path = pathlib.Path(root, "inputs", year_string, day_string)
 
     return path.read_text(encoding="utf8")
+
+
+def splitlines(text: str) -> list[str]:
+    return [line for line in text.splitlines() if line]
