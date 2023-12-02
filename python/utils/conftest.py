@@ -8,7 +8,7 @@ from ward.config import Config
 from ward.testing import Test
 
 
-@hook  # type: ignore
+@hook
 def preprocess_tests(config: Config, collected_tests: list[Test]) -> None:  # pylint: disable=unused-argument
     for test in collected_tests:
         if test.module_name == "test_main":

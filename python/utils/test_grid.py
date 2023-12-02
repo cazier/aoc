@@ -92,15 +92,15 @@ def _() -> None:
     expected = {(0, 0): "1", (1, 0): "2", (0, 1): "3", (1, 1): "4"}
     expected_with_pred = {(0, 0): 1, (1, 0): 2, (0, 1): 3, (1, 1): 4}
 
-    assert dict(Grid.create(input_string).items()) == expected  # type: ignore
-    assert dict(Grid.create(input_string, int).items()) == expected_with_pred  # type: ignore
+    assert dict(Grid.create(input_string).items()) == expected
+    assert dict(Grid.create(input_string, int).items()) == expected_with_pred
 
     with raises(ValueError) as exception:
-        assert dict(Grid.create(input_string_with_delim, int).items()) == expected_with_pred  # type: ignore
+        assert dict(Grid.create(input_string_with_delim, int).items()) == expected_with_pred
     assert "invalid literal" in str(exception.raised)
 
-    assert dict(Grid.create(input_string_with_delim, int, ",").items()) == expected_with_pred  # type: ignore
-    assert dict(Grid.create(input_string_with_delim, split=",").items()) == expected  # type: ignore
+    assert dict(Grid.create(input_string_with_delim, int, ",").items()) == expected_with_pred
+    assert dict(Grid.create(input_string_with_delim, split=",").items()) == expected
 
 
 @test("grid: access")  # type: ignore
@@ -128,6 +128,8 @@ def _() -> None:
 
     with raises(KeyError) as exception:
         grid.pop((3, 3))
+
+    assert grid.pop((100, 100), 100) == 100
 
 
 @test("grid: print")  # type: ignore
@@ -243,7 +245,7 @@ def _() -> None:
 def _() -> None:
     grid = Grid.create("123\n456\n789", int)
 
-    for (x, y) in itertools.product(range(3), repeat=2):
+    for x, y in itertools.product(range(3), repeat=2):
         if (x, y) == (1, 1):
             assert grid.is_on_edge(Coord(x, y)) is False
 

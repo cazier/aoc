@@ -6,7 +6,7 @@ import sys
 import enum
 import typing as t
 
-T = t.TypeVar("T")
+_T = t.TypeVar("_T")
 
 
 class Coord:
@@ -130,13 +130,13 @@ class Direction(enum.Enum):
         yield from (cls.N, cls.NE, cls.E, cls.SE, cls.S, cls.SW, cls.W, cls.NW)
 
 
-class Grid(t.Generic[T]):
+class Grid(t.Generic[_T]):
     """A generic Grid type to store arbitrary values at specific coordinate locations."""
 
     background = "."
 
     @staticmethod
-    def create(string: str, predicate: t.Optional[t.Callable[[str], T]] = None, split: str = "") -> "Grid[T]":
+    def create(string: str, predicate: t.Optional[t.Callable[[str], _T]] = None, split: str = "") -> "Grid[_T]":
         """Create a grid from a string input
 
         Args:
@@ -150,13 +150,13 @@ class Grid(t.Generic[T]):
         """
         return Grid(
             {
-                Coord(x, y): predicate(col) if predicate else t.cast(T, col)
+                Coord(x, y): predicate(col) if predicate else t.cast(_T, col)
                 for y, row in enumerate(string.splitlines())
                 for x, col in enumerate(row.split(split) if split else row)
             }
         )
 
-    def __init__(self, grid: dict[tuple[int, int] | Coord, T]) -> None:
+    def __init__(self, grid: dict[tuple[int, int] | Coord, _T]) -> None:
         self._grid = {k if isinstance(k, Coord) else Coord(*k): v for k, v in grid.items()}
         self._calculate_boundaries()
 
@@ -222,7 +222,7 @@ class Grid(t.Generic[T]):
         """
         yield from self._grid.keys()
 
-    def iter_values(self) -> t.Iterator[T]:
+    def iter_values(self) -> t.Iterator[_T]:
         """An iterator for all of the values stored in the grid. This will return each of the values
         in the order they were initally added to the grid.
 
@@ -231,7 +231,7 @@ class Grid(t.Generic[T]):
         """
         yield from self._grid.values()
 
-    def items(self) -> t.Iterator[tuple[Coord, T]]:
+    def items(self) -> t.Iterator[tuple[Coord, _T]]:
         """An iterator for all of the (coordinate, value) pairs stored in the grid. This will return each item
         in the order they were initally added to the grid.
 
@@ -252,7 +252,7 @@ class Grid(t.Generic[T]):
         """
         return any(not list(self._iter(center, False, direction)) for direction in Direction.ORTHOGONAL.value)
 
-    def get(self, center: Coord | tuple[int, int]) -> T:
+    def get(self, center: Coord | tuple[int, int]) -> _T:
         """Get the value stored at a specific coordinate location on the grid
 
         Args:
@@ -269,7 +269,7 @@ class Grid(t.Generic[T]):
 
         return self._grid[center]
 
-    def set(self, center: Coord | tuple[int, int], value: T, anywhere: bool = False) -> None:
+    def set(self, center: Coord | tuple[int, int], value: _T, anywhere: bool = False) -> None:
         """Set a new value at the specific coordinate location on the grid. If the ``anywhere`` flag is not used, the
         coordinate location cannot be a new location. (i.e., replacing an existing value.)
 
@@ -288,7 +288,7 @@ class Grid(t.Generic[T]):
 
         self._update_minimums(center)
 
-    def pop(self, center: Coord | tuple[int, int], default: t.Optional[T] = None) -> T:
+    def pop(self, center: Coord | tuple[int, int], default: t.Optional[_T] = None) -> _T:
         """If ``center`` is in the grid, remove it and return its value. Otherwise, return ``default``. If ``default``
         is not set, raise a KeyError.
 
@@ -348,7 +348,7 @@ class Grid(t.Generic[T]):
 
     def values(
         self, center: Coord | tuple[int, int], direction: Direction, include_self: bool = False
-    ) -> t.Iterator[T]:
+    ) -> t.Iterator[_T]:
         """Generates an iterator of values along a particular direction
 
         Args:
@@ -401,7 +401,7 @@ class Grid(t.Generic[T]):
             except StopIteration:
                 continue
 
-    def find(self, search: T, allow_multiple: bool = False) -> list[Coord]:
+    def find(self, search: _T, allow_multiple: bool = False) -> list[Coord]:
         """Return a list of :py:class:`Coord` that have a particular value. If the value does not exist in the grid,
         return an empty list.
 

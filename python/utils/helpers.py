@@ -17,10 +17,10 @@ def load_input(year: str, day: str) -> str:
     return path.read_text(encoding="utf8")
 
 
-Z = t.TypeVar("Z")
+_Z = t.TypeVar("_Z")
 
 
-def zip_longest_repeating(*iterables: t.Iterable[Z]) -> t.Iterator[list[Z]]:
+def zip_longest_repeating(*iterables: t.Iterable[_Z]) -> t.Iterator[list[_Z]]:
     """Similar to functools.zip_longest, but simply repeat the final value instead of using `None` or passing in a
     static value.
 
@@ -32,7 +32,7 @@ def zip_longest_repeating(*iterables: t.Iterable[Z]) -> t.Iterator[list[Z]]:
     Yields:
         t.Iterator[list[Z]]: list of each item from the same position in the iterables, until they've run out
     """
-    storage: dict[int, Z] = {}
+    storage: dict[int, _Z] = {}
     iterators = [iter(i) for i in iterables]
 
     num_active = len(iterators)
@@ -60,5 +60,5 @@ def zip_longest_repeating(*iterables: t.Iterable[Z]) -> t.Iterator[list[Z]]:
         yield out
 
 
-def splitlines(text: str) -> list[str]:
-    return [line for line in text.splitlines() if line]
+def splitlines(text: str) -> t.Iterator[str]:
+    yield from (line for line in text.splitlines() if line)
