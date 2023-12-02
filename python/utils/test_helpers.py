@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 from ward import test, raises
 
-from .helpers import load_input, zip_longest_repeating
+from .helpers import load_input, splitlines, zip_longest_repeating
 from .conftest import tmpdir
 
 
@@ -38,3 +38,10 @@ def _() -> None:
         ["a", "c", "f"],
     ]
     assert list(zip_longest_repeating([], [], [])) == []  # pylint: disable=use-implicit-booleaness-not-comparison
+
+
+@test("splitlines")  # type: ignore
+def _() -> None:
+    assert list(splitlines("")) == []  # pylint: disable=use-implicit-booleaness-not-comparison
+    assert list(splitlines("\nhello\n\n")) == ["hello"]
+    assert list(splitlines("\nhello\ngoodbye\n \n")) == ["hello", "goodbye", " "]

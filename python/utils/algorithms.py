@@ -1,15 +1,15 @@
 import typing as t
 from collections import deque
 
-T = t.TypeVar("T")
+_T = t.TypeVar("_T")
 
 
 def bfs(
-    start: T,
-    end_when: t.Callable[[T], bool],
-    generate: t.Callable[[T], t.Iterable[T]],
-    predicate: t.Callable[[T, T], bool],
-) -> list[T]:
+    start: _T,
+    end_when: t.Callable[[_T], bool],
+    generate: t.Callable[[_T], t.Iterable[_T]],
+    predicate: t.Callable[[_T, _T], bool],
+) -> list[_T]:
     """Implementation of a Breadth-First Search algorithm, to find the shortest path between two nodes.
 
     .. caution:: This method is extremely bare-bones, and depends a **lot** on well written callables!
@@ -26,8 +26,8 @@ def bfs(
     Returns:
         list[T]: a list of each of the visited nodes leading to the end result found via ``end_when``
     """
-    pending: deque[list[T]] = deque([[start]])
-    visited: set[T] = set()
+    pending: deque[list[_T]] = deque([[start]])
+    visited: set[_T] = set()
 
     while pending:
         path = pending.popleft()
@@ -45,17 +45,17 @@ def bfs(
 
 
 class _Comparable(t.Protocol):
-    def __le__(self: "B", other: "B") -> bool:
+    def __le__(self: "_B", other: "_B") -> bool:
         ...  # pragma: nocover
 
-    def __lt__(self: "B", other: "B") -> bool:
+    def __lt__(self: "_B", other: "_B") -> bool:
         ...  # pragma: nocover
 
 
-B = t.TypeVar("B", bound=_Comparable)
+_B = t.TypeVar("_B", bound=_Comparable)
 
 
-def _cmp(lhs: B, rhs: B) -> int:
+def _cmp(lhs: _B, rhs: _B) -> int:
     if lhs < rhs:
         return -1
 
@@ -65,7 +65,7 @@ def _cmp(lhs: B, rhs: B) -> int:
     return 1
 
 
-def bubble(items: t.Iterable[B], cmp: t.Callable[[B, B], int] = _cmp) -> list[B]:
+def bubble(items: t.Iterable[_B], cmp: t.Callable[[_B, _B], int] = _cmp) -> list[_B]:
     """An implementation of a (rather slow probably) bubble sort with support for arbitray generic iterable types.
 
     .. note:: A better option than this is probably to use `functools.cmp_to_key` as the key value for the builtin

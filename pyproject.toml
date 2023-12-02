@@ -3,13 +3,16 @@ name = "aoc"
 version = "2022.0.0"
 description = "Attempting Advent of Code in Golang and Python."
 authors = ["Brendan Cazier <cazier@github>"]
+packages = [
+    { include = "utils", from = "python" }
+]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 rich = "^13.7.0"
 
 [tool.poetry.group.testing.dependencies]
-ward = "^0.67.2b0"
+ward = { git = "https://github.com/darrenburns/ward.git", rev = "df2f69c0eca6bd21ba258b51214849f7c16eb459" }
 coverage = "^7.3.2"
 
 [tool.poetry.group.dev.dependencies]
