@@ -64,7 +64,7 @@ def part_two(inputs: str) -> int:
     return sum(_nums(line, True) for line in utils.splitlines(inputs))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     input_string = utils.load_input("2023", "01")
 
     print(part_one(input_string))
