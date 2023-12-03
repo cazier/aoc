@@ -1,7 +1,7 @@
 # Using values from envars or defaults
 AUTO=${AUTO:-0}
-DAY=${DAY}
-YEAR=${YEAR}
+DAY=${DAY:-$(date +"%d")}
+YEAR=${YEAR:-$(date +"%Y")}
 LANGUAGE=${LANGUAGE:-"go"}
 VERBOSE=${VERBOSE:-0}
 VERSION="1.0.0"
