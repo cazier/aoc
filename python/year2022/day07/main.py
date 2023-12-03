@@ -38,7 +38,7 @@ def assemble(inputs: str) -> tuple[str, dict[pathlib.Path, int]]:
     with tempfile.TemporaryDirectory() as tmp:
         directory = pathlib.Path(tmp).absolute()
 
-        for (stdin, *stdout) in lines:
+        for stdin, *stdout in lines:
             cmd, *arg = stdin.split()
 
             if cmd == "ls":

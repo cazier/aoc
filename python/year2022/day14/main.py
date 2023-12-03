@@ -30,7 +30,7 @@ class WallGrid(Grid[str]):
         super().__init__({})
 
         for path in inputs.splitlines():
-            for (start, finish) in itertools.pairwise(path.split(" -> ")):
+            for start, finish in itertools.pairwise(path.split(" -> ")):
                 x1, y1 = tuple(map(int, start.split(",")))
                 x2, y2 = tuple(map(int, finish.split(",")))
 
