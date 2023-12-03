@@ -110,7 +110,7 @@ def _() -> None:
     assert grid.get((1, 1)) == 5
     assert grid.get(Coord(1, 2)) == 8
 
-    assert grid.get(Coord(10, 10)) == None
+    assert grid.get(Coord(10, 10)) is None
     assert grid.get((10, 10), 100) == 100
 
     with raises(KeyError):

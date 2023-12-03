@@ -14,7 +14,7 @@ SAMPLE_INPUT: str = """30373
 def part_one(inputs: str) -> int:
     def visible(coordinate: Coord) -> bool:
         for direction in Direction.orthogonals():
-            if heights.get(coordinate) > max(heights.values(coordinate, direction)):
+            if heights[coordinate] > max(heights.values(coordinate, direction)):
                 return True
 
         return False
@@ -26,7 +26,7 @@ def part_one(inputs: str) -> int:
 
 def part_two(inputs: str) -> int:
     def visible(coordinate: Coord) -> int:
-        height = heights.get(coordinate)
+        height = heights[coordinate]
         score = 1
 
         for direction in Direction.orthogonals():
@@ -35,7 +35,7 @@ def part_two(inputs: str) -> int:
             for index, coord in enumerate(heights.coordinates(coordinate, direction), 1):
                 multiply = index
 
-                if heights.get(coord) >= height:
+                if heights[coord] >= height:
                     break
 
             score *= multiply

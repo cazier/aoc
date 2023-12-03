@@ -21,7 +21,7 @@ def part_one(inputs: str) -> int:
     grid.set(start, 0)
     grid.set(stop, 25)
 
-    path = bfs(start, lambda k: k == stop, grid.orthogonal, lambda k, l: (grid.get(l) - grid.get(k)) <= 1)
+    path = bfs(start, lambda k: k == stop, grid.orthogonal, lambda k, l: (grid[l] - grid[k]) <= 1)
 
     return len(path) - 1
 
@@ -35,7 +35,7 @@ def part_two(inputs: str) -> int:
     grid.set(start, 0)
     grid.set(stop, 25)
 
-    path = bfs(stop, lambda k: grid.get(k) == 0, grid.orthogonal, lambda k, l: (grid.get(l) - grid.get(k)) >= -1)
+    path = bfs(stop, lambda k: grid[k] == 0, grid.orthogonal, lambda k, l: (grid[l] - grid[k]) >= -1)
 
     return len(path) - 1
 
