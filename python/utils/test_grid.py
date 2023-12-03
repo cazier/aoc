@@ -110,8 +110,11 @@ def _() -> None:
     assert grid.get((1, 1)) == 5
     assert grid.get(Coord(1, 2)) == 8
 
+    assert grid.get(Coord(10, 10)) == None
+    assert grid.get((10, 10), 100) == 100
+
     with raises(KeyError):
-        assert grid.get((10, 10)) == -1
+        assert grid[(10, 10)] == -1
 
     grid.set((Coord(2, 2)), -1)
     assert grid.get(Coord(2, 2)) == -1
@@ -239,6 +242,37 @@ def _() -> None:
         (Coord(1, 2), 8),
         (Coord(2, 2), 9),
     ]
+
+    assert list(grid.step_by_row()) == [
+        (Coord(0, 0), 1),
+        (Coord(1, 0), 2),
+        (Coord(2, 0), 3),
+        (Coord(0, 1), 4),
+        (Coord(1, 1), 5),
+        (Coord(2, 1), 6),
+        (Coord(0, 2), 7),
+        (Coord(1, 2), 8),
+        (Coord(2, 2), 9),
+    ]
+
+    assert list(grid.step_by_column()) == [
+        (Coord(0, 0), 1),
+        (Coord(0, 1), 4),
+        (Coord(0, 2), 7),
+        (Coord(1, 0), 2),
+        (Coord(1, 1), 5),
+        (Coord(1, 2), 8),
+        (Coord(2, 0), 3),
+        (Coord(2, 1), 6),
+        (Coord(2, 2), 9),
+    ]
+
+    assert grid.get((-1, 0)) is None
+    grid[(-1, 0)] = 12
+    assert grid.get((-1, 0)) == 12
+
+    assert list(grid.iter_rows()) == [0, 1, 2]
+    assert list(grid.iter_columns()) == [-1, 0, 1, 2]
 
 
 @test("grid: internal")  # type: ignore

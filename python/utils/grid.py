@@ -7,6 +7,8 @@ import enum
 import typing as t
 import inspect
 
+import utils
+
 _T = t.TypeVar("_T")
 
 
@@ -136,8 +138,8 @@ class Grid(t.Generic[_T]):
 
     background = "."
 
-    @staticmethod
-    def create(string: str, predicate: t.Optional[t.Callable[..., _T]] = None, split: str = "") -> "Grid[_T]":
+    @classmethod
+    def create(cls, string: str, predicate: t.Optional[t.Callable[..., _T]] = None, split: str = "") -> "t.Self":
         """Create a grid from a string input
 
         The method can be passed a predicate that is run on every item added to the grid. The callable should accept
@@ -162,10 +164,10 @@ class Grid(t.Generic[_T]):
                 # builtin callables.
                 num = 1
 
-        return Grid(
+        return cls(
             {
                 Coord(x, y): (predicate(col) if num == 1 else predicate(col, x, y)) if predicate else t.cast(_T, col)
-                for y, row in enumerate(string.splitlines())
+                for y, row in enumerate(utils.splitlines(string))
                 for x, col in enumerate(row.split(split) if split else row)
             }
         )
@@ -177,7 +179,7 @@ class Grid(t.Generic[_T]):
     def __str__(self) -> str:
         def get(center: tuple[int, int]) -> str:
             try:
-                return str(self.get(center))
+                return str(self[center])
 
             except KeyError:
                 return self.background
@@ -245,6 +247,22 @@ class Grid(t.Generic[_T]):
         """
         yield from self._grid.values()
 
+    def iter_rows(self) -> t.Iterator[int]:
+        yield from range(self._min_bound.y, self._max_bound.y + 1)
+
+    def iter_columns(self) -> t.Iterator[int]:
+        yield from range(self._min_bound.x, self._max_bound.x + 1)
+
+    def step_by_column(self) -> t.Iterator[tuple[Coord, _T | None]]:
+        for row in self.iter_rows():
+            for column in self.iter_columns():
+                yield (c := Coord(row, column)), self.get(c)
+
+    def step_by_row(self) -> t.Iterator[tuple[Coord, _T | None]]:
+        for column in self.iter_columns():
+            for row in self.iter_rows():
+                yield (c := Coord(row, column)), self.get(c)
+
     def items(self) -> t.Iterator[tuple[Coord, _T]]:
         """An iterator for all of the (coordinate, value) pairs stored in the grid. This will return each item
         in the order they were initally added to the grid.
@@ -266,7 +284,15 @@ class Grid(t.Generic[_T]):
         """
         return any(not list(self._iter(center, False, direction)) for direction in Direction.ORTHOGONAL.value)
 
-    def get(self, center: Coord | tuple[int, int]) -> _T:
+    @t.overload
+    def get(self, center: Coord | tuple[int, int]) -> _T | None:
+        ...  # pragma: nocover
+
+    @t.overload
+    def get(self, center: Coord | tuple[int, int], __default: _T) -> _T:
+        ...  # pragma: nocover
+
+    def get(self, center: Coord | tuple[int, int], __default: _T | None = None) -> _T | None:
         """Get the value stored at a specific coordinate location on the grid
 
         Args:
@@ -278,10 +304,18 @@ class Grid(t.Generic[_T]):
         if not isinstance(center, Coord):
             center = Coord(*center)
 
-        if center not in self._grid:
+        if __default:
+            return self._grid.get(center, __default)
+
+        return self._grid.get(center)
+
+    def __getitem__(self, center: Coord | tuple[int, int]) -> _T:
+        result = self.get(center)
+
+        if result is None:
             raise KeyError(f"The coordinate {center} does not exist")
 
-        return self._grid[center]
+        return result
 
     def set(self, center: Coord | tuple[int, int], value: _T, anywhere: bool = False) -> None:
         """Set a new value at the specific coordinate location on the grid. If the ``anywhere`` flag is not used, the
@@ -301,6 +335,9 @@ class Grid(t.Generic[_T]):
         self._grid[center] = value
 
         self._update_minimums(center)
+
+    def __setitem__(self, center: Coord | tuple[int, int], value: _T) -> None:
+        self.set(center, value, anywhere=True)
 
     def pop(self, center: Coord | tuple[int, int], default: t.Optional[_T] = None) -> _T:
         """If ``center`` is in the grid, remove it and return its value. Otherwise, return ``default``. If ``default``
@@ -387,7 +424,11 @@ class Grid(t.Generic[_T]):
         Yields:
             t.Iterator[Coord]: each adjacent orthogonal neighbor coordinate
         """
-        self.get(center)
+        try:
+            self[center]  # Ensure the center is actually in the grid
+        except KeyError as exc:
+            raise exc
+
         for shift in Direction.ORTHOGONAL.value:
             try:
                 yield next(self._iter(center, False, shift))
@@ -407,7 +448,11 @@ class Grid(t.Generic[_T]):
         Yields:
             t.Iterator[Coord]: each adjacent neighbor coordinate
         """
-        self.get(center)
+        try:
+            self[center]  # Ensure the center is actually in the grid
+        except KeyError as exc:
+            raise exc
+
         for shift in Direction.ALL.value:
             try:
                 yield next(self._iter(center, False, shift))
