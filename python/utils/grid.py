@@ -5,6 +5,7 @@ A simple module to implement a fairly basic Grid type.
 import sys
 import enum
 import typing as t
+import inspect
 
 _T = t.TypeVar("_T")
 
@@ -136,21 +137,34 @@ class Grid(t.Generic[_T]):
     background = "."
 
     @staticmethod
-    def create(string: str, predicate: t.Optional[t.Callable[[str], _T]] = None, split: str = "") -> "Grid[_T]":
+    def create(string: str, predicate: t.Optional[t.Callable[..., _T]] = None, split: str = "") -> "Grid[_T]":
         """Create a grid from a string input
+
+        The method can be passed a predicate that is run on every item added to the grid. The callable should accept
+        three input arguments, the input item, and its location on the grid (i.e., ``callable(item, x, y))``) and return
+        the value to be added. This can be used to keep a secondary data structure tracking certain facts about the
+        data, linked to its position on the grid.
 
         Args:
             string (str): input string with grid values
-            predicate (t.Optional[t.Callable[[str], T]], optional): If set, the predicate will be run for each value
+            predicate (t.Optional[t.Callable[..., T]], optional): If set, the predicate will be run for each value
                 added to the grid. Defaults to None.
             split (str, optional): An optional value used to split each line of the input string. Defaults to "".
 
         Returns:
             Grid[T]: the created Grid type
         """
+        if predicate:
+            try:
+                num = len(inspect.signature(predicate).parameters)
+            except ValueError:
+                # This is error prone, but is necessary due to the inability to introspect the number of arguments in
+                # builtin callables.
+                num = 1
+
         return Grid(
             {
-                Coord(x, y): predicate(col) if predicate else t.cast(_T, col)
+                Coord(x, y): (predicate(col) if num == 1 else predicate(col, x, y)) if predicate else t.cast(_T, col)
                 for y, row in enumerate(string.splitlines())
                 for x, col in enumerate(row.split(split) if split else row)
             }
