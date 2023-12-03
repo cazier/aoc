@@ -13,6 +13,8 @@ from dataclasses import field, dataclass
 from html.parser import HTMLParser
 from urllib.request import Request, urlopen
 
+logger = logging.getLogger()
+
 
 def get(year: int, day: int, cookie: str, _input: bool = False) -> str:
     """Helper function to download information from the Advent of Code website, using a users
@@ -300,7 +302,7 @@ class Puzzle:
 
 def clean(data: str) -> str:
     # pylint: disable-next=anomalous-backslash-in-string
-    """Remove any instances of an \n\s+ within the tag data
+    """Remove any instances of an ``\n\\s+`` within the tag data
 
     Args:
         data (str): an HTML data which may have extra whitespace
@@ -445,7 +447,6 @@ if __name__ == "__main__":
         level=args.log_level,
         format="%(module)s: %(levelname)s: %(funcName)s: %(lineno)d: %(message)s",
     )
-    logger = logging.getLogger()
 
     cookie_string = args.cookie.read_text("utf8")
 
