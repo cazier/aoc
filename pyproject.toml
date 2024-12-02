@@ -12,14 +12,6 @@ dependencies = [
     "utils",
 ]
 
-[project.scripts]
-aoc = "aoc:main"
-
-[build-system]
-requires = ["setuptools>=61"]
-build-backend = "setuptools.build_meta"
-
-
 [tool.uv]
 dev-dependencies = [
     "coverage>=7.6.8",
@@ -31,11 +23,11 @@ dev-dependencies = [
     "ward>=0.68.0b0",
 ]
 
-[tool.uv.workspace]
-members = ["python/utils"]
-
 [tool.uv.sources]
 utils = { workspace = true }
+
+[tool.uv.workspace]
+members = ["python/utils"]
 
 [tool.ruff]
 line-length = 120
@@ -46,12 +38,10 @@ length_sort = true
 multi_line_output = 3
 include_trailing_comma = true
 
+
 [tool.mypy]
 strict = true
-mypy_path = "python"
 show_error_codes = true
-namespace_packages = true
-explicit_package_bases = true
-
-[tool.ward]
-hook_module = ['utils.conftest']
+namespace_packages = false
+# [tool.ward]
+# hook_module = ['utils.conftest']

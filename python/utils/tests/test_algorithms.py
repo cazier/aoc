@@ -1,8 +1,7 @@
 import random
 
 from ward import test
-
-from .algorithms import bfs, bubble
+from utils.algorithms import bfs, bubble
 
 # TODO: this probably needs more testing
 

@@ -3,9 +3,8 @@ import pathlib
 from unittest.mock import patch
 
 from ward import test, raises
-
-from .helpers import load_input, splitlines, zip_longest_repeating
-from .conftest import tmpdir
+from utils.helpers import load_input, splitlines, zip_longest_repeating
+from utils.conftest import tmpdir
 
 
 @test("load_input")  # type: ignore

@@ -1,6 +1,5 @@
 from ward import test, raises
-
-from .display import OCR, Display
+from utils.display import OCR, Display
 
 
 @test("display: create")  # type: ignore

@@ -1,8 +1,7 @@
 import itertools
 
 from ward import test, raises
-
-from .grid import Grid, Coord, Direction
+from utils.grid import Grid, Coord, Direction
 
 
 @test("coord: arithmetic")  # type: ignore
