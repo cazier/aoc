@@ -299,8 +299,7 @@ class Puzzle:
 
 
 def clean(data: str) -> str:
-    # pylint: disable-next=anomalous-backslash-in-string
-    """Remove any instances of an \n\s+ within the tag data
+    """Remove any instances of an \\n\\s+ within the tag data
 
     Args:
         data (str): an HTML data which may have extra whitespace
