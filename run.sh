@@ -1,5 +1,5 @@
 #! /bin/bash
-source utils/shared.sh
+source system/shared.sh
 
 RUN=0
 TEST=0
@@ -31,7 +31,7 @@ usage() {
 do_thing() {
         case "$LANGUAGE_DIRECTORY" in
         "golang")
-                source utils/golang.sh
+                source system/golang.sh
                 _change_directory
 
                 if [[ $RUN -eq 1 ]]; then
@@ -43,7 +43,7 @@ do_thing() {
                 ;;
         "python")
                 export PYTHONPATH="${AOC_ROOT_DIRECTORY}/python"
-                source utils/python.sh
+                source system/python.sh
                 _change_directory
 
                 if [[ $RUN -eq 1 ]]; then

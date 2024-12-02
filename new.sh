@@ -1,5 +1,5 @@
 #! /bin/bash
-source utils/shared.sh
+source system/shared.sh
 
 usage() {
         echo "Usage: new.sh [option]..."
@@ -21,13 +21,13 @@ usage() {
 }
 
 do_thing() {
-        source utils/system.sh
+        source system/system.sh
 
         case "$LANGUAGE_DIRECTORY" in
         "golang")
-                source utils/golang.sh;;
+                source system/golang.sh;;
         "python")
-                source utils/python.sh;;
+                source system/python.sh;;
         *)
                 _log_panic "Internal error"
                 ;;
