@@ -16,7 +16,12 @@ L 5
 R 2
 """
 
-DIRECTION_KEY = {"U": Coord(0, -1), "L": Coord(-1, 0), "D": Coord(0, 1), "R": Coord(1, 0)}
+DIRECTION_KEY = {
+    "U": Coord(0, -1),
+    "L": Coord(-1, 0),
+    "D": Coord(0, 1),
+    "R": Coord(1, 0),
+}
 
 
 def read(inputs: str) -> t.Iterator[Coord]:
@@ -44,7 +49,7 @@ def visualizer(rope: dict[int, Coord]) -> None:
 
         board[y][x] = show
 
-    print("\n".join("".join(map(str, l)) for l in board))
+    print("\n".join("".join(map(str, line)) for line in board))
     input()
 
 

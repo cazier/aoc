@@ -5,7 +5,6 @@ from ast import literal_eval
 from rich import print  # pylint: disable=redefined-builtin
 
 import utils
-from utils.algorithms import bubble  # pylint: disable=unused-import
 
 SAMPLE_INPUT: str = """[1,1,3,1,1]
 [1,1,5,1,1]
@@ -74,7 +73,7 @@ def part_two(inputs: str) -> int:
     second = "[[6]]"
 
     packets = [k for k in inputs.splitlines() + [first, second] if k != ""]
-    cmp = lambda k, l: compare(literal_eval(k), literal_eval(l))  # pylint: disable=unnecessary-lambda-assignment
+    cmp = lambda k, j: compare(literal_eval(k), literal_eval(j))  # noqa: E731
 
     # result = bubble(packets, cmp)
     result = sorted(packets, key=functools.cmp_to_key(cmp))
