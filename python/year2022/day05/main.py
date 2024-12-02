@@ -32,23 +32,23 @@ def parse(commands: str) -> tuple[dict[int, list[str]], list[tuple[int, ...]]]:
 def part_one(inputs: str) -> str:
     maps, moves = parse(inputs)
 
-    for (count, _from, _to) in moves:
+    for count, _from, _to in moves:
         for _ in range(count):
             maps[_to].append(maps[_from].pop())
 
-    return "".join(l[-1] for l in maps.values())
+    return "".join(line[-1] for line in maps.values())
 
 
 def part_two(inputs: str) -> str:
     maps, moves = parse(inputs)
 
-    for (count, _from, _to) in moves:
+    for count, _from, _to in moves:
         storage = [maps[_from].pop() for _ in range(count)]
 
         for crates in storage[-1::-1]:
             maps[_to].append(crates)
 
-    return "".join(l[-1] for l in maps.values())
+    return "".join(line[-1] for line in maps.values())
 
 
 if __name__ == "__main__":  # pragma: no cover
