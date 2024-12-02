@@ -77,3 +77,51 @@ func TestEach(t *testing.T) {
 	assert.True(Each([]int{1, 2, 3}, positive))
 	assert.False(Each([]string{"1", "e", "!"}, string_named_e))
 }
+
+func TestZip(t *testing.T) {
+	assert := assert.New(t)
+
+	input := [][]int{
+		{1, 1, 1},
+		{2, 2, 2},
+		{3, 3, 3},
+	}
+	expected := [][]int{
+		{1, 2, 3},
+		{1, 2, 3},
+		{1, 2, 3},
+	}
+
+	assert.ElementsMatch(Zip(input...), expected)
+
+	input = [][]int{
+		{1, 1, 1, 1},
+		{2, 2, 2, 2},
+		{3, 3, 3, 3},
+	}
+	expected = [][]int{
+		{1, 2, 3},
+		{1, 2, 3},
+		{1, 2, 3},
+		{1, 2, 3},
+	}
+
+	assert.ElementsMatch(Zip(input...), expected)
+
+	input = [][]int{
+		{1, 1, 1, 1, 1, 1, 1, 1},
+		{2, 2, 2, 2, 2, 2, 2, 2},
+	}
+	expected = [][]int{
+		{1, 2},
+		{1, 2},
+		{1, 2},
+		{1, 2},
+		{1, 2},
+		{1, 2},
+		{1, 2},
+		{1, 2},
+	}
+
+	assert.ElementsMatch(Zip(input...), expected)
+}

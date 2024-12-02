@@ -1,6 +1,8 @@
 package utils
 
-import "strconv"
+import (
+	"strconv"
+)
 
 // StringToInt takes a slice of strings and converts each of them to an int value,
 // and returns a new slice with those values.
@@ -8,7 +10,7 @@ func StringToInt(slice []string) []int {
 	var output []int
 
 	for _, v := range slice {
-		val, err := strconv.ParseInt(v, 10, 16)
+		val, err := strconv.ParseInt(v, 10, 64)
 
 		if err != nil {
 			panic(err)
@@ -45,6 +47,19 @@ func Sum[T Numeric](slice []T) T {
 	return total
 }
 
+// Count returns the total count of a value in a slice. This will return an integer value
+func Count[T Numeric](slice []T, value T) int {
+	var total int = 0
+
+	for _, v := range slice {
+		if v == value {
+			total++
+		}
+	}
+
+	return total
+}
+
 // IndexOf returns the index where a value can be found inside a slice. If the value is not found in
 // the slice, return -1.
 func IndexOf[T comparable](slice []T, value T) int {
@@ -70,4 +85,19 @@ func Each[T comparable](slice []T, predicate func(T) bool) bool {
 		}
 	}
 	return true
+}
+
+// Iterate through a slice of nested slices and zip-star each item (i.e., python's `zip(*lists)`)
+func Zip[T any](slices ...[]T) [][]T {
+	output := make([][]T, len(slices[0]))
+
+	for column := range slices[0] {
+		output[column] = make([]T, len(slices))
+
+		for index, row := range slices {
+			output[column][index] = row[column]
+		}
+	}
+
+	return output
 }
