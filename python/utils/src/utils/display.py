@@ -1,4 +1,5 @@
 """A set of tools to manipulate, perform OCR on, and display a simple pixel-based display screen."""
+
 import typing as t
 
 
