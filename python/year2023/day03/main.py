@@ -56,9 +56,6 @@ def find_numbers(grid: Schematic) -> list[tuple[int, list[Coord]]]:
                 number = ""
                 coords = []
 
-        if number:
-            numbers.append((int(number), coords[:]))
-
     return numbers
 
 

@@ -12,7 +12,7 @@ def _() -> None:
 
 @test("2023-03: Part Two")  # type: ignore
 def _() -> None:
-    expected = 4361
+    expected = 467835
     output = part_two(SAMPLE_INPUT)
 
     assert expected == output
