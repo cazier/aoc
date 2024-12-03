@@ -7,10 +7,7 @@ authors = [
     { name = "Brendan Cazier", email = "520246+cazier@users.noreply.github.com" },
 ]
 requires-python = ">=3.12"
-dependencies = [
-    "rich>=13.9.4",
-    "utils",
-]
+dependencies = ["rich>=13.9.4", "utils"]
 
 [tool.uv]
 dev-dependencies = [
@@ -38,10 +35,11 @@ length_sort = true
 multi_line_output = 3
 include_trailing_comma = true
 
-
 [tool.mypy]
 strict = true
 show_error_codes = true
-namespace_packages = false
-# [tool.ward]
-# hook_module = ['utils.conftest']
+namespace_packages = true
+explicit_package_bases = true
+
+[tool.ward]
+hook_module = ['utils.conftest']
