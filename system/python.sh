@@ -4,7 +4,7 @@ DIR="${_CWD}/${LANGUAGE_DIRECTORY}/year${YEAR}/day${DAY}"
 
 TEST_CODE=$(cat <<EOF
 from ward import test
-from year${YEAR}.day${DAY}.main import SAMPLE_INPUT, part_one, part_two
+from year${YEAR}.day${DAY}.main import SAMPLE_INPUT, part_one, part_two  # type: ignore[import-not-found]
 
 @test("${YEAR}-${DAY}: Part One")  # type: ignore
 def _() -> None:

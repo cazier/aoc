@@ -34,7 +34,7 @@ do_thing() {
         esac
 
         _log_debug "\\Creating input and readme directories and files"
-        _cmd "python ${_CWD}/utils/readme.py --year ${YEAR} --day ${DAY} --cookie ${_CWD}/.session_cookie --aoc-path ${_CWD} --log-level ERROR"
+        _cmd "python ${_CWD}/system/readme.py --year ${YEAR} --day ${DAY} --cookie ${_CWD}/.session_cookie --aoc-path ${_CWD} --log-level ERROR"
         _cmd "mkdir -p ${DIR}"
 
         README="${DIR}/../README.md"
