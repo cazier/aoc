@@ -4,9 +4,7 @@ A simple module to implement a fairly basic Grid type.
 
 import sys
 import enum
-import typing as t
-
-_T = t.TypeVar("_T")
+import typing
 
 
 class Coord:
@@ -28,28 +26,28 @@ class Coord:
         """
         return (self.x, self.y)
 
-    def __add__(self, other: t.Any) -> "Coord":
+    def __add__(self, other: typing.Any) -> "Coord":
         if not isinstance(other, Coord):
             other = Coord(*other)
 
         return Coord(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: t.Any) -> "Coord":
+    def __sub__(self, other: typing.Any) -> "Coord":
         if not isinstance(other, Coord):
             other = Coord(*other)
 
         return Coord(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: t.Any) -> "Coord":
+    def __mul__(self, other: typing.Any) -> "Coord":
         return Coord(self.x * other, self.y * other)
 
-    def __truediv__(self, other: t.Any) -> "Coord":
+    def __truediv__(self, other: typing.Any) -> "Coord":
         raise NotImplementedError()
 
-    def __floordiv__(self, other: t.Any) -> "Coord":
+    def __floordiv__(self, other: typing.Any) -> "Coord":
         raise NotImplementedError()
 
-    def __iadd__(self, other: t.Any) -> "Coord":
+    def __iadd__(self, other: typing.Any) -> "Coord":
         if not isinstance(other, Coord):
             other = Coord(*other)
 
@@ -64,7 +62,7 @@ class Coord:
     def __hash__(self) -> int:
         return hash(self.G)
 
-    def __eq__(self, other: t.Any) -> bool:
+    def __eq__(self, other: typing.Any) -> bool:
         if isinstance(other, tuple) and len(other) == 2:
             other = Coord(*other)
 
@@ -76,7 +74,7 @@ class Coord:
     def normalize(self) -> "Coord":
         return Coord(*map(lambda k: k // abs(k) if k else 0, self.G))
 
-    def touching(self, other: t.Any) -> bool:
+    def touching(self, other: typing.Any) -> bool:
         if not isinstance(other, Coord):
             other = Coord(*other)
 
@@ -110,6 +108,7 @@ class Direction(enum.Enum):
     COLUMN = (N[0], S[0])
 
     ORTHOGONAL = (N[0], E[0], S[0], W[0])
+    DIAGONAL = (NE[0], SE[0], SW[0], NW[0])
     ALL = (
         N[0],
         NE[0],
@@ -122,41 +121,68 @@ class Direction(enum.Enum):
     )
 
     @classmethod
-    def orthogonals(cls) -> t.Iterator["Direction"]:
+    def orthogonals(cls) -> "typing.Iterator[Direction]":
         yield from (cls.N, cls.E, cls.S, cls.W)
 
     @classmethod
-    def all(cls) -> t.Iterator["Direction"]:
+    def diagonals(cls) -> "typing.Iterator[Direction]":
+        yield from (cls.NE, cls.SE, cls.SW, cls.NW)
+
+    @classmethod
+    def all(cls) -> "typing.Iterator[Direction]":
         yield from (cls.N, cls.NE, cls.E, cls.SE, cls.S, cls.SW, cls.W, cls.NW)
 
 
-class Grid(t.Generic[_T]):
+class Grid[T]:
     """A generic Grid type to store arbitrary values at specific coordinate locations."""
 
     background = "."
 
-    @staticmethod
-    def create(string: str, predicate: t.Optional[t.Callable[[str], _T]] = None, split: str = "") -> "Grid[_T]":
+    @typing.overload
+    @classmethod
+    def create(cls, string: str, *, split: str = "") -> "Grid[str]": ...
+
+    @typing.overload
+    @classmethod
+    def create(cls, string: str, *, predicate: typing.Callable[[str], T], split: str = "") -> "Grid[T]": ...
+
+    @classmethod
+    def create(
+        cls, string: str, *, predicate: typing.Optional[typing.Callable[[str], T]] = None, split: str = ""
+    ) -> "Grid[str] | Grid[T]":
         """Create a grid from a string input
 
         Args:
             string (str): input string with grid values
-            predicate (t.Optional[t.Callable[[str], T]], optional): If set, the predicate will be run for each value
+            predicate (typing.Optional[typing.Callable[[str], T]], optional): If set, the predicate will be run for each value
                 added to the grid. Defaults to None.
             split (str, optional): An optional value used to split each line of the input string. Defaults to "".
 
         Returns:
             Grid[T]: the created Grid type
         """
-        return Grid(
+        return cls(
             {
-                Coord(x, y): predicate(col) if predicate else t.cast(_T, col)
+                Coord(x, y): predicate(col) if predicate else typing.cast(T, col)
                 for y, row in enumerate(string.splitlines())
                 for x, col in enumerate(row.split(split) if split else row)
             }
         )
 
-    def __init__(self, grid: dict[tuple[int, int] | Coord, _T]) -> None:
+    @classmethod
+    def new(cls: "typing.Type[Grid[str]]", height: int, width: int) -> "Grid[str]":
+        """Create an empty grid with a specific height and width.
+
+        Args:
+            height (int): number of rows
+            width (int): number of columns
+
+        Returns:
+            Grid[T]: the created Grid type
+        """
+        return cls({Coord(x, y): cls.background for y in range(height) for x in range(width)})
+
+    def __init__(self, grid: dict[tuple[int, int] | Coord, T]) -> None:
         self._grid = {k if isinstance(k, Coord) else Coord(*k): v for k, v in grid.items()}
         self._calculate_boundaries()
 
@@ -173,7 +199,7 @@ class Grid(t.Generic[_T]):
             for y in range(self.min_bound.y, self.max_bound.y + 1)
         )
 
-    def __contains__(self, key: t.Any) -> bool:
+    def __contains__(self, key: typing.Any) -> bool:
         return key in self._grid
 
     @property
@@ -181,7 +207,7 @@ class Grid(t.Generic[_T]):
         """A coordinate point representing the minimum "X" and "Y" value in the grid.
 
         .. note:: This point may not actually have any values in the grid, and just represents the "bottom-left" point,
-           were the whole grid to be printed out.
+           were the whole grid to be printed outyping.
 
         Returns:
             Coord: (Minimum X, Minimum Y) coordinate location
@@ -193,7 +219,7 @@ class Grid(t.Generic[_T]):
         """A coordinate point representing the maximum "X" and "Y" value in the grid.
 
         .. note:: This point may not actually have any values in the grid, and just represents the "top-right" point,
-           were the whole grid to be printed out.
+           were the whole grid to be printed outyping.
 
         Returns:
             Coord: (Maximum X, Maximum Y) coordinate location
@@ -213,30 +239,30 @@ class Grid(t.Generic[_T]):
         for center in self.iter_coord():
             self._update_minimums(center)
 
-    def iter_coord(self) -> t.Iterator[Coord]:
+    def iter_coord(self) -> typing.Iterator[Coord]:
         """An iterator for all of the coordinates in the grid. This will return each of the coordinates
         in the order they were initally added to the grid.
 
         Yields:
-            t.Iterator[Coord]: grid coordinates
+            typing.Iterator[Coord]: grid coordinates
         """
         yield from self._grid.keys()
 
-    def iter_values(self) -> t.Iterator[_T]:
+    def iter_values(self) -> typing.Iterator[T]:
         """An iterator for all of the values stored in the grid. This will return each of the values
         in the order they were initally added to the grid.
 
         Yields:
-            t.Iterator[T]: grid values
+            typing.Iterator[T]: grid values
         """
         yield from self._grid.values()
 
-    def items(self) -> t.Iterator[tuple[Coord, _T]]:
+    def items(self) -> typing.Iterator[tuple[Coord, T]]:
         """An iterator for all of the (coordinate, value) pairs stored in the grid. This will return each item
         in the order they were initally added to the grid.
 
         Yields:
-            t.Iterator[tuple[Coord, T]]: (coordinate, value) pairs
+            typing.Iterator[tuple[Coord, T]]: (coordinate, value) pairs
         """
         yield from self._grid.items()
 
@@ -252,7 +278,7 @@ class Grid(t.Generic[_T]):
         """
         return any(not list(self._iter(center, False, direction)) for direction in Direction.ORTHOGONAL.value)
 
-    def get(self, center: Coord | tuple[int, int]) -> _T:
+    def get(self, center: Coord | tuple[int, int]) -> T:
         """Get the value stored at a specific coordinate location on the grid
 
         Args:
@@ -269,7 +295,7 @@ class Grid(t.Generic[_T]):
 
         return self._grid[center]
 
-    def set(self, center: Coord | tuple[int, int], value: _T, anywhere: bool = False) -> None:
+    def set(self, center: Coord | tuple[int, int], value: T, anywhere: bool = False) -> None:
         """Set a new value at the specific coordinate location on the grid. If the ``anywhere`` flag is not used, the
         coordinate location cannot be a new location. (i.e., replacing an existing value.)
 
@@ -288,13 +314,13 @@ class Grid(t.Generic[_T]):
 
         self._update_minimums(center)
 
-    def pop(self, center: Coord | tuple[int, int], default: t.Optional[_T] = None) -> _T:
+    def pop(self, center: Coord | tuple[int, int], default: typing.Optional[T] = None) -> T:
         """If ``center`` is in the grid, remove it and return its value. Otherwise, return ``default``. If ``default``
         is not set, raise a KeyError.
 
         Args:
             center (Coord | tuple[int, int]): A coordinate location to pop from the grid
-            default (t.Optional[T], optional): A default value to return if center is not in the dict. Defaults to None.
+            default (typing.Optional[T], optional): A default value to return if center is not in the dictyping. Defaults to None.
 
         Raises:
             KeyError: When the key doesn't exist and no default is provided.
@@ -310,7 +336,7 @@ class Grid(t.Generic[_T]):
 
         return self._grid.pop(center, default)
 
-    def _iter(self, center: Coord | tuple[int, int], include_self: bool, shift: Coord) -> t.Iterator[Coord]:
+    def _iter(self, center: Coord | tuple[int, int], include_self: bool, shift: Coord) -> typing.Iterator[Coord]:
         if not isinstance(center, Coord):
             center = Coord(*center)
 
@@ -327,16 +353,16 @@ class Grid(t.Generic[_T]):
 
     def coordinates(
         self, center: Coord | tuple[int, int], direction: Direction, include_self: bool = False
-    ) -> t.Iterator[Coord]:
+    ) -> typing.Iterator[Coord]:
         """Generates an iterator of coordinates along a particular direction
 
         Args:
             center (Coord | tuple[int, int]): the center point to radiate from
             direction (Direction): direction to step over
-            include_self (bool, optional): If true, include the center in the result. Defaults to False.
+            include_self (bool, optional): If true, include the center in the resultyping. Defaults to False.
 
         Yields:
-            t.Iterator[Coord]: the coordinate value along each direction
+            typing.Iterator[Coord]: the coordinate value along each direction
         """
         shown = set()
 
@@ -348,20 +374,20 @@ class Grid(t.Generic[_T]):
 
     def values(
         self, center: Coord | tuple[int, int], direction: Direction, include_self: bool = False
-    ) -> t.Iterator[_T]:
+    ) -> typing.Iterator[T]:
         """Generates an iterator of values along a particular direction
 
         Args:
             center (Coord | tuple[int, int]): the center point to radiate from
             direction (Direction): direction to step over
-            include_self (bool, optional): If true, include the center in the result. Defaults to False.
+            include_self (bool, optional): If true, include the center in the resultyping. Defaults to False.
 
         Yields:
-            t.Iterator[T]: the value along each direction
+            typing.Iterator[T]: the value along each direction
         """
         yield from map(self.get, self.coordinates(center=center, direction=direction, include_self=include_self))
 
-    def orthogonal(self, center: Coord | tuple[int, int]) -> t.Iterator[Coord]:
+    def orthogonal(self, center: Coord | tuple[int, int]) -> typing.Iterator[Coord]:
         """An iterator with each of the orthogonal neighbors to the supplied center coordinate. (Orthognal meaning
         only the coordinates directly North, East, South or East)
 
@@ -371,7 +397,7 @@ class Grid(t.Generic[_T]):
             center (Coord | tuple[int, int]): the center point
 
         Yields:
-            t.Iterator[Coord]: each adjacent orthogonal neighbor coordinate
+            typing.Iterator[Coord]: each adjacent orthogonal neighbor coordinate
         """
         self.get(center)
         for shift in Direction.ORTHOGONAL.value:
@@ -381,7 +407,27 @@ class Grid(t.Generic[_T]):
             except StopIteration:
                 continue
 
-    def neighbors(self, center: Coord | tuple[int, int]) -> t.Iterator[Coord]:
+    def diagonal(self, center: Coord | tuple[int, int]) -> typing.Iterator[Coord]:
+        """An iterator with each of the diagonal neighbors to the supplied center coordinate. (Diagonal meaning
+        only the coordinates directly Northeast, Southeast, Southwest or Northeast)
+
+        .. note:: The iterator will always return values starting from the Northeast direction, and proceeding clockwise.
+
+        Args:
+            center (Coord | tuple[int, int]): the center point
+
+        Yields:
+            typing.Iterator[Coord]: each adjacent diagonal neighbor coordinate
+        """
+        self.get(center)
+        for shift in Direction.DIAGONAL.value:
+            try:
+                yield next(self._iter(center, False, shift))
+
+            except StopIteration:
+                continue
+
+    def neighbors(self, center: Coord | tuple[int, int]) -> typing.Iterator[Coord]:
         """An iterator with each of the neighbors to the supplied center coordinate, including diagonally adjacent
         coordinates.
 
@@ -391,7 +437,7 @@ class Grid(t.Generic[_T]):
             center (Coord | tuple[int, int]): the center point
 
         Yields:
-            t.Iterator[Coord]: each adjacent neighbor coordinate
+            typing.Iterator[Coord]: each adjacent neighbor coordinate
         """
         self.get(center)
         for shift in Direction.ALL.value:
@@ -401,13 +447,77 @@ class Grid(t.Generic[_T]):
             except StopIteration:
                 continue
 
-    def find(self, search: _T, allow_multiple: bool = False) -> list[Coord]:
+    def _n_shift(self, center: Coord | tuple[int, int], amount: Coord, n: int) -> typing.Iterator[list[Coord]]:
+        try:
+            result = []
+            for _ in range(n):
+                try:
+                    center = next(self._iter(center, False, amount))
+                    result.append(center)
+
+                except StopIteration:
+                    break
+
+            yield result
+
+        except StopIteration:
+            pass
+
+    def n_orthogonal(self, center: Coord | tuple[int, int], n: int) -> typing.Iterator[list[Coord]]:
+        """An iterator with each of the orthogonal neighbors to the supplied center coordinate. (Orthognal meaning
+        only the coordinates directly North, East, South or East)
+
+        .. note:: The iterator will always return values starting from the North direction, and proceeding clockwise.
+
+        Args:
+            center (Coord | tuple[int, int]): the center point
+
+        Yields:
+            typing.Iterator[Coord]: each adjacent orthogonal neighbor coordinate
+        """
+        self.get(center)
+        for shift in Direction.ORTHOGONAL.value:
+            yield from self._n_shift(center, shift, n)
+
+    def n_diagonal(self, center: Coord | tuple[int, int], n: int) -> typing.Iterator[list[Coord]]:
+        """An iterator with each of the diagonal neighbors to the supplied center coordinate. (Diagonal meaning
+        only the coordinates directly Northeast, Southeast, Southwest or Northeast)
+
+        .. note:: The iterator will always return values starting from the Northeast direction, and proceeding clockwise.
+
+        Args:
+            center (Coord | tuple[int, int]): the center point
+
+        Yields:
+            typing.Iterator[Coord]: each adjacent diagonal neighbor coordinate
+        """
+        self.get(center)
+        for shift in Direction.DIAGONAL.value:
+            yield from self._n_shift(center, shift, n)
+
+    def n_neighbors(self, center: Coord | tuple[int, int], n: int) -> typing.Iterator[list[Coord]]:
+        """An iterator with each of the neighbors to the supplied center coordinate, including diagonally adjacent
+        coordinates.
+
+        .. note:: The iterator will always return values starting from the North direction, and proceeding clockwise.
+
+        Args:
+            center (Coord | tuple[int, int]): the center point
+
+        Yields:
+            typing.Iterator[Coord]: each adjacent neighbor coordinate
+        """
+        self.get(center)
+        for shift in Direction.ALL.value:
+            yield from self._n_shift(center, shift, n)
+
+    def find(self, search: T, allow_multiple: bool = False) -> list[Coord]:
         """Return a list of :py:class:`Coord` that have a particular value. If the value does not exist in the grid,
-        return an empty list.
+        return an empty listyping.
 
         Args:
             search (T): the searched value
-            allow_multiple (bool, optional): If true, allow multiple results in returned list. Defaults to False.
+            allow_multiple (bool, optional): If true, allow multiple results in returned listyping. Defaults to False.
 
         Returns:
             list[Coord]: Coordinates locations with the desired value

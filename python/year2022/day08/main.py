@@ -1,6 +1,5 @@
-from rich import print  # pylint: disable=redefined-builtin
-
 import utils
+from rich import print  # pylint: disable=redefined-builtin
 from utils.grid import Grid, Coord, Direction
 
 SAMPLE_INPUT: str = """30373
@@ -19,7 +18,7 @@ def part_one(inputs: str) -> int:
 
         return False
 
-    heights = Grid.create(inputs, int)
+    heights = Grid.create(inputs, predicate=int)
 
     return sum(heights.is_on_edge(coord) or visible(coord) for coord in heights.iter_coord())
 
@@ -42,7 +41,7 @@ def part_two(inputs: str) -> int:
 
         return score
 
-    heights = Grid.create(inputs, int)
+    heights = Grid.create(inputs, predicate=int)
 
     return max(visible(coord) for coord in heights.iter_coord())
 
