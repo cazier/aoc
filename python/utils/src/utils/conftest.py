@@ -1,8 +1,3 @@
-import typing as t
-import pathlib
-import tempfile
-
-from ward import Scope, fixture
 from ward.hooks import hook
 from ward.config import Config
 from ward.testing import Test
@@ -19,9 +14,3 @@ def preprocess_tests(config: Config, collected_tests: list[Test]) -> None:  # py
         return  # pragma: no cover
 
     collected_tests.sort(key=lambda k: k.description)
-
-
-@fixture(scope=Scope.Global)  # type: ignore
-def tmpdir() -> t.Iterator[pathlib.Path]:
-    with tempfile.TemporaryDirectory() as name:
-        yield pathlib.Path(name)
