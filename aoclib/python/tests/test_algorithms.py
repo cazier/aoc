@@ -1,18 +1,18 @@
 import random
 
-from utils.algorithms import bfs, bubble
+from aoclib.algorithms import bfs, bubble
 
 # TODO: this probably needs more testing
 
 
 class TestAlgorithms:
-    def test_bfs_dict(self):
+    def test_bfs_dict(self) -> None:
         graph = {0: [1, 2], 1: [2, 3], 2: [3], 3: [6], 4: [5, 6, 7]}
 
         assert bfs(0, lambda k: k == 6, lambda k: graph.get(k, []), lambda _, __: True) == [0, 1, 3, 6]
         assert bfs(0, lambda k: k == 7, lambda k: graph.get(k, []), lambda _, __: True) == []
 
-    def test_bubble_sort(self):
+    def test_bubble_sort(self) -> None:
         def cmp(lhs: int, rhs: int) -> int:
             if rhs < lhs:
                 return -1

@@ -3,10 +3,10 @@ import pathlib
 from unittest.mock import patch
 
 import pytest
-from utils.helpers import load_input, splitlines, zip_longest_repeating
+from aoclib.helpers import load_input, splitlines, zip_longest_repeating
 
 
-class TestUtils:
+class TestAoclib:
     def test_load_input(self, tmp_path: pathlib.Path) -> None:
         input_string = b"hello\nline\ntwo\nfour"
         expected = "hello\nline\ntwo\nfour"
@@ -22,7 +22,7 @@ class TestUtils:
             with pytest.raises(FileNotFoundError, match="No such file or directory"):
                 expected = load_input("2020", "16")
 
-        with pytest.raises(SystemExit, match=r"Could not determine the proper \$AOC_ROOT_DIRECTORY"):  # type: ignore[type-var]
+        with pytest.raises(SystemExit, match=r"Could not determine the proper \$AOC_ROOT_DIRECTORY"):
             expected = load_input("2020", "15")
 
     def test_zip_longest_repeating(self) -> None:

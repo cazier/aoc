@@ -2,7 +2,7 @@ import typing
 import itertools
 
 import pytest
-from utils.grid import Grid, Coord, Direction
+from aoclib.grid import Grid, Coord, Direction
 
 
 class TestCoordinate:
@@ -372,7 +372,7 @@ class TestGrid:
     @pytest.mark.parametrize(
         "method", (Grid.n_orthogonal, Grid.n_diagonal, Grid.n_neighbors), ids=("orthogonal", "diagonal", "neighbors")
     )
-    def test_n__invalid(self, method: typing.Callable):
+    def test_n__invalid(self, method: typing.Callable[..., typing.Iterator[list[Coord]]]) -> None:
         grid = Grid.create("123\n456\n789", predicate=int)
 
         with pytest.raises(KeyError, match="does not exist"):

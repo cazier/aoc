@@ -1,5 +1,5 @@
 import pytest
-from utils.display import OCR, Display
+from aoclib.display import OCR, Display
 
 
 class TestDisplay:
