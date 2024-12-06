@@ -2,8 +2,9 @@ import typing
 import graphlib
 import collections
 
-import utils
 from rich import print  # pylint: disable=redefined-builtin
+
+from ... import utils
 
 SAMPLE_INPUT: str = """
 47|53
