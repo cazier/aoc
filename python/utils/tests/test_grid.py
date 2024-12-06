@@ -1,3 +1,4 @@
+import typing
 import itertools
 
 import pytest
@@ -85,8 +86,55 @@ class TestDirection:
             Direction.NW,
         ]
 
+    @pytest.mark.parametrize(
+        ("kwargs", "expected"),
+        [
+            ({"facing": Direction.N, "orthogonal": True}, [Direction.N, Direction.E, Direction.S, Direction.W]),
+            ({"facing": Coord(0, -1), "orthogonal": True}, [Direction.N, Direction.E, Direction.S, Direction.W]),
+            (
+                {"facing": Direction.NE, "clockwise": False, "diagonal": True},
+                [Direction.NE, Direction.NW, Direction.SW, Direction.SE],
+            ),
+            (
+                {"facing": Direction.S, "diagonal": True, "orthogonal": True},
+                [
+                    Direction.S,
+                    Direction.SW,
+                    Direction.W,
+                    Direction.NW,
+                    Direction.N,
+                    Direction.NE,
+                    Direction.E,
+                    Direction.SE,
+                ],
+            ),
+        ],
+        ids=("direction-orthogonal", "coord-orthogonal", "counterclockwise-diagonal", "all"),
+    )
+    def test_rotate(self, kwargs: dict[str, typing.Any], expected: list[Direction]) -> None:
+        assert list(Direction.rotate(**kwargs)) == expected
+
+    @pytest.mark.parametrize(
+        ("kwargs", "kind", "message"),
+        [
+            (
+                {"facing": Direction.NW, "orthogonal": True},
+                ValueError,
+                "The starting directiton is not in the desired array.",
+            ),
+            ({"facing": Direction.N}, ValueError, "At least one of the orthogonal or diagonal arguments must be True"),
+        ],
+        ids=("invalid-start", "invalid-arguments"),
+    )
+    def test_rotate_invalid_face(self, kwargs: dict[str, typing.Any], kind: type[Exception], message: str) -> None:
+        with pytest.raises(kind, match=message):
+            list(Direction.rotate(**kwargs))
+
 
 class TestGrid:
+    def test_create_new(self) -> None:
+        assert dict(Grid.new(2, 2).items()) == {(0, 0): ".", (0, 1): ".", (1, 0): ".", (1, 1): "."}
+
     def test_create_from_string(self) -> None:
         input_string = "12\n34"
         input_string_with_delim = "1,2\n3,4"
@@ -236,6 +284,15 @@ class TestGrid:
         with pytest.raises(KeyError, match="does not exist"):
             list(grid.orthogonal((12, 12)))
 
+    def test_diagonal(self) -> None:
+        grid = Grid.create("123\n456\n789", predicate=int)
+        assert list(grid.diagonal((1, 1))) == [Coord(2, 0), Coord(2, 2), Coord(0, 2), Coord(0, 0)]
+        assert list(grid.diagonal((0, 1))) == [Coord(1, 0), Coord(1, 2)]
+        assert list(grid.diagonal((0, 0))) == [Coord(1, 1)]
+
+        with pytest.raises(KeyError, match="does not exist"):
+            list(grid.diagonal((12, 12)))
+
     def test_neighbors(self) -> None:
         grid = Grid.create("123\n456\n789", predicate=int)
         assert list(grid.neighbors((1, 1))) == [
@@ -254,14 +311,72 @@ class TestGrid:
         with pytest.raises(KeyError, match="does not exist"):
             list(grid.neighbors((12, 12)))
 
-    def test_n_orthogonal(self) -> None:
+    @pytest.mark.parametrize(
+        ("kwargs", "expected"),
+        [
+            ({"center": (0, 0), "n": 2}, [[], [Coord(1, 0), Coord(2, 0)], [Coord(0, 1), Coord(0, 2)], []]),
+            ({"center": (0, 0), "n": 1}, [[], [Coord(1, 0)], [Coord(0, 1)], []]),
+            ({"center": (1, 1), "n": 1}, [[Coord(1, 0)], [Coord(2, 1)], [Coord(1, 2)], [Coord(0, 1)]]),
+            ({"center": (0, 0), "n": 3}, [[], [Coord(1, 0), Coord(2, 0)], [Coord(0, 1), Coord(0, 2)], []]),
+        ],
+        ids=("to-edge", "limit", "surrounding", "insufficient"),
+    )
+    def test_n_orthogonal(self, kwargs: dict[str, typing.Any], expected: list[list[Coord]]) -> None:
         grid = Grid.create("123\n456\n789", predicate=int)
-        assert list(grid.n_orthogonal((0, 0), n=2)) == [[], [Coord(1, 0), Coord(2, 0)], [Coord(0, 1), Coord(0, 2)], []]
-        assert list(grid.n_orthogonal((0, 0), n=1)) == [[], [Coord(1, 0)], [Coord(0, 1)], []]
-        assert list(grid.n_orthogonal((0, 0), n=3)) == [[], [Coord(1, 0), Coord(2, 0)], [Coord(0, 1), Coord(0, 2)], []]
+        assert list(grid.n_orthogonal(**kwargs)) == expected
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected"),
+        [
+            ({"center": (0, 2), "n": 2}, [[Coord(1, 1), Coord(2, 0)], [Coord(1, 3), Coord(2, 4)], [], []]),
+            ({"center": (0, 2), "n": 1}, [[Coord(1, 1)], [Coord(1, 3)], [], []]),
+            ({"center": (0, 3), "n": 3}, [[Coord(1, 2), Coord(2, 1), Coord(3, 0)], [Coord(1, 4)], [], []]),
+        ],
+        ids=("to-edge", "limit", "insufficient"),
+    )
+    def test_n_diagonal(self, kwargs: dict[str, typing.Any], expected: list[list[Coord]]) -> None:
+        grid = Grid.create("12345\n67890\nabcde\nfghij\nklmno")
+        assert list(grid.n_diagonal(**kwargs)) == expected
+
+    @pytest.mark.parametrize(
+        ("kwargs", "expected"),
+        [
+            (
+                {"center": (0, 0), "n": 2},
+                [
+                    *([], []),
+                    [Coord(1, 0), Coord(2, 0)],
+                    [Coord(1, 1), Coord(2, 2)],
+                    [Coord(0, 1), Coord(0, 2)],
+                    *([], [], []),
+                ],
+            ),
+            ({"center": (0, 0), "n": 1}, [[], [], [Coord(1, 0)], [Coord(1, 1)], [Coord(0, 1)], [], [], []]),
+            (
+                {"center": (0, 0), "n": 3},
+                [
+                    *([], []),
+                    [Coord(1, 0), Coord(2, 0)],
+                    [Coord(1, 1), Coord(2, 2)],
+                    [Coord(0, 1), Coord(0, 2)],
+                    *([], [], []),
+                ],
+            ),
+        ],
+        ids=("to-edge", "limit", "insufficient"),
+    )
+    def test_n_neighbors(self, kwargs: dict[str, typing.Any], expected: list[list[Coord]]) -> None:
+        grid = Grid.create("123\n456\n789", predicate=int)
+        assert list(grid.n_neighbors(**kwargs)) == expected
+
+    @pytest.mark.parametrize(
+        "method", (Grid.n_orthogonal, Grid.n_diagonal, Grid.n_neighbors), ids=("orthogonal", "diagonal", "neighbors")
+    )
+    def test_n__invalid(self, method: typing.Callable):
+        grid = Grid.create("123\n456\n789", predicate=int)
 
         with pytest.raises(KeyError, match="does not exist"):
-            list(grid.n_orthogonal((12, 12), n=3))
+            list(method(grid, (12, 12), n=3))
 
     def test_find(self) -> None:
         grid = Grid.create("123\n456\n789", predicate=int)

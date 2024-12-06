@@ -5,6 +5,7 @@ A simple module to implement a fairly basic Grid type.
 import sys
 import enum
 import typing
+import itertools
 
 
 class Coord:
@@ -132,6 +133,36 @@ class Direction(enum.Enum):
     def all(cls) -> "typing.Iterator[Direction]":
         yield from (cls.N, cls.NE, cls.E, cls.SE, cls.S, cls.SW, cls.W, cls.NW)
 
+    @classmethod
+    def rotate(
+        cls, facing: "Coord | Direction", *, clockwise: bool = True, orthogonal: bool = False, diagonal: bool = False
+    ) -> "typing.Iterator[Direction]":
+        if orthogonal and diagonal:
+            array = list(cls.all())
+
+        elif orthogonal and not diagonal:
+            array = list(cls.orthogonals())
+
+        elif not orthogonal and diagonal:
+            array = list(cls.diagonals())
+
+        else:
+            raise ValueError("At least one of the orthogonal or diagonal arguments must be True")
+
+        if not isinstance(facing, Direction):
+            facing = Direction((facing,))
+
+        if not clockwise:
+            array.reverse()
+
+        try:
+            start = array.index(facing)
+
+        except ValueError:
+            raise ValueError("The starting directiton is not in the desired array.")
+
+        return itertools.islice(itertools.cycle(array), start, start + len(array))
+
 
 class Grid[T]:
     """A generic Grid type to store arbitrary values at specific coordinate locations."""
@@ -169,8 +200,8 @@ class Grid[T]:
             }
         )
 
-    @classmethod
-    def new(cls: "typing.Type[Grid[str]]", height: int, width: int) -> "Grid[str]":
+    @staticmethod
+    def new(height: int, width: int) -> "Grid[str]":
         """Create an empty grid with a specific height and width.
 
         Args:
@@ -180,7 +211,7 @@ class Grid[T]:
         Returns:
             Grid[T]: the created Grid type
         """
-        return cls({Coord(x, y): cls.background for y in range(height) for x in range(width)})
+        return Grid({Coord(x, y): Grid.background for y in range(height) for x in range(width)})
 
     def __init__(self, grid: dict[tuple[int, int] | Coord, T]) -> None:
         self._grid = {k if isinstance(k, Coord) else Coord(*k): v for k, v in grid.items()}
@@ -448,20 +479,16 @@ class Grid[T]:
                 continue
 
     def _n_shift(self, center: Coord | tuple[int, int], amount: Coord, n: int) -> typing.Iterator[list[Coord]]:
-        try:
-            result = []
-            for _ in range(n):
-                try:
-                    center = next(self._iter(center, False, amount))
-                    result.append(center)
+        result = []
+        for _ in range(n):
+            try:
+                center = next(self._iter(center, False, amount))
+                result.append(center)
 
-                except StopIteration:
-                    break
+            except StopIteration:
+                break
 
-            yield result
-
-        except StopIteration:
-            pass
+        yield result
 
     def n_orthogonal(self, center: Coord | tuple[int, int], n: int) -> typing.Iterator[list[Coord]]:
         """An iterator with each of the orthogonal neighbors to the supplied center coordinate. (Orthognal meaning
