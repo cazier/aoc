@@ -7,7 +7,7 @@ authors = [
     { name = "Brendan Cazier", email = "520246+cazier@users.noreply.github.com" },
 ]
 requires-python = ">=3.12"
-dependencies = ["rich>=13.9.4", "utils"]
+dependencies = ["rich>=13.9.4", "aoclib"]
 
 [tool.uv]
 dev-dependencies = [
@@ -23,10 +23,10 @@ dev-dependencies = [
 ]
 
 [tool.uv.sources]
-utils = { workspace = true }
+aoclib = { workspace = true }
 
 [tool.uv.workspace]
-members = ["python/utils"]
+members = ["aoclib/python"]
 
 [tool.ruff]
 line-length = 120
@@ -44,4 +44,4 @@ namespace_packages = true
 explicit_package_bases = true
 
 [tool.ward]
-hook_module = ['utils.conftest']
+hook_module = ['aoclib.conftest']

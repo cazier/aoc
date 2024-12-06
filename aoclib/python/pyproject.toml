@@ -1,5 +1,5 @@
 [project]
-name = "utils"
+name = "aoclib"
 version = "0.1.0"
 authors = [
     { name = "Brendan Cazier", email = "520246+cazier@users.noreply.github.com" }
