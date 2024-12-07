@@ -3,29 +3,33 @@ RUN_NAME="main.py"
 DIR="${_CWD}/${LANGUAGE_DIRECTORY}/year${YEAR}/day${DAY}"
 
 TEST_CODE=$(cat <<EOF
-from ward import test
-from year${YEAR}.day${DAY}.main import SAMPLE_INPUT, part_one, part_two  # type: ignore[import-not-found]
+import typing
 
-@test("${YEAR}-${DAY}: Part One")  # type: ignore
-def _() -> None:
-    expected =
-    output = part_one(SAMPLE_INPUT)
+import pytest
 
-    assert expected == output
+from aoc.year${YEAR}.day${DAY}.main import SAMPLE_INPUT, part_one, part_two
 
-@test("${YEAR}-${DAY}: Part Two")  # type: ignore
-def _() -> None:
-    expected =
-    output = part_two(SAMPLE_INPUT)
+T = typing.TypeVar("T")
 
-    assert expected == output
+
+@pytest.mark.parametrize(
+    ("expected", "func"),
+    [
+        (None, part_one),
+        (None, part_two),
+    ],
+    ids=("one", "two"),
+)
+class TestYear${YEAR}:
+    def test_day(self, expected: T, func: typing.Callable[[str], T]) -> None:
+        assert expected == func(SAMPLE_INPUT)
 EOF
 )
 
 RUN_CODE=$(cat <<EOF
 from rich import print  # pylint: disable=redefined-builtin
 
-import utils
+import aoclib
 
 SAMPLE_INPUT: str = """
 
@@ -38,12 +42,6 @@ def part_one(inputs: str) -> int:
 def part_two(inputs: str) -> int:
 
     return
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = utils.load_input("${YEAR}", "${DAY}")
-
-    print(part_one(input_string))
-    print(part_two(input_string))
 EOF
 )
 

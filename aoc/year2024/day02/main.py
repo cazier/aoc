@@ -51,5 +51,5 @@ def part_two(inputs: str) -> int:
 if __name__ == "__main__":  # pragma: no cover
     input_string = aoclib.load_input("2024", "02")
 
-    print(part_one(SAMPLE_INPUT))
+    print(part_one(input_string))
     print(part_two(input_string))

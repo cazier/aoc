@@ -102,6 +102,8 @@ _languages() {
                 return 1
         fi
 
+        LANGUAGE_DIRECTORY="aoc"
+
         return 0
 }
 
