@@ -9,16 +9,20 @@ authors = [
 requires-python = ">=3.12"
 dependencies = [
     "rich>=13.9.4",
-    "utils",
+    "typer>=0.15.1",
+    "aoclib",
+    "pyyaml>=6.0.2",
 ]
 
-[project.scripts]
-aoc = "aoc:main"
-
 [build-system]
-requires = ["setuptools>=61"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = ["aoc"]
+
+[project.scripts]
+aoc = "aoc.main:app"
 
 [tool.uv]
 dev-dependencies = [
@@ -26,16 +30,22 @@ dev-dependencies = [
     "ipython>=8.30.0",
     "isort>=5.13.2",
     "mypy>=1.13.0",
+    "pdbr>=0.8.9",
     "pre-commit>=4.0.1",
+    "pytest>=8.3.4",
     "ruff>=0.8.1",
+    "types-pyyaml>=6.0.12.20240917",
     "ward>=0.68.0b0",
 ]
 
-[tool.uv.workspace]
-members = ["python/utils"]
-
 [tool.uv.sources]
-utils = { workspace = true }
+aoclib = { workspace = true }
+
+[tool.uv.workspace]
+members = ["aoclib/python"]
+
+[tool.coverage.report]
+omit = [ "aoclib/python/src/aoclib/readme.py" ]
 
 [tool.ruff]
 line-length = 120
@@ -48,10 +58,9 @@ include_trailing_comma = true
 
 [tool.mypy]
 strict = true
-mypy_path = "python"
 show_error_codes = true
 namespace_packages = true
 explicit_package_bases = true
 
 [tool.ward]
-hook_module = ['utils.conftest']
+hook_module = ['aoclib.conftest']

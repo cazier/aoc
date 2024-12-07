@@ -195,3 +195,4 @@ cython_debug/
 .session_cookie
 
 inputs/
+**/input

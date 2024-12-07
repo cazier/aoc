@@ -1,0 +1,55 @@
+test:
+  name: day$day_test.go
+  contents: |
+    package main
+
+    import (
+      "testing"
+
+      "github.com/stretchr/testify/assert"
+    )
+
+    func TestPartOne(t *testing.T) {
+      var expected int = 0
+      var output int = PartOne(sample_input)
+
+      assert.Equal(t, expected, output)
+    }
+    func TestPartTwo(t *testing.T) {
+      var expected int = 0
+      var output int = PartTwo(sample_input)
+
+      assert.Equal(t, expected, output)
+    }
+
+run:
+  name: day$day.go
+  contents: |
+    package main
+
+    import (
+      _ "embed"
+      "fmt"
+
+      aoclib "github.com/cazier/aoclib"
+    )
+
+    //go:embed input
+    var input string
+
+    const sample_input string = `
+
+    `
+
+    func PartOne(input string) int {
+
+    }
+
+    func PartTwo(input string) int {
+
+    }
+
+    func main() {
+      aoclib.Answer("Part One: %d", PartOne(input))
+      aoclib.Answer("Part Two: %d", PartTwo(input))
+    }
