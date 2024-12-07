@@ -3,7 +3,7 @@ package grid
 import (
 	"testing"
 
-	aoclib "github.com/cazier/aoclib/pkg"
+	aoclib "github.com/cazier/aoclib"
 	"github.com/stretchr/testify/assert"
 )
 

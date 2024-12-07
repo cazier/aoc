@@ -3,8 +3,8 @@ package grid
 import (
 	"fmt"
 
-	aoclib "github.com/cazier/aoclib/pkg"
-	"github.com/cazier/aoclib/pkg/types"
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/types"
 )
 
 // Coord is used primarily as the keys to a map

@@ -3,8 +3,8 @@ package grid
 import (
 	"fmt"
 
-	"github.com/cazier/aoclib/pkg/splits"
-	"github.com/cazier/aoclib/pkg/types"
+	"github.com/cazier/aoclib/splits"
+	"github.com/cazier/aoclib/types"
 )
 
 func New[T types.Numeric](rows int) Grid[T] {

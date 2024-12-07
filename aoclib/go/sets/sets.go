@@ -1,6 +1,6 @@
 package sets
 
-import aoclib "github.com/cazier/aoclib/pkg"
+import aoclib "github.com/cazier/aoclib"
 
 type Set[T comparable] struct {
 	values []T

@@ -1,5 +1,5 @@
 test:
-  name: $day_test.go
+  name: day$day_test.go
   contents: |
     package main
 
@@ -10,28 +10,33 @@ test:
     )
 
     func TestPartOne(t *testing.T) {
-      var expected int =
+      var expected int = 0
       var output int = PartOne(sample_input)
 
       assert.Equal(t, expected, output)
     }
     func TestPartTwo(t *testing.T) {
-      var expected int =
+      var expected int = 0
       var output int = PartTwo(sample_input)
 
       assert.Equal(t, expected, output)
     }
 
 run:
-  name: main.go
+  name: day$day.go
   contents: |
     package main
 
     import (
+      _ "embed"
       "fmt"
 
-      utils "main/utils"
+      aoclib "github.com/cazier/aoclib"
+      "github.com/cazier/aoclib/splits"
     )
+
+    //go:embed input
+    var input string
 
     const sample_input string = \`
 
@@ -46,13 +51,6 @@ run:
     }
 
     func main() {
-      input, err := utils.LoadInput(${YEAR}, ${DAY})
-
-      if err != nil {
-        panic(err)
-      }
-
-
       utils.Answer("Part One: %%d", PartOne(input))
       utils.Answer("Part Two: %%d", PartTwo(input))
     }

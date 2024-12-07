@@ -7,24 +7,26 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/cazier/aoclib/pkg/types"
+	"github.com/cazier/aoclib/types"
 	"github.com/fatih/color"
 )
 
 // LoadInput reads the input file found at $AOC_ROOT_DIRECTORY/inputs and returns the value as a
 // string.
 func LoadInput(year int, day int) (string, error) {
-	var root string = os.Getenv("AOC_ROOT_DIRECTORY")
+	// var root string = os.Getenv("AOC_ROOT_DIRECTORY")
 
-	if root == "" {
-		msg := color.RedString("Could not determine the proper $AOC_ROOT_DIRECTORY environment variable.")
-		return "", &AocError{Msg: msg}
-	}
+	// if root == "" {
+	// 	msg := color.RedString("Could not determine the proper $AOC_ROOT_DIRECTORY environment variable.")
+	// 	return "", &AocError{Msg: msg}
+	// }
 
-	var year_string string = fmt.Sprintf("2%03d", year%2000)
-	var day_string string = fmt.Sprintf("%02d.txt", day)
+	// var year_string string = fmt.Sprintf("2%03d", year%2000)
+	// var day_string string = fmt.Sprintf("%02d.txt", day)
 
-	path, _ := filepath.Abs(filepath.Join(root, "inputs", year_string, day_string))
+	// path, _ := filepath.Abs(filepath.Join(root, "inputs", year_string, day_string))
+	path, _ := filepath.Abs(filepath.Join(".", "input"))
+	fmt.Println(path)
 
 	contents, _ := os.ReadFile(path)
 

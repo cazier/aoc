@@ -3,7 +3,7 @@ package arrays2d
 import (
 	"fmt"
 
-	"github.com/cazier/aoclib/pkg/types"
+	"github.com/cazier/aoclib/types"
 )
 
 type Array2D[T types.Numeric] struct {

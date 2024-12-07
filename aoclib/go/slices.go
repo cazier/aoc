@@ -3,7 +3,7 @@ package aoclib
 import (
 	"strconv"
 
-	"github.com/cazier/aoclib/pkg/types"
+	"github.com/cazier/aoclib/types"
 )
 
 // StringToInt takes a slice of strings and converts each of them to an int value,
