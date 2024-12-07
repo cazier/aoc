@@ -1,5 +1,5 @@
 # pylint: disable=missing-class-docstring
-import typing as t
+import typing
 import itertools
 
 from rich import print  # pylint: disable=redefined-builtin
@@ -15,7 +15,7 @@ SAMPLE_INPUT: str = """498,4 -> 498,6 -> 496,6
 START = Coord(500, 0)
 
 
-def _gen_path(start: int, stop: int) -> t.Iterator[int]:
+def _gen_path(start: int, stop: int) -> typing.Iterator[int]:
     if start > stop:
         step = -1
 

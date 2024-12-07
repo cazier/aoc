@@ -1,4 +1,4 @@
-import typing as t
+import typing
 import itertools
 
 from rich import print  # pylint: disable=redefined-builtin
@@ -24,7 +24,7 @@ DIRECTION_KEY = {
 }
 
 
-def read(inputs: str) -> t.Iterator[Coord]:
+def read(inputs: str) -> typing.Iterator[Coord]:
     for direction, steps in map(str.split, inputs.splitlines()):
         for _ in range(int(steps)):
             yield DIRECTION_KEY[direction]

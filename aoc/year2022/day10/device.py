@@ -1,5 +1,5 @@
 # pylint: disable=missing-class-docstring
-import typing as t
+import typing
 
 from aoclib.display import Display
 
@@ -7,7 +7,7 @@ from aoclib.display import Display
 class Device:
     cycle: int = 1
     register: int = 1
-    commands: list[t.Iterator[int]] = []
+    commands: list[typing.Iterator[int]] = []
     screen: Display = Display(6, 40)
 
     def __init__(self, commands: list[str]):
@@ -57,10 +57,10 @@ class Device:
         self.screen.draw(column, row, "#" if abs(self.register - column) <= 1 else ".")
 
     @staticmethod
-    def _noop(_: None) -> t.Iterator[int]:
+    def _noop(_: None) -> typing.Iterator[int]:
         yield 0
 
     @staticmethod
-    def _addx(command_value: str) -> t.Iterator[int]:
+    def _addx(command_value: str) -> typing.Iterator[int]:
         for value in [0, int(command_value)]:
             yield value

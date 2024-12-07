@@ -1,4 +1,4 @@
-import typing as t
+import typing
 import functools
 from ast import literal_eval
 
@@ -32,7 +32,7 @@ SAMPLE_INPUT: str = """[1,1,3,1,1]
 """
 
 
-def compare(lhs: t.Any, rhs: t.Any) -> int:
+def compare(lhs: typing.Any, rhs: typing.Any) -> int:
     def _compare(lhs: int, rhs: int) -> int:
         if lhs < rhs:
             return -1

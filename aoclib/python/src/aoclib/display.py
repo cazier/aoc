@@ -1,6 +1,6 @@
 """A set of tools to manipulate, perform OCR on, and display a simple pixel-based display screen."""
 
-import typing as t
+import typing
 
 
 class OCR:
@@ -160,7 +160,7 @@ class OCR:
             str: the display output
         """
 
-        def _split(line: str) -> t.Iterator[str]:
+        def _split(line: str) -> typing.Iterator[str]:
             index = 0
             while index < len(line):
                 yield line[index : index + OCR._width]
@@ -193,7 +193,7 @@ class Display:
         """Delete all the pixels set on the screen by resetting them to the value of ``self.background``"""
         self._screen = [[self.background for _ in range(self.width)] for _ in range(self.height)]
 
-    def draw(self, x: int, y: int, character: t.Optional[str] = None) -> None:
+    def draw(self, x: int, y: int, character: typing.Optional[str] = None) -> None:
         """Fill in a pixel at the coordinates supplied.
 
         Args:

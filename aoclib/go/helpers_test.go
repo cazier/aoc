@@ -5,33 +5,10 @@ import (
 	"io"
 	"math"
 	"os"
-	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
-
-func TestLoadInput(t *testing.T) {
-	var input []byte = []byte("hello\nline\ntwo\nfour")
-	var expected string = "hello\nline\ntwo\nfour"
-
-	// Setup
-	var tmpdir string = t.TempDir()
-	os.Setenv("AOC_ROOT_DIRECTORY", tmpdir)
-
-	var testFile string = filepath.Join(tmpdir, "inputs", "2020")
-	os.MkdirAll(testFile, os.ModePerm)
-
-	os.WriteFile(filepath.Join(testFile, "15.txt"), input, os.ModePerm)
-
-	output, err := LoadInput(2020, 15)
-	assert.Equal(t, expected, output)
-	assert.Nil(t, err)
-
-	os.Unsetenv("AOC_ROOT_DIRECTORY")
-	_, err = LoadInput(2020, 15)
-	assert.Error(t, err)
-}
 
 func TestParseToInt(t *testing.T) {
 	assert := assert.New(t)

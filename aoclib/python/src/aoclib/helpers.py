@@ -1,36 +1,19 @@
-import os
-import typing as t
-import pathlib
+import typing
+
+_Z = typing.TypeVar("_Z")
 
 
-def load_input(year: str, day: str) -> str:
-    root = os.getenv("AOC_ROOT_DIRECTORY", "")
-
-    if root == "":
-        raise SystemExit("Could not determine the proper $AOC_ROOT_DIRECTORY environment variable.")
-
-    year_string = f"2{int(year) % 2000:03}"
-    day_string = f"{int(day):02}.txt"
-
-    path = pathlib.Path(root, "inputs", year_string, day_string)
-
-    return path.read_text(encoding="utf8")
-
-
-_Z = t.TypeVar("_Z")
-
-
-def zip_longest_repeating(*iterables: t.Iterable[_Z]) -> t.Iterator[list[_Z]]:
+def zip_longest_repeating(*iterables: typing.Iterable[_Z]) -> typing.Iterator[list[_Z]]:
     """Similar to functools.zip_longest, but simply repeat the final value instead of using `None` or passing in a
     static value.
 
     If a zero-length iterable is supplied, it will return `None` for each value.
 
     Args:
-        *iterables (t.Iterable[Z]): Any number of input sequences to zip through
+        *iterables (typing.Iterable[Z]): Any number of input sequences to zip through
 
     Yields:
-        t.Iterator[list[Z]]: list of each item from the same position in the iterables, until they've run out
+        typing.Iterator[list[Z]]: list of each item from the same position in the iterables, until they've run out
     """
     storage: dict[int, _Z] = {}
     iterators = [iter(i) for i in iterables]
@@ -60,5 +43,5 @@ def zip_longest_repeating(*iterables: t.Iterable[_Z]) -> t.Iterator[list[_Z]]:
         yield out
 
 
-def splitlines(text: str) -> t.Iterator[str]:
+def splitlines(text: str) -> typing.Iterator[str]:
     yield from (line for line in text.splitlines() if line)

@@ -1,6 +1,6 @@
 # pylint: disable=missing-class-docstring
 import re
-import typing as t
+import typing
 
 OPERATIONS = {
     "+": lambda x, y: x + y,
@@ -8,7 +8,7 @@ OPERATIONS = {
 }
 
 
-class Operator(t.Protocol):  # pylint: disable=too-few-public-methods
+class Operator(typing.Protocol):  # pylint: disable=too-few-public-methods
     def __call__(self, first: int, second: int) -> int: ...
 
 
@@ -33,14 +33,14 @@ class Monkey:
         if self._a == "old":
             return self.worry
 
-        return t.cast(int, self._a)
+        return typing.cast(int, self._a)
 
     @property
     def second(self) -> int:
         if self._b == "old":
             return self.worry
 
-        return t.cast(int, self._b)
+        return typing.cast(int, self._b)
 
     @staticmethod
     def parse(data: str) -> "Monkey":
@@ -63,7 +63,7 @@ class Monkey:
 
         return OPERATIONS[operation]
 
-    def step(self, modulo: t.Optional[int] = None) -> t.Iterator[tuple[int, int]]:
+    def step(self, modulo: typing.Optional[int] = None) -> typing.Iterator[tuple[int, int]]:
         while self.items:
             self.count += 1
             self.worry = self.items.pop(0)
