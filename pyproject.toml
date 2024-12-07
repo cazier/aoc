@@ -44,6 +44,9 @@ aoclib = { workspace = true }
 [tool.uv.workspace]
 members = ["aoclib/python"]
 
+[tool.coverage.report]
+omit = [ "aoclib/python/src/aoclib/readme.py" ]
+
 [tool.ruff]
 line-length = 120
 

@@ -1,4 +1,10 @@
 import typing
+import pathlib
+
+
+def load_input() -> str:
+    return pathlib.Path("input").read_text(encoding="utf8")
+
 
 _Z = typing.TypeVar("_Z")
 

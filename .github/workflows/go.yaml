@@ -1,50 +1,33 @@
 name: Test Golang Files
-defaults:
-  run:
-    working-directory: golang
 
 on:
   push:
-    branches:
-      - main
-      - go
   pull_request:
-    types:
-      - opened
-      - reopened
-      - synchronize
 
 jobs:
-  test_utilities:
+  utilities-test:
     runs-on: ubuntu-latest
     container:
       image: golang:latest
 
     steps:
       - uses: actions/checkout@v3
-      - run: go install github.com/kyoh86/richgo@v0.3.10
-      - run: richgo test main/utils -v
+      - run: go test ./... -race -covermode=atomic -coverprofile=.coverage.go
 
-  test_2021:
+  # utilities-coverage:
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: golang:latest
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - run: go test ./aoclib/go/... -v
+
+  event-2024-test:
     runs-on: ubuntu-latest
     container:
       image: golang:latest
 
     steps:
       - uses: actions/checkout@v3
-      - run: go install github.com/kyoh86/richgo@v0.3.10
-      - run: richgo test ./2021/... -v
-
-  coverage:
-    runs-on: ubuntu-latest
-    container:
-      image: golang:latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - run: go test ./... -race -covermode=atomic -coverprofile=coverage.out
-      - uses: ./.github/actions/coverage/
-        id: coverage
-        with:
-          coverage_file: coverage.out
-          secret: ${{ secrets.CODECOV_TOKEN }}
+      - run: go test ./2024/... -v

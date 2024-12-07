@@ -2,7 +2,7 @@ import typing
 
 import pytest
 
-from aoc.year2024.day03.main import SAMPLE_INPUT_ONE, SAMPLE_INPUT_TWO, part_one, part_two
+from aoc.year2024.day03.day03 import SAMPLE_INPUT_ONE, SAMPLE_INPUT_TWO, part_one, part_two
 
 T = typing.TypeVar("T")
 
