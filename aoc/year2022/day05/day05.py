@@ -52,7 +52,7 @@ def part_two(inputs: str) -> str:
 
 
 if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input("2022", "05")
+    input_string = aoclib.load_input()
 
     print(part_one(input_string))
     print(part_two(input_string))
