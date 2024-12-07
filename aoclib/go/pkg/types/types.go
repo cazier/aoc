@@ -1,4 +1,4 @@
-package utils
+package types
 
 // Numeric represents anything that can be integer or floatish!
 type Numeric interface {

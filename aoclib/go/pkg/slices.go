@@ -1,7 +1,9 @@
-package utils
+package aoclib
 
 import (
 	"strconv"
+
+	"github.com/cazier/aoclib/pkg/types"
 )
 
 // StringToInt takes a slice of strings and converts each of them to an int value,
@@ -37,7 +39,7 @@ func RemoveSlow[T comparable](slice []T, i int) []T {
 
 // Sum returns the total value of all the elements in a slice added together. This will return the
 // same type as the input values.
-func Sum[T Numeric](slice []T) T {
+func Sum[T types.Numeric](slice []T) T {
 	var total T = 0
 
 	for _, v := range slice {
@@ -48,7 +50,7 @@ func Sum[T Numeric](slice []T) T {
 }
 
 // Count returns the total count of a value in a slice. This will return an integer value
-func Count[T Numeric](slice []T, value T) int {
+func Count[T types.Numeric](slice []T, value T) int {
 	var total int = 0
 
 	for _, v := range slice {

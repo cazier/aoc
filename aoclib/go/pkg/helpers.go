@@ -1,4 +1,4 @@
-package utils
+package aoclib
 
 import (
 	"fmt"
@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/cazier/aoclib/pkg/types"
 	"github.com/fatih/color"
 )
 
@@ -55,7 +56,7 @@ func Answer(s string, a ...any) {
 }
 
 // Min returns the minimum Numeric value in a slice of values.
-func Min[T Numeric](values ...T) T {
+func Min[T types.Numeric](values ...T) T {
 	var output T = values[0]
 	for _, v := range values[1:] {
 		if v < output {
@@ -66,7 +67,7 @@ func Min[T Numeric](values ...T) T {
 }
 
 // Max returns the maximum Numeric value in a slice of values.
-func Max[T Numeric](values ...T) T {
+func Max[T types.Numeric](values ...T) T {
 	var output T = values[0]
 	for _, v := range values[1:] {
 		if v > output {
@@ -77,7 +78,7 @@ func Max[T Numeric](values ...T) T {
 }
 
 // Abs returns an absolute value for a generic Numeric type.
-func Abs[T Numeric](val T) T {
+func Abs[T types.Numeric](val T) T {
 	var output T
 	var zero T
 

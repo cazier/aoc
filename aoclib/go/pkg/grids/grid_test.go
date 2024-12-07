@@ -1,9 +1,9 @@
 package grid
 
 import (
-	"main/utils"
 	"testing"
 
+	aoclib "github.com/cazier/aoclib/pkg"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -17,7 +17,7 @@ func TestNewGrid(t *testing.T) {
 
 func TestGridFromString(t *testing.T) {
 	input := "123\n456\n789"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	assert.Equal(t, map[Coord]int{
 		{0, 0}: 1, {1, 0}: 2, {2, 0}: 3,
@@ -33,7 +33,7 @@ func TestGridFromString(t *testing.T) {
 
 func TestGridGet(t *testing.T) {
 	input := "123\n456\n789"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	assert.Equal(t, 6, grid.Get(Coord{2, 1}))
 	assert.Equal(t, 0, grid.Get(Coord{10, 10}))
@@ -41,7 +41,7 @@ func TestGridGet(t *testing.T) {
 
 func TestGridGetSafe(t *testing.T) {
 	input := "123\n456\n789"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	output, err := grid.GetSafe(Coord{2, 1})
 	assert.Equal(t, 6, output)
@@ -54,7 +54,7 @@ func TestGridGetSafe(t *testing.T) {
 
 func TestGridSet(t *testing.T) {
 	input := "123\n456\n789"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	assert.Equal(t, 5, grid.Get(Coord{1, 1}))
 	assert.Equal(t, 5, grid.viewer[1][1])
@@ -66,7 +66,7 @@ func TestGridSet(t *testing.T) {
 
 func TestGridIAdd(t *testing.T) {
 	input := "123\n456\n789"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	assert.Equal(t, 5, grid.Get(Coord{1, 1}))
 	assert.Equal(t, [][]int{
@@ -88,7 +88,7 @@ func TestGridIAdd(t *testing.T) {
 
 func TestGridIter(t *testing.T) {
 	input := "123\n456\n789"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	output := make([]Coord, 0)
 
@@ -102,7 +102,7 @@ func TestGridIter(t *testing.T) {
 }
 func TestGridOrderedIter(t *testing.T) {
 	input := "123\n456\n789"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	output := make([]Coord, 0)
 
@@ -117,7 +117,7 @@ func TestGridOrderedIter(t *testing.T) {
 
 func TestGridPrint(t *testing.T) {
 	input := "123\n456\n789\n"
-	grid := FromString(input, func(value string) int { return utils.B10toI(value) })
+	grid := FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	assert.Equal(t, input, grid.Print(0, 3, 0, 3))
 }

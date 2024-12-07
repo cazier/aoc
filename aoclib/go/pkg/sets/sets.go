@@ -1,8 +1,6 @@
 package sets
 
-import (
-	"main/utils"
-)
+import aoclib "github.com/cazier/aoclib/pkg"
 
 type Set[T comparable] struct {
 	values []T
@@ -39,7 +37,7 @@ func (s *Set[T]) Extend(values ...T) {
 }
 
 func (s Set[T]) Contains(value T) bool {
-	return utils.Contains(s.values, value)
+	return aoclib.Contains(s.values, value)
 }
 
 func (s Set[T]) Length() int {

@@ -2,15 +2,16 @@ package grid
 
 import (
 	"fmt"
-	"main/utils"
-	"main/utils/splits"
+
+	"github.com/cazier/aoclib/pkg/splits"
+	"github.com/cazier/aoclib/pkg/types"
 )
 
-func New[T utils.Numeric](rows int) Grid[T] {
+func New[T types.Numeric](rows int) Grid[T] {
 	return Grid[T]{make(map[Coord]T), make([][]T, rows)}
 }
 
-func FromString[T utils.Numeric](input string, cast func(value string) T) Grid[T] {
+func FromString[T types.Numeric](input string, cast func(value string) T) Grid[T] {
 	lines := splits.ByLine(input)
 	g := Grid[T]{make(map[Coord]T), make([][]T, len(lines))}
 

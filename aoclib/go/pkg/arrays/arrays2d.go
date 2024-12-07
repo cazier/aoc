@@ -3,15 +3,15 @@ package arrays2d
 import (
 	"fmt"
 
-	utils "main/utils"
+	"github.com/cazier/aoclib/pkg/types"
 )
 
-type Array2D[T utils.Numeric] struct {
+type Array2D[T types.Numeric] struct {
 	Elements      [][]T
 	width, height int
 }
 
-func Construct[T utils.Numeric](width, height int, defaults T) Array2D[T] {
+func Construct[T types.Numeric](width, height int, defaults T) Array2D[T] {
 	b := Array2D[T]{width: width, height: height}
 	b.Elements = make([][]T, height)
 

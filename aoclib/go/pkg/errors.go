@@ -1,4 +1,4 @@
-package utils
+package aoclib
 
 type AocError struct {
 	Msg string
