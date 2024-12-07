@@ -1,9 +1,14 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
-	utils "main/utils"
+
+	aoclib "github.com/cazier/aoclib"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 0,9 -> 5,9
@@ -73,14 +78,8 @@ func PartTwo(input string) int {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 05)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }
 
 func PrintBoard(lines []Line) string {

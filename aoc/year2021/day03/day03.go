@@ -1,9 +1,14 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/splits"
+	_ "embed"
+
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 00100
@@ -89,14 +94,14 @@ func repeatPartTwo(input []string, lookup func(int, int) bool) (int, error) {
 
 			var char string = string([]rune(slice[slice_index])[index])
 			if char != match {
-				slice = utils.RemoveSlow(slice, slice_index)
+				slice = aoclib.RemoveSlow(slice, slice_index)
 				slice_index -= 1
 			}
 
 			slice_index += 1
 		}
 	}
-	return utils.ParseToInt(slice[0], 2, 16)
+	return aoclib.ParseToInt(slice[0], 2, 16)
 }
 func getValuesOfSliceAtIndex(slice []string, index int) int {
 	var count int = 0
@@ -111,12 +116,6 @@ func getValuesOfSliceAtIndex(slice []string, index int) int {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 03)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }

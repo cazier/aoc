@@ -1,18 +1,23 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/splits"
+	_ "embed"
 	"math"
+
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 16,1,2,0,4,2,7,1,2,14
 `
 
 func PartOne(input string) int {
-	crabs := utils.StringToInt(splits.ByComma(utils.Strip(input)))
-	min, max := utils.Min(crabs...), utils.Max(crabs...)
+	crabs := aoclib.StringToInt(splits.ByComma(aoclib.Strip(input)))
+	min, max := aoclib.Min(crabs...), aoclib.Max(crabs...)
 
 	var output int = math.MaxInt
 
@@ -20,7 +25,7 @@ func PartOne(input string) int {
 		var fuel int = 0
 
 		for _, crab := range crabs {
-			var diff = utils.Abs(crab - start)
+			var diff = aoclib.Abs(crab - start)
 			fuel += diff
 		}
 
@@ -32,8 +37,8 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	crabs := utils.StringToInt(splits.ByComma(utils.Strip(input)))
-	min, max := utils.Min(crabs...), utils.Max(crabs...)
+	crabs := aoclib.StringToInt(splits.ByComma(aoclib.Strip(input)))
+	min, max := aoclib.Min(crabs...), aoclib.Max(crabs...)
 
 	var output int = math.MaxInt
 
@@ -41,7 +46,7 @@ func PartTwo(input string) int {
 		var fuel int = 0
 
 		for _, crab := range crabs {
-			var diff = utils.Abs(crab - start)
+			var diff = aoclib.Abs(crab - start)
 			fuel += cumulative_sum(diff)
 		}
 
@@ -57,12 +62,6 @@ func cumulative_sum(num int) int {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 07)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }

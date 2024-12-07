@@ -1,11 +1,16 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/splits"
-	stacks "main/utils/stacks"
+	_ "embed"
 	"sort"
+
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
+	"github.com/cazier/aoclib/stacks"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 [({(<(())[]>[[{[]{<()<>>
@@ -93,14 +98,8 @@ func PartTwo(input string) int {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 10)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }
 
 func open(character string) bool {

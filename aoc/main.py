@@ -71,27 +71,14 @@ def new(
         log_level="ERROR",
     )
 
-    if Language.PYTHON in language:
-        support = yaml.safe_load(
-            pathlib.Path(__file__).parent.joinpath("support", "python.yaml").read_text(encoding="utf8")
-        )
-
-    if Language.GO in language:
-        support = yaml.safe_load(
-            pathlib.Path(__file__).parent.joinpath("support", "go.yaml").read_text(encoding="utf8")
-        )
-
     for lang in language:
-        support = yaml.safe_load(
-            pathlib.Path(__file__).parent.joinpath("support", f"{lang.value}.yaml").read_text(encoding="utf8")
-        )
+        raw = pathlib.Path(__file__).parent.joinpath("support", f"{lang.value}.yaml").read_text(encoding="utf8")
+        raw = raw.replace("$year", f"{year:04d}").replace("$day", f"{day:02d}")
+
+        support: dict[str, dict[str, str]] = yaml.safe_load(raw)
 
         for kind in ("run", "test"):
-            # TODO: Fix for go
-
-            day_path.joinpath(support[kind]["name"]).write_text(
-                str(support[kind]["contents"].replace("$year", f"{year:04d}").replace("$day", f"{day:02d}"))
-            )
+            day_path.joinpath(support[kind]["name"]).write_text(support[kind]["contents"])
 
 
 if __name__ == "__main__":

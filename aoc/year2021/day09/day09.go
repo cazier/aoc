@@ -1,10 +1,15 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/splits"
+	_ "embed"
 	"sort"
+
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 2199943210
@@ -81,14 +86,8 @@ func PartTwo(input string) int {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 9)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }
 
 func fromGrid(input string) map[Coord]int {
@@ -96,7 +95,7 @@ func fromGrid(input string) map[Coord]int {
 
 	for y, row := range splits.ByLine(input) {
 		for x, item := range splits.ByCharacter(row) {
-			num, _ := utils.ParseToInt(item, 10, 16)
+			num, _ := aoclib.ParseToInt(item, 10, 16)
 
 			output[Coord{x, y}] = num
 		}

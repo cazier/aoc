@@ -32,15 +32,14 @@ run:
       "fmt"
 
       aoclib "github.com/cazier/aoclib"
-      "github.com/cazier/aoclib/splits"
     )
 
     //go:embed input
     var input string
 
-    const sample_input string = \`
+    const sample_input string = `
 
-    \`
+    `
 
     func PartOne(input string) int {
 
@@ -51,6 +50,6 @@ run:
     }
 
     func main() {
-      utils.Answer("Part One: %%d", PartOne(input))
-      utils.Answer("Part Two: %%d", PartTwo(input))
+      aoclib.Answer("Part One: %d", PartOne(input))
+      aoclib.Answer("Part Two: %d", PartTwo(input))
     }

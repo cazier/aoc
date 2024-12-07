@@ -1,13 +1,16 @@
 package main
 
 import (
-	"fmt"
+	_ "embed"
 	"regexp"
 	"sort"
 
-	aoclib "github.com/cazier/aoclib/pkg"
-	"github.com/cazier/aoclib/pkg/splits"
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 3   4
@@ -60,13 +63,6 @@ func PartTwo(input string) int {
 }
 
 func main() {
-	input, err := aoclib.LoadInput(2024, 01)
-	fmt.Println(input)
-
-	if err != nil {
-		panic(err)
-	}
-
 	aoclib.Answer("Part One: %d", PartOne(input))
 	aoclib.Answer("Part Two: %d", PartTwo(input))
 }

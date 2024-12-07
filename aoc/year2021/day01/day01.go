@@ -1,9 +1,14 @@
 package main
 
 import (
-	utils "main/utils"
-	splits "main/utils/splits"
+	_ "embed"
+
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 199
@@ -19,7 +24,7 @@ const sample_input string = `
 `
 
 func PartOne(input string) int {
-	var depths []int = utils.StringToInt(splits.ByLine(input))
+	var depths []int = aoclib.StringToInt(splits.ByLine(input))
 
 	var increases int = 0
 
@@ -32,12 +37,12 @@ func PartOne(input string) int {
 }
 
 func PartTwo(input string) int {
-	var depths []int = utils.StringToInt(splits.ByLine(input))
+	var depths []int = aoclib.StringToInt(splits.ByLine(input))
 
 	var increases int = 0
 
 	for i := 0; i < len(depths)-3; i++ {
-		if utils.Sum(depths[i:i+3]) < utils.Sum(depths[i+1:i+4]) {
+		if aoclib.Sum(depths[i:i+3]) < aoclib.Sum(depths[i+1:i+4]) {
 			increases++
 		}
 	}
@@ -45,12 +50,6 @@ func PartTwo(input string) int {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 01)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }

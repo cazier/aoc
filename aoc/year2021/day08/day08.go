@@ -1,11 +1,16 @@
 package main
 
 import (
-	utils "main/utils"
-	"main/utils/sets"
-	"main/utils/splits"
+	_ "embed"
 	"regexp"
+
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/sets"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe
@@ -28,7 +33,7 @@ func PartOne(input string) int {
 		display.Resolve()
 		var num int = 0
 		for _, m := range display.output_match {
-			if utils.Contains([]int{1, 4, 7, 8}, m) {
+			if aoclib.Contains([]int{1, 4, 7, 8}, m) {
 				num += 1
 			}
 		}
@@ -54,14 +59,8 @@ func PartTwo(input string) int {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 8)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }
 
 func fromDisplay(input string) []*Display {
@@ -156,7 +155,7 @@ func (d *Display) Resolve() {
 			return value == ""
 		}
 
-		if utils.Each(combo, valid) {
+		if aoclib.Each(combo, valid) {
 			break
 		}
 	}

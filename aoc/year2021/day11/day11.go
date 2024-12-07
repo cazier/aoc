@@ -1,10 +1,15 @@
 package main
 
 import (
-	utils "main/utils"
-	grid "main/utils/grids"
-	"main/utils/sets"
+	_ "embed"
+
+	aoclib "github.com/cazier/aoclib"
+	grid "github.com/cazier/aoclib/grids"
+	"github.com/cazier/aoclib/sets"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 5483143223
@@ -20,7 +25,7 @@ const sample_input string = `
 `
 
 func PartOne(input string) (score int) {
-	board := grid.FromString(input, func(value string) int { return utils.B10toI(value) })
+	board := grid.FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	for num := 0; num < 100; num++ {
 		score += step(board)
@@ -29,7 +34,7 @@ func PartOne(input string) (score int) {
 }
 
 func PartTwo(input string) (score int) {
-	board := grid.FromString(input, func(value string) int { return utils.B10toI(value) })
+	board := grid.FromString(input, func(value string) int { return aoclib.B10toI(value) })
 
 	for {
 		score += 1
@@ -42,14 +47,8 @@ func PartTwo(input string) (score int) {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 11)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }
 
 func step(board grid.Grid[int]) int {

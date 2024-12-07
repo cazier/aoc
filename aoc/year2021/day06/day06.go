@@ -1,35 +1,33 @@
 package main
 
 import (
+	_ "embed"
 	"regexp"
 
-	utils "main/utils"
-	"main/utils/splits"
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 3,4,3,1,2
 `
 
 func PartOne(input string) int {
-	fishes := fromString(utils.Strip(input))
+	fishes := fromString(aoclib.Strip(input))
 	return run(fishes, 80)
 }
 
 func PartTwo(input string) int {
-	fishes := fromString(utils.Strip(input))
+	fishes := fromString(aoclib.Strip(input))
 	return run(fishes, 256)
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 06)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }
 
 func run(input map[int]int, days int) int {
@@ -56,7 +54,7 @@ func run(input map[int]int, days int) int {
 
 func fromString(input string) map[int]int {
 	splits := splits.ByRegexp(input, regexp.MustCompile(`,`))
-	var days []int = utils.StringToInt(splits)
+	var days []int = aoclib.StringToInt(splits)
 
 	var output map[int]int = make(map[int]int)
 

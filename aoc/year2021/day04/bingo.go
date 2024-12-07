@@ -1,10 +1,11 @@
 package main
 
 import (
-	utils "main/utils"
-	arrays2d "main/utils/arrays"
-	"main/utils/splits"
 	"regexp"
+
+	aoclib "github.com/cazier/aoclib"
+	arrays2d "github.com/cazier/aoclib/arrays"
+	"github.com/cazier/aoclib/splits"
 )
 
 type BingoBoard struct {
@@ -17,7 +18,7 @@ func FromBoard(input string) BingoBoard {
 	var a arrays2d.Array2D[int] = arrays2d.Construct(5, 5, -1)
 
 	for y, row := range splits.ByLine(input) {
-		for x, value := range utils.StringToInt(splits.ByRegexp(row, regexp.MustCompile(`[\s]`))) {
+		for x, value := range aoclib.StringToInt(splits.ByRegexp(row, regexp.MustCompile(`[\s]`))) {
 			a.Set(x, y, value)
 		}
 	}
@@ -32,12 +33,12 @@ func (b BingoBoard) CheckReturn() (row_num, column_num int) {
 	for index, row := range b.marked.Elements {
 		if index == 0 {
 			for column_index := range row {
-				if !utils.Contains(b.marked.Column(column_index), -1) {
+				if !aoclib.Contains(b.marked.Column(column_index), -1) {
 					return -1, column_index
 				}
 			}
 		}
-		if !utils.Contains(b.marked.Row(index), -1) {
+		if !aoclib.Contains(b.marked.Row(index), -1) {
 			return index, -1
 		}
 	}

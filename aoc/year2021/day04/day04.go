@@ -1,12 +1,16 @@
 package main
 
 import (
+	_ "embed"
 	"regexp"
 	"strings"
 
-	utils "main/utils"
-	"main/utils/splits"
+	aoclib "github.com/cazier/aoclib"
+	"github.com/cazier/aoclib/splits"
 )
+
+//go:embed input
+var input string
 
 const sample_input string = `
 7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
@@ -35,7 +39,7 @@ func PartOne(input string) int {
 
 	for _, command := range splits.ByRegexp(commands, regexp.MustCompile(`,`)) {
 		for _, board := range boards {
-			num, _ := utils.ParseToInt(command, 10, 16)
+			num, _ := aoclib.ParseToInt(command, 10, 16)
 			board.AddToMarkedWithRemoval(num)
 
 			row, column := board.CheckReturn()
@@ -53,7 +57,7 @@ func PartTwo(input string) int {
 	commands, boards := gameData(input)
 
 	for _, command := range splits.ByRegexp(commands, regexp.MustCompile(`,`)) {
-		num, _ := utils.ParseToInt(command, 10, 16)
+		num, _ := aoclib.ParseToInt(command, 10, 16)
 
 		for index, board := range boards {
 			var out int = board.AddToMarkedWithRemoval(num)
@@ -90,12 +94,6 @@ func gameData(input string) (string, map[int]BingoBoard) {
 }
 
 func main() {
-	input, err := utils.LoadInput(2021, 04)
-
-	if err != nil {
-		panic(err)
-	}
-
-	utils.Answer("Part One: %d", PartOne(input))
-	utils.Answer("Part Two: %d", PartTwo(input))
+	aoclib.Answer("Part One: %d", PartOne(input))
+	aoclib.Answer("Part Two: %d", PartTwo(input))
 }
