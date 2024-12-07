@@ -1,18 +1,20 @@
-from ward import test
-from year2022.day07.main import SAMPLE_INPUT, part_one, part_two
+import typing
+
+import pytest
+
+from aoc.year2022.day07.main import SAMPLE_INPUT, part_one, part_two
+
+T = typing.TypeVar("T")
 
 
-@test("2022-07: Part One")  # type: ignore
-def _() -> None:
-    expected = 95437
-    output = part_one(SAMPLE_INPUT)
-
-    assert expected == output
-
-
-@test("2022-07: Part Two")  # type: ignore
-def _() -> None:
-    expected = 24933642
-    output = part_two(SAMPLE_INPUT)
-
-    assert expected == output
+@pytest.mark.parametrize(
+    ("expected", "func"),
+    [
+        (95437, part_one),
+        (24933642, part_two),
+    ],
+    ids=("one", "two"),
+)
+class TestYear2022:
+    def test_day(self, expected: T, func: typing.Callable[[str], T]) -> None:
+        assert expected == func(SAMPLE_INPUT)
