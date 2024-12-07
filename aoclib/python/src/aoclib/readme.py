@@ -7,11 +7,13 @@ import re
 import sys
 import pprint
 import logging
+import pathlib
 import argparse
-from pathlib import Path
 from dataclasses import field, dataclass
 from html.parser import HTMLParser
 from urllib.request import Request, urlopen
+
+logger = logging.getLogger()
 
 
 def get(year: int, day: int, cookie: str, _input: bool = False) -> str:
@@ -62,8 +64,7 @@ class Arguments:
     year: int
     day: int
     log_level: str
-    cookie: Path
-    aoc_path: Path
+    cookie: pathlib.Path
 
 
 class Puzzle:
@@ -424,36 +425,38 @@ class Parser(HTMLParser):
             self.storage.add(Element(self.stack[-1], data))
 
 
+def fetch(year: int, day: int, cookie: pathlib.Path, readme: pathlib.Path, input: pathlib.Path, log_level: str) -> int:
+    logging.basicConfig(level=log_level, format="%(module)s: %(levelname)s: %(funcName)s: %(lineno)d: %(message)s")
+
+    readme.parent.mkdir(parents=True, exist_ok=True)
+    input.parent.mkdir(parents=True, exist_ok=True)
+
+    cookie_string = cookie.read_text("utf8")
+
+    parser = Parser()
+    parser.feed(get(year, day, cookie_string))
+
+    readme.write_text(parser.storage.write(), "utf8")
+
+    if not input.exists():
+        input.write_text(get(year, day, cookie_string, _input=True), "utf8")
+
+
 if __name__ == "__main__":
     cli = argparse.ArgumentParser(__file__)
     cli.add_argument("--year", type=int, help="event year", required=True)
     cli.add_argument("--day", type=int, help="puzzle day", required=True)
-    cli.add_argument("--cookie", type=Path, help="path to session cookie", required=True)
-    cli.add_argument("--aoc-path", type=Path, help="path to the aoc directory", required=True)
+    cli.add_argument("--cookie", type=pathlib.Path, help="path to session cookie", required=True)
+    cli.add_argument("--aoc-path", type=pathlib.Path, help="path to the aoc directory", required=True)
     cli.add_argument("--log-level", type=str, default="INFO", help="logging level")
 
-    args = Arguments(**vars(cli.parse_args()))
+    args = cli.parse_args()
 
-    readme = args.aoc_path.joinpath("puzzle_readmes", f"{args.year}", f"{args.day:02}.md")
-    puzzle_inputs = args.aoc_path.joinpath("inputs", f"{args.year}", f"{args.day:02}.txt")
+    path: pathlib.Path = args.aoc_path
+    readme = path.joinpath("puzzle_readmes", f"{args.year}", f"{args.day:02}.md")
+    puzzle_inputs = path.joinpath("inputs", f"{args.year}", f"{args.day:02}.txt")
 
-    readme.parent.mkdir(parents=True, exist_ok=True)
-    puzzle_inputs.parent.mkdir(parents=True, exist_ok=True)
-
-    logging.basicConfig(
-        level=args.log_level,
-        format="%(module)s: %(levelname)s: %(funcName)s: %(lineno)d: %(message)s",
+    fetch(
+        year=args.year, day=args.day, cookie=args.cookie, readme=readme, input=puzzle_inputs, log_level=args.log_level
     )
-    logger = logging.getLogger()
-
-    cookie_string = args.cookie.read_text("utf8")
-
-    parser = Parser()
-    parser.feed(get(args.year, args.day, cookie_string))
-
-    readme.write_text(parser.storage.write(), "utf8")
-
-    if not puzzle_inputs.exists():
-        puzzle_inputs.write_text(get(args.year, args.day, cookie_string, _input=True), "utf8")
-
     print(f"{__file__.rsplit('/', maxsplit=1)[-1]}: Successfully retrieved data!")

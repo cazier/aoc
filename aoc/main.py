@@ -46,8 +46,20 @@ def test(
 
 
 @app.command()
-def new(year: int = datetime.date.today().year, day: int = datetime.date.today().day) -> None:
-    pass
+def new(
+    year: int = datetime.date.today().year,
+    day: int = datetime.date.today().day,
+    cookie: pathlib.Path = pathlib.Path(".session_cookie"),
+    path: pathlib.Path = pathlib.Path("aoc"),
+) -> None:
+    aoclib.fetch(
+        year=year,
+        day=day,
+        cookie=cookie,
+        readme=path.joinpath(f"year{year:04d}", f"day{day:02d}", "README.md"),
+        input=path.joinpath(f"year{year:04d}", f"day{day:02d}", "input"),
+        log_level="ERROR",
+    )
 
 
 if __name__ == "__main__":
