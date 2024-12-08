@@ -1,7 +1,3 @@
-from rich import print  # pylint: disable=redefined-builtin
-
-import aoclib
-
 SAMPLE_INPUT: str = """A Y
 B X
 C Z
@@ -40,10 +36,3 @@ def part_two(inputs: str) -> int:
     guide = map(lambda k: k.split(" "), inputs.splitlines())
 
     return sum(score(*value(a, b)) for a, b in guide)
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

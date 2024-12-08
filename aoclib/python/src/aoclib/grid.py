@@ -2,10 +2,15 @@
 A simple module to implement a fairly basic Grid type.
 """
 
+from __future__ import annotations
+
 import sys
 import enum
 import typing
+import operator
 import itertools
+
+notset = object()
 
 
 class Coord:
@@ -27,28 +32,28 @@ class Coord:
         """
         return (self.x, self.y)
 
-    def __add__(self, other: typing.Any) -> "Coord":
+    def __add__(self, other: typing.Any) -> typing.Self:
         if not isinstance(other, Coord):
             other = Coord(*other)
 
         return Coord(self.x + other.x, self.y + other.y)
 
-    def __sub__(self, other: typing.Any) -> "Coord":
+    def __sub__(self, other: typing.Any) -> typing.Self:
         if not isinstance(other, Coord):
             other = Coord(*other)
 
         return Coord(self.x - other.x, self.y - other.y)
 
-    def __mul__(self, other: typing.Any) -> "Coord":
+    def __mul__(self, other: typing.Any) -> typing.Self:
         return Coord(self.x * other, self.y * other)
 
-    def __truediv__(self, other: typing.Any) -> "Coord":
+    def __truediv__(self, other: typing.Any) -> typing.Self:
         raise NotImplementedError()
 
-    def __floordiv__(self, other: typing.Any) -> "Coord":
+    def __floordiv__(self, other: typing.Any) -> typing.Self:
         raise NotImplementedError()
 
-    def __iadd__(self, other: typing.Any) -> "Coord":
+    def __iadd__(self, other: typing.Any) -> typing.Self:
         if not isinstance(other, Coord):
             other = Coord(*other)
 
@@ -57,7 +62,7 @@ class Coord:
 
         return self
 
-    def __abs__(self) -> "Coord":
+    def __abs__(self) -> typing.Self:
         return Coord(abs(self.x), abs(self.y))
 
     def __hash__(self) -> int:
@@ -72,7 +77,25 @@ class Coord:
 
         raise NotImplementedError()
 
-    def normalize(self) -> "Coord":
+    def __lt__(self, other: typing.Any) -> bool:
+        if isinstance(other, tuple) and len(other) == 2:
+            other = Coord(*other)
+
+        if isinstance(other, Coord):
+            return self.x < other.x and self.y < other.y
+
+        raise NotImplementedError()
+
+    def __le__(self, other: typing.Any) -> bool:
+        if isinstance(other, tuple) and len(other) == 2:
+            other = Coord(*other)
+
+        if isinstance(other, Coord):
+            return self.x <= other.x and self.y <= other.y
+
+        raise NotImplementedError()
+
+    def normalize(self) -> typing.Self:
         return Coord(*map(lambda k: k // abs(k) if k else 0, self.G))
 
     def touching(self, other: typing.Any) -> bool:
@@ -86,6 +109,40 @@ class Coord:
             return True
 
         return False
+
+    def opposites(self, other: typing.Any) -> set[typing.Self]:
+        if not isinstance(other, Coord):
+            other = Coord(*other)
+
+        dx = other.x - self.x
+        dy = other.y - self.y
+
+        return {Coord(self.x - dx, self.y - dy), Coord(other.x + dx, other.y + dy)}
+
+    def inline(self, other: typing.Any, bounds: tuple[typing.Any, typing.Any]) -> typing.Iterator[Coord]:
+        if not isinstance(other, Coord):
+            other = Coord(*other)
+
+        lower, upper = bounds
+
+        if not isinstance(upper, Coord):
+            upper = Coord(*upper)
+
+        if not isinstance(lower, Coord):
+            lower = Coord(*lower)
+
+        dx = other.x - self.x
+        dy = other.y - self.y
+
+        for start, operation in ((self, operator.add), (other, operator.sub)):
+            while True:
+                start = Coord(operation(start.x, dx), operation(start.y, dy))
+
+                if not (lower <= start <= upper):
+                    break
+
+                if start != self and start != other:
+                    yield start
 
 
 class Direction(enum.Enum):
@@ -136,7 +193,7 @@ class Direction(enum.Enum):
     @classmethod
     def rotate(
         cls, facing: "Coord | Direction", *, clockwise: bool = True, orthogonal: bool = False, diagonal: bool = False
-    ) -> "typing.Iterator[Direction]":
+    ) -> typing.Iterator[Direction]:
         if orthogonal and diagonal:
             array = list(cls.all())
 
@@ -171,42 +228,59 @@ class Grid[T]:
 
     @typing.overload
     @classmethod
-    def create(cls, string: str, *, split: str = "") -> "Grid[str]": ...
+    def create(
+        cls, string: str, *, filter: typing.Callable[[str], bool] = lambda k: True, split: str = ""
+    ) -> Grid[str]: ...
 
     @typing.overload
     @classmethod
-    def create(cls, string: str, *, predicate: typing.Callable[[str], T], split: str = "") -> "Grid[T]": ...
+    def create(
+        cls,
+        string: str,
+        *,
+        filter: typing.Callable[[str], bool] = lambda k: True,
+        predicate: typing.Callable[[str], T],
+        split: str = "",
+    ) -> Grid[T]: ...
 
     @classmethod
     def create(
-        cls, string: str, *, predicate: typing.Optional[typing.Callable[[str], T]] = None, split: str = ""
-    ) -> "Grid[str] | Grid[T]":
+        cls,
+        string: str,
+        *,
+        predicate: typing.Optional[typing.Callable[[str], T]] = None,
+        filter: typing.Callable[[str], bool] = lambda k: True,
+        split: str = "",
+    ) -> Grid[str] | Grid[T]:
         """Create a grid from a string input
 
         Args:
             string (str): input string with grid values
             predicate (typing.Optional[typing.Callable[[str], T]], optional): If set, the predicate will be run for each value
                 added to the grid. Defaults to None.
+            filter (typing.Optional[typing.Callable[[str], bool]], optional): If set, filter the values added to the grid. Defaults to None.
             split (str, optional): An optional value used to split each line of the input string. Defaults to "".
 
         Returns:
             Grid[T]: the created Grid type
         """
-        return cls(
+        grid = cls(
             {
                 Coord(x, y): predicate(col) if predicate else typing.cast(T, col)
-                for y, row in enumerate(string.splitlines())
+                for y, row in enumerate(line for line in string.splitlines() if line)
                 for x, col in enumerate(row.split(split) if split else row)
             }
         )
+        grid._grid = {key: value for key, value in grid._grid.items() if filter(value)}
+        return grid
 
     @staticmethod
-    def new(height: int, width: int) -> "Grid[str]":
+    def new(width: int, height: int) -> Grid[str]:
         """Create an empty grid with a specific height and width.
 
         Args:
-            height (int): number of rows
             width (int): number of columns
+            height (int): number of rows
 
         Returns:
             Grid[T]: the created Grid type
@@ -309,11 +383,15 @@ class Grid[T]:
         """
         return any(not list(self._iter(center, False, direction)) for direction in Direction.ORTHOGONAL.value)
 
-    def get(self, center: Coord | tuple[int, int]) -> T:
+    def get(self, center: Coord | tuple[int, int], *, default: typing.Any = notset) -> T:
         """Get the value stored at a specific coordinate location on the grid
 
         Args:
             center (Coord | tuple[int, int]): the coordinate location
+            default (typing.Any, optional): Default value if key does not exist in the grid. Defaults to raise exception.
+
+        Raises:
+            KeyError: Exception if the key is not in the grid
 
         Returns:
             T: the value at that coordinate location
@@ -322,7 +400,10 @@ class Grid[T]:
             center = Coord(*center)
 
         if center not in self._grid:
-            raise KeyError(f"The coordinate {center} does not exist")
+            if default is notset:
+                raise KeyError(f"The coordinate {center} does not exist")
+
+            return default
 
         return self._grid[center]
 

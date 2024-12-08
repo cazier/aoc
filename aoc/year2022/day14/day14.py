@@ -1,12 +1,8 @@
-# pylint: disable=missing-class-docstring
 import typing
 import itertools
 
-from rich import print  # pylint: disable=redefined-builtin
 from aoclib.grid import Grid, Coord
 from aoclib.helpers import zip_longest_repeating
-
-import aoclib
 
 SAMPLE_INPUT: str = """498,4 -> 498,6 -> 496,6
 503,4 -> 502,4 -> 502,9 -> 494,9
@@ -106,10 +102,3 @@ def part_two(inputs: str) -> int:
                 return counter + 1
 
         counter += 1
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

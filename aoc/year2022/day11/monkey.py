@@ -1,4 +1,3 @@
-# pylint: disable=missing-class-docstring
 import re
 import typing
 
@@ -8,11 +7,10 @@ OPERATIONS = {
 }
 
 
-class Operator(typing.Protocol):  # pylint: disable=too-few-public-methods
+class Operator(typing.Protocol):
     def __call__(self, first: int, second: int) -> int: ...
 
 
-# pylint: disable=too-many-instance-attributes,too-many-arguments
 class Monkey:
     worry: int
     operation: Operator

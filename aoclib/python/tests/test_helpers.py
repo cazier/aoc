@@ -15,7 +15,7 @@ class TestAoclib:
         ],
         ids=("missing", "exists"),
     )
-    def test_load_input(self, exists: bool, cm: typing.ContextManager, tmp_path: pathlib.Path) -> None:
+    def test_load_input(self, exists: bool, cm: typing.ContextManager[None], tmp_path: pathlib.Path) -> None:
         pytest.MonkeyPatch().chdir(tmp_path)
         input_string = b"hello\nline\ntwo\nfour"
         expected = "hello\nline\ntwo\nfour"
@@ -34,9 +34,9 @@ class TestAoclib:
             ["a", "c", "r"],
             ["a", "c", "f"],
         ]
-        assert list(zip_longest_repeating([], [], [])) == []  # pylint: disable=use-implicit-booleaness-not-comparison
+        assert list(zip_longest_repeating([], [], [])) == []
 
     def test_splitlines(self) -> None:
-        assert list(splitlines("")) == []  # pylint: disable=use-implicit-booleaness-not-comparison
+        assert list(splitlines("")) == []
         assert list(splitlines("\nhello\n\n")) == ["hello"]
         assert list(splitlines("\nhello\ngoodbye\n \n")) == ["hello", "goodbye", " "]

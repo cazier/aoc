@@ -1,7 +1,5 @@
 import re
 
-from rich import print  # pylint: disable=redefined-builtin
-
 import aoclib
 
 SAMPLE_INPUT_ONE: str = """

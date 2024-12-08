@@ -1,7 +1,4 @@
-from rich import print  # pylint: disable=redefined-builtin
 from aoclib.grid import Grid, Coord, Direction
-
-import aoclib
 
 SAMPLE_INPUT: str = """30373
 25512
@@ -45,10 +42,3 @@ def part_two(inputs: str) -> int:
     heights = Grid.create(inputs, predicate=int)
 
     return max(visible(coord) for coord in heights.iter_coord())
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

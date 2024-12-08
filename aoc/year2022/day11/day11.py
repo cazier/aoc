@@ -1,10 +1,6 @@
 import pathlib
 import functools
 
-from rich import print  # pylint: disable=redefined-builtin
-
-import aoclib
-
 from .monkey import Monkey
 
 SAMPLE_INPUT: str = pathlib.Path(__file__).parent.joinpath("sample.txt").read_text(encoding="utf8")
@@ -38,10 +34,3 @@ def part_two(inputs: str) -> int:
     sort = sorted(monkeys.values(), key=lambda k: k.count, reverse=True)
 
     return sort[0].count * sort[1].count
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

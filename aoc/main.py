@@ -35,11 +35,14 @@ def run(
 ) -> None:
     module = importlib.import_module(f".year{year:04d}.day{day:02d}.main", package="aoc")
 
-    if part in (-1, 1):
-        print(module.part_one(aoclib.load_input(f"{year:04d}", f"{day:02d}")))
+    with pytest.MonkeyPatch().context() as mp:
+        mp.chdir(pathlib.Path(__file__).parent.joinpath(f"year{year:04d}", f"day{day:02d}"))
 
-    if part in (-1, 2):
-        print(module.part_two(aoclib.load_input(f"{year:04d}", f"{day:02d}")))
+        if part in (-1, 1):
+            print(module.part_one(aoclib.load_input()))
+
+        if part in (-1, 2):
+            print(module.part_two(aoclib.load_input()))
 
 
 @python.command()
@@ -49,7 +52,7 @@ def test(
 ) -> None:
     path = pathlib.Path(__file__).parent.joinpath(f"year{year:04d}", f"day{day:02d}")
 
-    exit(pytest.main(["-v", str(path)]))
+    exit(pytest.main(["-v", "-s", str(path)]))
 
 
 @app.command()

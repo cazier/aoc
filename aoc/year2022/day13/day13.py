@@ -2,10 +2,6 @@ import typing
 import functools
 from ast import literal_eval
 
-from rich import print  # pylint: disable=redefined-builtin
-
-import aoclib
-
 SAMPLE_INPUT: str = """[1,1,3,1,1]
 [1,1,5,1,1]
 
@@ -79,10 +75,3 @@ def part_two(inputs: str) -> int:
     result = sorted(packets, key=functools.cmp_to_key(cmp))
 
     return (1 + result.index(first)) * (1 + result.index(second))
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))
