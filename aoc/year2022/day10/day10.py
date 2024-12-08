@@ -1,7 +1,6 @@
 import pathlib
 import itertools
 
-from rich import print  # pylint: disable=redefined-builtin
 from aoclib.display import Display
 
 import aoclib

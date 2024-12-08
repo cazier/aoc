@@ -1,4 +1,3 @@
-# pylint: disable=missing-class-docstring
 import typing
 
 from aoclib.display import Display

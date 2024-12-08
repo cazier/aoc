@@ -54,7 +54,7 @@ def part_two(inputs: str) -> int:
             antinodes.set(second, value)
 
             for opposite in first.inline(second, (Coord(0, 0), grid.max_bound)):
-                if grid.get(opposite, None) not in ("O", "A"):
+                if grid.get(opposite, default=None) not in ("O", "A"):
                     antinodes.set(opposite, "#", anywhere=True)
 
     return len([value for value in antinodes.iter_values() if value != "."])

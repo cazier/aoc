@@ -1,10 +1,6 @@
 import re
 from collections import defaultdict
 
-from rich import print  # pylint: disable=redefined-builtin
-
-import aoclib
-
 SAMPLE_INPUT: str = """    [D]
 [N] [C]
 [Z] [M] [P]
@@ -49,10 +45,3 @@ def part_two(inputs: str) -> str:
             maps[_to].append(crates)
 
     return "".join(line[-1] for line in maps.values())
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

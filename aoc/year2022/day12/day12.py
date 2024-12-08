@@ -1,8 +1,5 @@
-from rich import print  # pylint: disable=redefined-builtin
 from aoclib.grid import Grid
 from aoclib.algorithms import bfs
-
-import aoclib
 
 SAMPLE_INPUT: str = """Sabqponm
 abcryxxl
@@ -48,10 +45,3 @@ def part_two(inputs: str) -> int:
     )
 
     return len(path) - 1
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

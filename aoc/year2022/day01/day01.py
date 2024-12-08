@@ -1,7 +1,3 @@
-from rich import print  # pylint: disable=redefined-builtin
-
-import aoclib
-
 SAMPLE_INPUT: str = """1000
 2000
 3000
@@ -29,10 +25,3 @@ def part_two(inputs: str) -> int:
     elves = [calories.splitlines() for calories in inputs.strip().split("\n\n")]
 
     return sum(sorted(list(map(lambda k: sum(map(int, k)), elves)), reverse=True)[:3])
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

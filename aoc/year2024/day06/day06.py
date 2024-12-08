@@ -1,9 +1,6 @@
 import typing
 
-from rich import print  # pylint: disable=redefined-builtin
 from aoclib.grid import Grid, Coord, Direction
-
-import aoclib
 
 SAMPLE_INPUT: str = """
 ....#.....
@@ -84,10 +81,3 @@ def part_two(inputs: str) -> int:
         grid.set(obstruction, ".")
 
     return valid
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))

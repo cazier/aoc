@@ -383,11 +383,15 @@ class Grid[T]:
         """
         return any(not list(self._iter(center, False, direction)) for direction in Direction.ORTHOGONAL.value)
 
-    def get(self, center: Coord | tuple[int, int], default: typing.Any = notset) -> T:
+    def get(self, center: Coord | tuple[int, int], *, default: typing.Any = notset) -> T:
         """Get the value stored at a specific coordinate location on the grid
 
         Args:
             center (Coord | tuple[int, int]): the coordinate location
+            default (typing.Any, optional): Default value if key does not exist in the grid. Defaults to raise exception.
+
+        Raises:
+            KeyError: Exception if the key is not in the grid
 
         Returns:
             T: the value at that coordinate location

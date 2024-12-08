@@ -1,9 +1,5 @@
 import itertools
 
-from rich import print  # pylint: disable=redefined-builtin
-
-import aoclib
-
 SAMPLE_INPUT: str = """
 7 6 4 2 1
 1 2 7 8 9
@@ -46,10 +42,3 @@ def part_one(inputs: str) -> int:
 
 def part_two(inputs: str) -> int:
     return sum(line_check(line) for line in parse(inputs))
-
-
-if __name__ == "__main__":  # pragma: no cover
-    input_string = aoclib.load_input()
-
-    print(part_one(input_string))
-    print(part_two(input_string))
