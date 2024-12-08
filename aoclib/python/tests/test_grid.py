@@ -41,20 +41,71 @@ class TestCoordinate:
         assert abs(Coord(-1, 1)) == Coord(1, 1)
         assert abs(Coord(-1, -1)) == Coord(1, 1)
 
-    def test_normalize(self) -> None:
-        assert Coord(0, 0).normalize() == Coord(0, 0)
-        assert Coord(-1, 10).normalize() == Coord(-1, 1)
-        assert Coord(50, -100).normalize() == Coord(1, -1)
-        assert Coord(10, 100).normalize() == Coord(1, 1)
+    @pytest.mark.parametrize(
+        ("input", "expected"),
+        [
+            ((0, 0), Coord(0, 0)),
+            ((-1, 10), Coord(-1, 1)),
+            ((50, -100), Coord(1, -1)),
+            ((10, 100), Coord(1, 1)),
+        ],
+    )
+    def test_normalize(self, input: tuple[int, int], expected: Coord) -> None:
+        assert Coord(*input).normalize() == expected
 
-    def test_touching(self) -> None:
-        assert Coord(0, 0).touching((0, 0))
-        assert Coord(1, 1).touching((0, 0))
-        assert Coord(1, 1).touching((0, 2))
-        assert Coord(1, 1).touching((2, 0))
-        assert Coord(0, 0).touching((1, 1))
-        assert not Coord(1, 1).touching((10, 1))
-        assert not Coord(1, 1).touching((1, 5))
+    @pytest.mark.parametrize(
+        ("original", "other", "touching"),
+        [
+            (Coord(0, 0), (0, 0), True),
+            (Coord(0, 0), (0, 0), True),
+            (Coord(1, 1), (0, 0), True),
+            (Coord(1, 1), (0, 2), True),
+            (Coord(1, 1), (2, 0), True),
+            (Coord(0, 0), (1, 1), True),
+            (Coord(1, 1), (10, 1), False),
+            (Coord(1, 1), (1, 5), False),
+        ],
+    )
+    def test_touching(self, original: Coord, other: tuple[int, int], touching: bool) -> None:
+        assert original.touching(other) == touching
+
+    @pytest.mark.parametrize(
+        ("x", "y", "a", "b"),
+        [
+            (Coord(1, 1), Coord(2, 2), Coord(0, 0), Coord(3, 3)),
+            (Coord(1, 1), Coord(2, 1), Coord(0, 1), Coord(3, 1)),
+            (Coord(1, 2), Coord(1, 3), Coord(1, 1), Coord(1, 4)),
+            (Coord(1, 2), Coord(2, 5), Coord(0, -1), Coord(3, 8)),
+            (Coord(1, 2), Coord(2, -1), Coord(0, 5), Coord(3, -4)),
+        ],
+    )
+    def test_opposites(self, x: Coord, y: Coord, a: Coord, b: Coord) -> None:
+        assert x.opposites(y) == {a, b}
+
+    @pytest.mark.parametrize(
+        ("x", "y", "bounds", "inlines"),
+        [
+            (Coord(1, 1), Coord(2, 2), (Coord(0, 0), Coord(3, 3)), {Coord(0, 0), Coord(3, 3)}),
+            (Coord(0, 0), Coord(1, 2), (Coord(0, 0), Coord(9, 9)), {Coord(2, 4), Coord(3, 6), Coord(4, 8)}),
+            (
+                Coord(4, 0),
+                Coord(5, 0),
+                (Coord(0, 0), Coord(9, 9)),
+                {
+                    Coord(0, 0),
+                    Coord(1, 0),
+                    Coord(2, 0),
+                    Coord(3, 0),
+                    Coord(6, 0),
+                    Coord(7, 0),
+                    Coord(8, 0),
+                    Coord(9, 0),
+                },
+            ),
+        ],
+    )
+    def test_inline(self, x: Coord, y: Coord, bounds: tuple[Coord, Coord], inlines: set[Coord]) -> None:
+        assert set(x.inline(y, bounds=bounds)) == inlines
 
 
 class TestDirection:
