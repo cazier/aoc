@@ -33,7 +33,7 @@ def run(
     day: int = datetime.date.today().day,
     part: typing.Annotated[int, typer.Option(show_default="Both parts")] = -1,
 ) -> None:
-    module = importlib.import_module(f".year{year:04d}.day{day:02d}.main", package="aoc")
+    module = importlib.import_module(f".year{year:04d}.day{day:02d}.day{day:02d}", package="aoc")
 
     with pytest.MonkeyPatch().context() as mp:
         mp.chdir(pathlib.Path(__file__).parent.joinpath(f"year{year:04d}", f"day{day:02d}"))

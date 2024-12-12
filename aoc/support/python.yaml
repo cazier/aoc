@@ -1,11 +1,11 @@
 test:
-  name: test_main.py
+  name: test_day$day.py
   contents: |
     import typing
 
     import pytest
 
-    from aoc.year$year.day$day.main import SAMPLE_INPUT, part_one, part_two
+    from aoc.year$year.day$day.day$day import SAMPLE_INPUT, part_one, part_two
 
     T = typing.TypeVar("T")
 
@@ -23,7 +23,7 @@ test:
             assert expected == func(SAMPLE_INPUT)
 
 run:
-  name: main.py
+  name: day$day.py
   contents: |
     import aoclib
 
