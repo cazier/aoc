@@ -425,7 +425,7 @@ class Parser(HTMLParser):
             self.storage.add(Element(self.stack[-1], data))
 
 
-def fetch(year: int, day: int, cookie: pathlib.Path, readme: pathlib.Path, input: pathlib.Path, log_level: str) -> int:
+def fetch(year: int, day: int, cookie: pathlib.Path, readme: pathlib.Path, input: pathlib.Path, log_level: str) -> None:
     logging.basicConfig(level=log_level, format="%(module)s: %(levelname)s: %(funcName)s: %(lineno)d: %(message)s")
 
     readme.parent.mkdir(parents=True, exist_ok=True)

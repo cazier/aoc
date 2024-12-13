@@ -238,8 +238,8 @@ class Grid[T]:
         cls,
         string: str,
         *,
-        filter: typing.Callable[[str], bool] = lambda k: True,
         predicate: typing.Callable[[str], T],
+        filter: typing.Callable[[T], bool] = lambda k: True,
         split: str = "",
     ) -> Grid[T]: ...
 
@@ -249,7 +249,7 @@ class Grid[T]:
         string: str,
         *,
         predicate: typing.Optional[typing.Callable[[str], T]] = None,
-        filter: typing.Callable[[str], bool] = lambda k: True,
+        filter: typing.Callable[..., bool] = lambda k: True,
         split: str = "",
     ) -> Grid[str] | Grid[T]:
         """Create a grid from a string input
@@ -258,7 +258,7 @@ class Grid[T]:
             string (str): input string with grid values
             predicate (typing.Optional[typing.Callable[[str], T]], optional): If set, the predicate will be run for each value
                 added to the grid. Defaults to None.
-            filter (typing.Optional[typing.Callable[[str], bool]], optional): If set, filter the values added to the grid. Defaults to None.
+            filter (typing.Optional[typing.Callable[..., bool]], optional): If set, filter the values added to the grid. Defaults to None.
             split (str, optional): An optional value used to split each line of the input string. Defaults to "".
 
         Returns:

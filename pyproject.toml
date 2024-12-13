@@ -1,12 +1,12 @@
 [project]
 name = "aoc"
-version = "2023.0.0"
+version = "2024.0.0"
 description = "Add your description here"
 readme = "README.md"
 authors = [
     { name = "Brendan Cazier", email = "520246+cazier@users.noreply.github.com" },
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 dependencies = [
     "rich>=13.9.4",
     "typer>=0.15.1",
