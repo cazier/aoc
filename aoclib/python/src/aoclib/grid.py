@@ -33,6 +33,10 @@ class Coord:
         """
         return (self.x, self.y)
 
+    @property
+    def T(self) -> typing.Self:
+        return type(self)(self.y, self.x)
+
     def __add__(self, other: typing.Any) -> typing.Self:
         if not isinstance(other, Coord):
             other = Coord(*other)
@@ -93,6 +97,15 @@ class Coord:
 
         if isinstance(other, Coord):
             return self.x <= other.x and self.y <= other.y
+
+        raise NotImplementedError()
+
+    def det(self, other: typing.Any) -> int:
+        if isinstance(other, tuple) and len(other) == 2:
+            other = type(self)(*other)
+
+        if isinstance(other, Coord):
+            return (self.x * other.y) - (other.x * self.y)
 
         raise NotImplementedError()
 

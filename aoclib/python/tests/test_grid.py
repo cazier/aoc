@@ -55,6 +55,17 @@ class TestCoordinate:
         with pytest.raises(NotImplementedError):
             Coord(12, 12) <= 2
 
+        with pytest.raises(NotImplementedError):
+            Coord(1, 1).det("A")
+
+    @pytest.mark.parametrize(
+        ("coord", "operation", "answer"),
+        [(Coord(1, 2), Coord.G, (1, 2)), (Coord(1, 2), Coord.T, Coord(2, 1))],
+        ids=("tuple", "transpose"),
+    )
+    def test_identities(self, coord: Coord, operation: typing.Any, answer: typing.Any):
+        assert getattr(coord, operation.__name__) == answer
+
     @pytest.mark.parametrize(
         ("input", "expected"),
         [
@@ -122,6 +133,12 @@ class TestCoordinate:
     )
     def test_inline(self, x: Coord, y: Coord, bounds: tuple[Coord, Coord], inlines: set[Coord]) -> None:
         assert set(x.inline(y, bounds=bounds)) == inlines
+
+    @pytest.mark.parametrize(
+        ("a", "b", "answer"), [(Coord(1, 2), Coord(2, 1), -3), (Coord(2, 1), Coord(1, 2), 3), (Coord(0, 0), (0, 0), 0)]
+    )
+    def test_determinate(self, a: Coord, b: Coord, answer: int) -> None:
+        assert a.det(b) == answer
 
 
 class TestDirection:
