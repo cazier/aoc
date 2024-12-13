@@ -193,7 +193,7 @@ class Direction(enum.Enum):
 
     @classmethod
     def rotate(
-        cls, facing: "Coord | Direction", *, clockwise: bool = True, orthogonal: bool = False, diagonal: bool = False
+        cls, facing: Coord | Direction, *, clockwise: bool = True, orthogonal: bool = False, diagonal: bool = False
     ) -> typing.Iterator[Direction]:
         if orthogonal and diagonal:
             array = list(cls.all())
@@ -723,15 +723,36 @@ class Region[T]:
         resp: set[tuple[Coord, Direction]] = set()
 
         for coordinate in self._grid.iter_coord():
-            for direction, neighbor in zip(
-                Direction.orthogonals(), self._grid.orthogonal(coordinate, include_missing=True)
-            ):
+            for direction, neighbor in zip(Direction.orthogonals(), self._grid.orthogonal(coordinate, True)):
                 if self._grid.get(neighbor, default=-1) != self.identifier:
                     resp.add((neighbor, direction))
 
         return resp
 
     def edges(self) -> int:
-        breakpoint()
+        def spans(index: int, *coords: Coord) -> int:
+            count = 1
+            for first, second in itertools.pairwise(coords):
+                step = second - first
 
-        return 12
+                if step.G[index] == 0 and step.G[(index + 1) % 2] == 1:
+                    continue
+
+                count += 1
+
+            return count
+
+        edges = 0
+
+        _perimeter = self.perimeter()
+        perimeter = {key: [edge for edge, face in _perimeter if face is key] for key in Direction.orthogonals()}
+
+        for direction, pieces in perimeter.items():
+            match direction:
+                case Direction.N | Direction.S:
+                    pieces = sorted(pieces, key=lambda k: (k.y, k.x))
+                    edges += spans(1, *pieces)
+                case _:
+                    pieces = sorted(pieces, key=lambda k: (k.x, k.y))
+                    edges += spans(0, *pieces)
+        return edges

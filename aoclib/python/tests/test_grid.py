@@ -511,6 +511,53 @@ class TestGrid:
     def test_region(self, grid: str, center: Coord, region: set[Coord]) -> None:
         assert Grid.create(grid, predicate=int).region(center) == region
 
+    @pytest.mark.parametrize(
+        ("grid", "regions"),
+        [
+            (
+                "000\n111\n111",
+                {
+                    0: {Coord(0, 0), Coord(1, 0), Coord(2, 0)},
+                    1: {Coord(0, 1), Coord(1, 1), Coord(2, 1), Coord(0, 2), Coord(1, 2), Coord(2, 2)},
+                },
+            ),
+            (
+                "000\n111\n222",
+                {
+                    0: {Coord(0, 0), Coord(1, 0), Coord(2, 0)},
+                    1: {Coord(0, 1), Coord(1, 1), Coord(2, 1)},
+                    2: {Coord(0, 2), Coord(1, 2), Coord(2, 2)},
+                },
+            ),
+            (
+                "012\n345\n678",
+                {
+                    0: {Coord(0, 0)},
+                    1: {Coord(1, 0)},
+                    2: {Coord(2, 0)},
+                    3: {Coord(0, 1)},
+                    4: {Coord(1, 1)},
+                    5: {Coord(2, 1)},
+                    6: {Coord(0, 2)},
+                    7: {Coord(1, 2)},
+                    8: {Coord(2, 2)},
+                },
+            ),
+            (
+                "000\n110\n000",
+                {
+                    0: {Coord(1, 2), Coord(2, 1), Coord(0, 0), Coord(2, 0), Coord(0, 2), Coord(2, 2), Coord(1, 0)},
+                    1: {Coord(0, 1), Coord(1, 1)},
+                },
+            ),
+        ],
+        ids=["standard", "multiple", "diagonal", "weird"],
+    )
+    @pytest.mark.parametrize("autonumber", (True, False))
+    def test_regions(self, grid: str, autonumber: bool, regions: dict[int, set[Coord]]) -> None:
+        g = Grid.create(grid, predicate=int)
+        assert g.regions(autonumber=autonumber) == regions
+
 
 class TestRegion:
     @pytest.mark.parametrize(
@@ -559,4 +606,4 @@ class TestRegion:
         ids=["standard", "multiple", "diagonal", "weird"],
     )
     def test_edges(self, region: set[Coord], edges: int) -> None:
-        assert Region(0, region).edges == edges
+        assert Region(0, region).edges() == edges
