@@ -520,7 +520,7 @@ class TestRegion:
         ],
     )
     def test_internal(self, region: set[Coord], internal: set[Coord]) -> None:
-        assert Region("A", region)._internal() == internal
+        assert Region(0, region)._internal() == internal
 
     @pytest.mark.parametrize(
         ("region", "area"),
@@ -533,7 +533,7 @@ class TestRegion:
         ids=["standard", "multiple", "diagonal", "weird"],
     )
     def test_area(self, region: set[Coord], area: int) -> None:
-        assert Region("A", region).area == area
+        assert Region(0, region).area == area
 
     @pytest.mark.parametrize(
         ("region", "perimeter"),
@@ -546,7 +546,7 @@ class TestRegion:
         ids=["standard", "multiple", "diagonal", "weird"],
     )
     def test_perimeter(self, region: set[Coord], perimeter: int) -> None:
-        assert Region("A", region).perimeter() == perimeter
+        assert len(Region(0, region).perimeter()) == perimeter
 
     @pytest.mark.parametrize(
         ("region", "edges"),
@@ -559,4 +559,4 @@ class TestRegion:
         ids=["standard", "multiple", "diagonal", "weird"],
     )
     def test_edges(self, region: set[Coord], edges: int) -> None:
-        assert Region("A", region).edges == edges
+        assert Region(0, region).edges == edges

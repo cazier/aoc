@@ -674,16 +674,26 @@ class Grid[T]:
         find(center)
         return visited
 
-    def regions(self) -> dict[int, typing.Set[Coord]]:
-        resp = {}
+    @typing.overload
+    def regions(self, autonumber: typing.Literal[False]) -> dict[T, typing.Set[Coord]]: ...
+    @typing.overload
+    def regions(self, autonumber: typing.Literal[True] = True) -> dict[int, typing.Set[Coord]]: ...
+
+    def regions(self, autonumber: bool = True) -> dict[int, typing.Set[Coord]] | dict[T, typing.Set[Coord]]:
+        resp: dict[int, typing.Set[Coord]] | dict[T, typing.Set[Coord]] = {}
         visited: typing.Set[Coord] = set()
         chars = itertools.count()
 
-        for center in self.iter_coord():
+        for center, identifier in self.items():
             if center not in visited:
                 region = self.region(center)
 
-                resp[next(chars)] = region
+                if autonumber:
+                    resp[next(chars)] = region  # type: ignore[index]
+
+                else:
+                    resp[identifier] = region  # type: ignore[index]
+
                 visited.update(region)
 
         return resp
@@ -709,19 +719,19 @@ class Region[T]:
     def area(self) -> int:
         return len(self.region)
 
-    def perimeter(self) -> int:
-        resp = 0
+    def perimeter(self) -> set[tuple[Coord, Direction]]:
+        resp: set[tuple[Coord, Direction]] = set()
 
         for coordinate in self._grid.iter_coord():
-            for index, neighbor in enumerate((*self._grid.orthogonal(coordinate), *(notset, 4))):
-                if neighbor is notset:
-                    resp += 4 - index
-                    break
+            for direction, neighbor in zip(
+                Direction.orthogonals(), self._grid.orthogonal(coordinate, include_missing=True)
+            ):
+                if self._grid.get(neighbor, default=-1) != self.identifier:
+                    resp.add((neighbor, direction))
 
-                if self._grid.get(neighbor) != self.identifier:
-                    resp += 1
         return resp
 
-    @property
     def edges(self) -> int:
+        breakpoint()
+
         return 12
