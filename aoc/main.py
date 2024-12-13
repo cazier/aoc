@@ -49,10 +49,20 @@ def run(
 def test(
     year: int = datetime.date.today().year,
     day: int = datetime.date.today().day,
+    verbose: typing.Annotated[bool, typer.Option("-v", help="Make output more verbose")] = False,
+    pdb: typing.Annotated[bool, typer.Option("--pdb", help="Enable debugging")] = False,
 ) -> None:
     path = pathlib.Path(__file__).parent.joinpath(f"year{year:04d}", f"day{day:02d}")
 
-    exit(pytest.main(["-v", "-s", str(path)]))
+    args = {"-s"}
+
+    if verbose:
+        args.add("-vv")
+
+    if pdb:
+        args.add("--pdb")
+
+    exit(pytest.main([*args, str(path)]))
 
 
 @app.command()
@@ -81,7 +91,10 @@ def new(
         support: dict[str, dict[str, str]] = yaml.safe_load(raw)
 
         for kind in ("run", "test"):
-            day_path.joinpath(support[kind]["name"]).write_text(support[kind]["contents"])
+            path = day_path.joinpath(support[kind]["name"])
+
+            if not path.exists():
+                path.write_text(support[kind]["contents"])
 
 
 if __name__ == "__main__":
