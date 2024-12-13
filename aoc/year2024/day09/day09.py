@@ -13,22 +13,20 @@ def _iter_chars() -> typing.Generator[int, None, None]:
         start += 1
 
 
-@dataclasses.dataclass(init=False)
+@dataclasses.dataclass
 class Disk:
-    _disk: list[int]
+    _disk: str
     map: list[int | None] = dataclasses.field(init=False, default_factory=list)
     ids: dict[bool, deque[int]] = dataclasses.field(default_factory=lambda: defaultdict(deque))
     spans: dict[int | None, list[tuple[int, int]]] = dataclasses.field(default_factory=lambda: defaultdict(list))
 
-    def __init__(self, files: str) -> None:
-        self._disk = list(map(int, files.strip()))
-
     def __post_init__(self) -> None:
+        disk = list(map(int, str(self._disk).strip()))
         chars = _iter_chars()
 
         start = 0
 
-        for value, free in zip(self._disk, itertools.cycle([False, True])):
+        for value, free in zip(disk, itertools.cycle([False, True])):
             if free:
                 self.map.extend([None] * value)
             else:
