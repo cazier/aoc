@@ -1,5 +1,5 @@
 test:
-  name: test_day$day.py
+  name: day$day_test.py
   contents: |
     import typing
 
