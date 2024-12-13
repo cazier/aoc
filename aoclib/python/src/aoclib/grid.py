@@ -9,6 +9,7 @@ import enum
 import typing
 import operator
 import itertools
+import dataclasses
 
 notset = object()
 
@@ -499,7 +500,7 @@ class Grid[T]:
         """
         yield from map(self.get, self.coordinates(center=center, direction=direction, include_self=include_self))
 
-    def orthogonal(self, center: Coord | tuple[int, int]) -> typing.Iterator[Coord]:
+    def orthogonal(self, center: Coord | tuple[int, int], include_missing: bool = False) -> typing.Iterator[Coord]:
         """An iterator with each of the orthogonal neighbors to the supplied center coordinate. (Orthognal meaning
         only the coordinates directly North, East, South or East)
 
@@ -517,9 +518,10 @@ class Grid[T]:
                 yield next(self._iter(center, False, shift))
 
             except StopIteration:
-                continue
+                if include_missing:
+                    yield shift + center
 
-    def diagonal(self, center: Coord | tuple[int, int]) -> typing.Iterator[Coord]:
+    def diagonal(self, center: Coord | tuple[int, int], include_missing: bool = False) -> typing.Iterator[Coord]:
         """An iterator with each of the diagonal neighbors to the supplied center coordinate. (Diagonal meaning
         only the coordinates directly Northeast, Southeast, Southwest or Northeast)
 
@@ -537,7 +539,8 @@ class Grid[T]:
                 yield next(self._iter(center, False, shift))
 
             except StopIteration:
-                continue
+                if include_missing:
+                    yield shift + center
 
     def neighbors(self, center: Coord | tuple[int, int]) -> typing.Iterator[Coord]:
         """An iterator with each of the neighbors to the supplied center coordinate, including diagonally adjacent
@@ -654,3 +657,71 @@ class Grid[T]:
             center = Coord(*center)
 
         return (self.min_bound.x <= center.x <= self.max_bound.x) and (self.min_bound.y <= center.y <= self.max_bound.y)
+
+    def region(self, center: Coord) -> typing.Set[Coord]:
+        def find(coord: Coord):
+            if coord in visited or self.get(coord) != value:
+                return
+
+            visited.add(coord)
+
+            for neighbor in self.orthogonal(coord):
+                find(neighbor)
+
+        value = self.get(center)
+        visited: typing.Set[Coord] = set()
+
+        find(center)
+        return visited
+
+    def regions(self) -> dict[int, typing.Set[Coord]]:
+        resp = {}
+        visited: typing.Set[Coord] = set()
+        chars = itertools.count()
+
+        for center in self.iter_coord():
+            if center not in visited:
+                region = self.region(center)
+
+                resp[next(chars)] = region
+                visited.update(region)
+
+        return resp
+
+
+class DuplicateRegionIDError(BaseException):
+    pass
+
+
+@dataclasses.dataclass
+class Region[T]:
+    identifier: T
+    region: set[Coord]
+    _grid: Grid[T] = dataclasses.field(init=False)
+
+    def __post_init__(self):
+        self._grid = Grid({coord: self.identifier for coord in self.region})
+
+    def _internal(self) -> set[Coord]:
+        return {coord for coord in self._grid.iter_coord() if len(list(self._grid.orthogonal(coord))) == 4}
+
+    @property
+    def area(self) -> int:
+        return len(self.region)
+
+    def perimeter(self) -> int:
+        resp = 0
+
+        for coordinate in self._grid.iter_coord():
+            for index, neighbor in enumerate((*self._grid.orthogonal(coordinate), *(notset, 4))):
+                if neighbor is notset:
+                    resp += 4 - index
+                    break
+
+                if self._grid.get(neighbor) != self.identifier:
+                    resp += 1
+        return resp
+
+    @property
+    def edges(self) -> int:
+        return 12

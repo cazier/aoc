@@ -2,7 +2,7 @@ import typing
 import itertools
 
 import pytest
-from aoclib.grid import Grid, Coord, Direction
+from aoclib.grid import Grid, Coord, Region, Direction
 
 
 class TestCoordinate:
@@ -344,20 +344,44 @@ class TestGrid:
             else:
                 assert grid.is_on_edge(Coord(x, y)) is True
 
-    def test_orthogonal(self) -> None:
+    @pytest.mark.parametrize(
+        ("center", "coords"),
+        [
+            ((1, 1), [(True, Coord(1, 0)), (True, Coord(2, 1)), (True, Coord(1, 2)), (True, Coord(0, 1))]),
+            ((0, 1), [(True, Coord(0, 0)), (True, Coord(1, 1)), (True, Coord(0, 2)), (False, Coord(-1, 1))]),
+            ((0, 0), [(False, Coord(0, -1)), (True, Coord(1, 0)), (True, Coord(0, 1)), (False, Coord(-1, 0))]),
+        ],
+    )
+    @pytest.mark.parametrize("missing", (False, True))
+    def test_orthogonal(self, center: tuple[int, int], coords: list[tuple[bool, Coord]], missing: bool) -> None:
         grid = Grid.create("123\n456\n789", predicate=int)
-        assert list(grid.orthogonal((1, 1))) == [Coord(1, 0), Coord(2, 1), Coord(1, 2), Coord(0, 1)]
-        assert list(grid.orthogonal((0, 1))) == [Coord(0, 0), Coord(1, 1), Coord(0, 2)]
-        assert list(grid.orthogonal((0, 0))) == [Coord(1, 0), Coord(0, 1)]
+        coords = [coord for keep, coord in coords if keep is True or missing is True]
+
+        assert list(grid.orthogonal(center, include_missing=missing)) == coords
+
+    def test_orthogonal_invalid(self) -> None:
+        grid = Grid.create("123\n456\n789", predicate=int)
 
         with pytest.raises(KeyError, match="does not exist"):
             list(grid.orthogonal((12, 12)))
 
-    def test_diagonal(self) -> None:
+    @pytest.mark.parametrize(
+        ("center", "coords"),
+        [
+            ((1, 1), [(True, Coord(2, 0)), (True, Coord(2, 2)), (True, Coord(0, 2)), (True, Coord(0, 0))]),
+            ((0, 1), [(True, Coord(1, 0)), (True, Coord(1, 2)), (False, Coord(-1, 2)), (False, Coord(-1, 0))]),
+            ((0, 0), [(False, Coord(1, -1)), (True, Coord(1, 1)), (False, Coord(-1, 1)), (False, Coord(-1, -1))]),
+        ],
+    )
+    @pytest.mark.parametrize("missing", (False, True))
+    def test_diagonal(self, center: tuple[int, int], coords: list[tuple[bool, Coord]], missing: bool) -> None:
         grid = Grid.create("123\n456\n789", predicate=int)
-        assert list(grid.diagonal((1, 1))) == [Coord(2, 0), Coord(2, 2), Coord(0, 2), Coord(0, 0)]
-        assert list(grid.diagonal((0, 1))) == [Coord(1, 0), Coord(1, 2)]
-        assert list(grid.diagonal((0, 0))) == [Coord(1, 1)]
+        coords = [coord for keep, coord in coords if keep is True or missing is True]
+
+        assert list(grid.diagonal(center, include_missing=missing)) == coords
+
+    def test_diagonal_invalid(self) -> None:
+        grid = Grid.create("123\n456\n789", predicate=int)
 
         with pytest.raises(KeyError, match="does not exist"):
             list(grid.diagonal((12, 12)))
@@ -469,3 +493,70 @@ class TestGrid:
         grid = Grid.create("123\n456\n789", predicate=int)
         assert grid.within((1, 1))
         assert not grid.within((10, 10))
+
+    @pytest.mark.parametrize(
+        ("grid", "center", "region"),
+        [
+            ("111\n000\n000", Coord(0, 0), {Coord(0, 0), Coord(1, 0), Coord(2, 0)}),
+            ("111\n000\n111", Coord(0, 0), {Coord(0, 0), Coord(1, 0), Coord(2, 0)}),
+            ("101\n010\n101", Coord(1, 1), {Coord(1, 1)}),
+            (
+                "111\n001\n111",
+                Coord(0, 0),
+                {Coord(0, 0), Coord(1, 0), Coord(2, 0), Coord(2, 1), Coord(2, 2), Coord(1, 2), Coord(0, 2)},
+            ),
+        ],
+        ids=["standard", "multiple", "diagonal", "weird"],
+    )
+    def test_region(self, grid: str, center: Coord, region: set[Coord]) -> None:
+        assert Grid.create(grid, predicate=int).region(center) == region
+
+
+class TestRegion:
+    @pytest.mark.parametrize(
+        ("region", "internal"),
+        [
+            ({Coord(0, 1), Coord(1, 0), Coord(2, 1), Coord(1, 2), Coord(1, 1)}, {Coord(1, 1)}),
+        ],
+    )
+    def test_internal(self, region: set[Coord], internal: set[Coord]) -> None:
+        assert Region("A", region)._internal() == internal
+
+    @pytest.mark.parametrize(
+        ("region", "area"),
+        [
+            ({Coord(0, 0), Coord(1, 0), Coord(2, 0)}, 3),
+            ({Coord(0, 0), Coord(1, 0), Coord(2, 0)}, 3),
+            ({Coord(1, 1)}, 1),
+            ({Coord(0, 0), Coord(1, 0), Coord(2, 0), Coord(2, 1), Coord(2, 2), Coord(1, 2), Coord(0, 2)}, 7),
+        ],
+        ids=["standard", "multiple", "diagonal", "weird"],
+    )
+    def test_area(self, region: set[Coord], area: int) -> None:
+        assert Region("A", region).area == area
+
+    @pytest.mark.parametrize(
+        ("region", "perimeter"),
+        [
+            ({Coord(0, 0), Coord(1, 0), Coord(1, 1), Coord(0, 1)}, 8),
+            ({Coord(0, 0), Coord(1, 0), Coord(2, 0)}, 8),
+            ({Coord(1, 1)}, 4),
+            ({Coord(0, 0), Coord(1, 0), Coord(2, 0), Coord(2, 1), Coord(2, 2), Coord(1, 2), Coord(0, 2)}, 16),
+        ],
+        ids=["standard", "multiple", "diagonal", "weird"],
+    )
+    def test_perimeter(self, region: set[Coord], perimeter: int) -> None:
+        assert Region("A", region).perimeter() == perimeter
+
+    @pytest.mark.parametrize(
+        ("region", "edges"),
+        [
+            ({Coord(0, 0), Coord(1, 0), Coord(1, 1), Coord(0, 1)}, 4),
+            ({Coord(0, 0), Coord(1, 0), Coord(2, 0)}, 4),
+            ({Coord(1, 1)}, 4),
+            ({Coord(0, 0), Coord(1, 0), Coord(2, 0), Coord(2, 1), Coord(2, 2), Coord(1, 2), Coord(0, 2)}, 8),
+        ],
+        ids=["standard", "multiple", "diagonal", "weird"],
+    )
+    def test_edges(self, region: set[Coord], edges: int) -> None:
+        assert Region("A", region).edges == edges
