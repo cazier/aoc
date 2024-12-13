@@ -36,16 +36,16 @@ class Coord:
         if not isinstance(other, Coord):
             other = Coord(*other)
 
-        return Coord(self.x + other.x, self.y + other.y)
+        return type(self)(self.x + other.x, self.y + other.y)
 
     def __sub__(self, other: typing.Any) -> typing.Self:
         if not isinstance(other, Coord):
             other = Coord(*other)
 
-        return Coord(self.x - other.x, self.y - other.y)
+        return type(self)(self.x - other.x, self.y - other.y)
 
     def __mul__(self, other: typing.Any) -> typing.Self:
-        return Coord(self.x * other, self.y * other)
+        return type(self)(self.x * other, self.y * other)
 
     def __truediv__(self, other: typing.Any) -> typing.Self:
         raise NotImplementedError()
@@ -63,7 +63,7 @@ class Coord:
         return self
 
     def __abs__(self) -> typing.Self:
-        return Coord(abs(self.x), abs(self.y))
+        return type(self)(abs(self.x), abs(self.y))
 
     def __hash__(self) -> int:
         return hash(self.G)
@@ -96,7 +96,7 @@ class Coord:
         raise NotImplementedError()
 
     def normalize(self) -> typing.Self:
-        return Coord(*map(lambda k: k // abs(k) if k else 0, self.G))
+        return type(self)(*map(lambda k: k // abs(k) if k else 0, self.G))
 
     def touching(self, other: typing.Any) -> bool:
         if not isinstance(other, Coord):
@@ -117,7 +117,7 @@ class Coord:
         dx = other.x - self.x
         dy = other.y - self.y
 
-        return {Coord(self.x - dx, self.y - dy), Coord(other.x + dx, other.y + dy)}
+        return {type(self)(self.x - dx, self.y - dy), type(self)(other.x + dx, other.y + dy)}
 
     def inline(self, other: typing.Any, bounds: tuple[typing.Any, typing.Any]) -> typing.Iterator[Coord]:
         if not isinstance(other, Coord):
