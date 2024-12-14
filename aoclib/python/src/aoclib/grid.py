@@ -306,17 +306,17 @@ class Grid[T]:
         self._calculate_boundaries()
 
     def __str__(self) -> str:
-        def get(center: tuple[int, int]) -> str:
-            try:
-                return str(self.get(center))
-
-            except KeyError:
-                return self.background
-
         return "\n".join(
-            "".join(get((x, y)) for x in range(self.min_bound.x, self.max_bound.x + 1))
+            "".join(self._str_get((x, y)) for x in range(self.min_bound.x, self.max_bound.x + 1))
             for y in range(self.min_bound.y, self.max_bound.y + 1)
         )
+
+    def _str_get(self, center: tuple[int, int]) -> str:
+        try:
+            return str(self.get(center))
+
+        except KeyError:
+            return self.background
 
     def __contains__(self, key: typing.Any) -> bool:
         return key in self._grid
