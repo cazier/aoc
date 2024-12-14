@@ -1,0 +1,20 @@
+import typing
+
+import pytest
+
+from aoc.year2024.day14.day14 import SAMPLE_INPUT, part_one, part_two
+
+T = typing.TypeVar("T")
+
+
+@pytest.mark.parametrize(
+    ("expected", "func"),
+    [
+        (12, part_one),
+        pytest.param(None, part_two, marks=pytest.mark.skip(reason="Isn't really testable...")),
+    ],
+    ids=("one", "two"),
+)
+class TestYear2024:
+    def test_day(self, expected: T, func: typing.Callable[[str], T]) -> None:
+        assert expected == func(SAMPLE_INPUT)
