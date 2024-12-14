@@ -18,7 +18,7 @@ class Raster:
         self._width = len(self.pixels[0])
         self._size = self._height * max(self._width // 8, 1) * 8
 
-    def write(self) -> list[bytes]:
+    def write(self) -> bytes:
         # fmt: off
         header = [
             self._bmp_header,                             # BMP magic bytes/signature
